@@ -34,10 +34,8 @@ function PuzzlePiece:onPurge()
 end
 
 function PuzzlePiece:draw()
-  if DEBUG then
-    local s = 128*(1 + 0.2*math.cos(self.t*math.pi*2))
-    love.graphics.rectangle("line", self.x - 0.5*s, self.y - 0.5*s, s, s)
-  end
+  local s = 128*(1 + 0.05*math.cos(self.t*math.pi*2))
+  love.graphics.rectangle("line", self.x - 0.5*s, self.y - 0.5*s, s, s)
 end
 
 function PuzzlePiece:update(dt)

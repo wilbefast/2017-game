@@ -27,7 +27,6 @@ end
 
 function state:enter()
 	--self.newspaperGrid = CollisionGrid()
-	PuzzlePiece(100, 100)
 	PuzzlePiece(200, 300)
 	PuzzlePiece(700, 140)
 	PuzzlePiece(133, 100)
@@ -41,6 +40,11 @@ end
 --[[------------------------------------------------------------
 Callbacks
 --]]--
+
+function state:mousepressed()
+  shake = shake + 20
+end
+
 
 function state:keypressed(key, uni)
   if key == "escape" then
