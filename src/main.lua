@@ -125,11 +125,13 @@ function love.keyreleased(key, uni)
 end
 
 function love.mousepressed(x, y, button)
-  GameState.mousepressed(x, y, button)
+  mx, my = scaling.scaleMouse()
+  GameState.mousepressed(mx, my, button)
 end
 
-function love.mousereleased(x, y, button)
-  GameState.mousereleased(x, y, button)
+function love.mousereleased(mx, my, button)
+  mx, my = scaling.scaleMouse()
+  GameState.mousereleased(mx, my, button)
 end
 
 function love.update(dt)
