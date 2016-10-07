@@ -18,12 +18,15 @@ Initialisation
 
 local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
-  init = function(self, x, y)
+  init = function(self, x, y, cellCount, cellSize, gridWidth, gridHeight)
     GameObject.init(self, x, y)
-    self.radius = 128
     self.t = math.random()
 
-    self.gridCellSize = 8
+    self.radius = cellSize
+    self.gridCellCount = cellCount
+    self.gridWidth = gridWidth
+    self.gridHeight = gridHeight
+    self.gridMargin = 16
 
     -- wiggle animation
     self.wiggleStartedAt = -1000
@@ -65,8 +68,8 @@ function PuzzlePiece:update(dt)
 
   -- snap animation
   local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
-  local x = (math.ceil(self.x / 1920 * self.gridCellSize) / self.gridCellSize) * 1920
-  local y = (math.ceil(self.y / 1080 * self.gridCellSize) / self.gridCellSize) * 1080
+  local x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
+  local y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
   self.x = useful.lerp(self.x, x, 0.5 * snapRatio)
   self.y = useful.lerp(self.y, y, 0.5 * snapRatio)
 end

@@ -27,9 +27,13 @@ end
 
 function state:enter()
 	--self.newspaperGrid = CollisionGrid()
-	PuzzlePiece(200, 300)
-	PuzzlePiece(700, 140)
-	PuzzlePiece(133, 100)
+	self.gridCellCount = 8
+	self.gridWidth = (WORLD_W*0.5 - 32)
+	self.gridHeight = WORLD_H - 32
+	self.gridCellSize = self.gridWidth / self.gridCellCount
+	PuzzlePiece(200, 300, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
+	PuzzlePiece(700, 140, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
+	PuzzlePiece(133, 100, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
 end
 
 function state:leave()
@@ -80,6 +84,14 @@ function state:draw()
   -- left and right parts
   love.graphics.rectangle("line", 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
   love.graphics.rectangle("line", WORLD_W*0.5 + 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
+
+  -- fake grid
+  for x = 0, 8 do
+		love.graphics.line(16 + x * self.gridCellSize, 16, 16 + x * self.gridCellSize, WORLD_H - 16)
+  	for y = 0, 8 do
+  		love.graphics.line(16, 16 + y * self.gridCellSize, WORLD_W*0.5 - 16, 16 + y * self.gridCellSize)
+  	end
+  end
 end
 
 --[[------------------------------------------------------------
