@@ -26,10 +26,16 @@ function state:init()
 end
 
 function state:enter()
+	--self.newspaperGrid = CollisionGrid()
+	PuzzlePiece(100, 100)
+	PuzzlePiece(200, 300)
+	PuzzlePiece(700, 140)
+	PuzzlePiece(133, 100)
 end
 
 function state:leave()
 	GameObject.purgeAll()
+	self.newspaperGrid = nil
 end
 
 --[[------------------------------------------------------------
@@ -43,19 +49,18 @@ function state:keypressed(key, uni)
   end
 end
 
-
-
 function state:update(dt)
   -- update logic
   GameObject.updateAll(dt)
 end
 
 function state:draw()
+	-- draw logic
 	GameObject.drawAll()
 
-
-	-- TEST
-  love.graphics.printf("THE GAME", WORLD_W*0.1, WORLD_H*0.45, WORLD_W*0.8, "center")
+  -- left and right parts
+  love.graphics.rectangle("line", 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
+  love.graphics.rectangle("line", WORLD_W*0.5 + 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
 end
 
 --[[------------------------------------------------------------

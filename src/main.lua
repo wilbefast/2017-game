@@ -51,6 +51,7 @@ function love.load(arg)
   scaling = require("scaling")
   ingame = require("gamestates/ingame")
   title = require("gamestates/title")
+  PuzzlePiece = require("gameobjects/PuzzlePiece")
 
   -- startup logs
   log.print = true
@@ -113,6 +114,8 @@ function love.keypressed(key, uni)
     DEBUG = not DEBUG
   elseif key == "x" then
     CAPTURE_SCREENSHOT = not CAPTURE_SCREENSHOT
+  else
+    --babysitter.activeWaitThen(10, function(t) log:write(t*t) end, function() log:write("DONE") end)
   end
 end
 
