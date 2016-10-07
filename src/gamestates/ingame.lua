@@ -41,8 +41,11 @@ end
 Callbacks
 --]]--
 
-function state:mousepressed()
+function state:mousepressed(x, y)
   shake = shake + 20
+	if DEBUG then
+		PuzzlePiece(x, y)
+	end
 end
 
 
