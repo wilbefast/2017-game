@@ -29,13 +29,13 @@ local PuzzlePiece = Class({
     self.gridMargin = 16
 
     -- wiggle animation
-    self.wiggleStartedAt = -1000
+    self.wiggleStartedAt = love.timer.getTime()
     self.wiggleDelay = 0.3
     self.wiggleScale = 0.2
     self.wiggleCount = 3
 
     -- snap animation
-    self.snapStartedAt = -1000
+    self.snapStartedAt = love.timer.getTime()
     self.snapDelay = 0.2
   end
 })
@@ -57,7 +57,9 @@ function PuzzlePiece:draw()
   local sy = self.radius * (1 + self.wiggleScale * math.cos(t + math.pi) * wiggleRatio)
 
   -- draw dat piece
-  love.graphics.rectangle("line", self.x - 0.5 * sx, self.y - 0.5 * sy, sx, sy)
+  love.graphics.setColor(255,0,0)
+  love.graphics.rectangle("fill", self.x - 0.5 * sx, self.y - 0.5 * sy, sx, sy)
+  love.graphics.setColor(255,255,255)
 end
 
 function PuzzlePiece:update(dt)
