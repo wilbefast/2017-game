@@ -51,6 +51,7 @@ function love.load(arg)
   scaling = require("scaling")
   ingame = require("gamestates/ingame")
   title = require("gamestates/title")
+  Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
 
   -- startup logs

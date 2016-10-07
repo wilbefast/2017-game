@@ -50,11 +50,8 @@ function state:update(dt)
 end
 
 function state:draw()
-	-- title
-	love.graphics.setColor(49, 29, 33)
-	love.graphics.setFont(fontLarge)
-  love.graphics.printf(TITLE, WORLD_W*0.1, WORLD_H*0.45, WORLD_W*0.8, "center")
-  useful.bindWhite()
+  -- background
+  love.graphics.draw(Resources.title, 0, 0)
 end
 
 
