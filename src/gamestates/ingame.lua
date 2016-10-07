@@ -29,8 +29,8 @@ function state:enter()
 	--self.newspaperGrid = CollisionGrid()
 	self.gridCellCount = 8
 	self.gridWidth = (WORLD_W*0.5 - 32)
-	self.gridHeight = WORLD_H - 32
 	self.gridCellSize = self.gridWidth / self.gridCellCount
+	self.gridHeight = self.gridCellCount * self.gridCellSize--WORLD_H - 16
 	PuzzlePiece(200, 300, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
 	PuzzlePiece(700, 140, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
 	PuzzlePiece(133, 100, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)

@@ -70,8 +70,8 @@ function PuzzlePiece:update(dt)
   local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
   local x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
   local y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
-  self.x = useful.lerp(self.x, x, 0.5 * snapRatio)
-  self.y = useful.lerp(self.y, y, 0.5 * snapRatio)
+  self.x = useful.lerp(self.x, x - 0.5 * self.radius, 0.5 * snapRatio)
+  self.y = useful.lerp(self.y, y - 0.5 * self.radius, 0.5 * snapRatio)
 end
 
 function PuzzlePiece:drag(x, y)
