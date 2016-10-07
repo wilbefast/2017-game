@@ -1,0 +1,3 @@
+[submodule "src/unrequited"]
+	path = src/unrequited
+	url = https://github.com/wilbefast/unrequited-love2d
