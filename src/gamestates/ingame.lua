@@ -41,10 +41,20 @@ end
 Callbacks
 --]]--
 
-function state:mousepressed()
-  shake = shake + 20
+function state:mousepressed(x, y, button)
+	--mapToTypeWithinRadius
+  --shake = shake + 20
+	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
+	self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
 end
 
+function state:mousereleased(x, y, button)
+	if self.puzzlePieceDragged then
+		self.puzzlePieceDragged.snapStartedAt = love.timer.getTime()
+		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
+	  self.puzzlePieceDragged = nil
+	end
+end
 
 function state:keypressed(key, uni)
   if key == "escape" then
@@ -56,6 +66,11 @@ end
 function state:update(dt)
   -- update logic
   GameObject.updateAll(dt)
+
+ 	-- drag
+ 	if self.puzzlePieceDragged then
+  	self.puzzlePieceDragged:drag(scaling.scaleMouse())
+  end
 end
 
 function state:draw()
