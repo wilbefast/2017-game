@@ -45,8 +45,8 @@ function CombinationPart:draw()
   else
     love.graphics.setColor(0,0,0)
   end
-  local x = self.x + self.size * self.pivot.x
-  local y = self.y + self.size * self.pivot.y
+  local x = self.x + (self.size + PuzzlePiece.cellSize) * self.pivot.x
+  local y = self.y + (self.size + PuzzlePiece.cellSize) * self.pivot.y
   if self.combinationType == 0 then
     local top = y + self.size
     if self.convex then

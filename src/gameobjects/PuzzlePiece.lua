@@ -19,21 +19,14 @@ Initialisation
 local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
   layer = 0,
-  init = function(self, x, y, cellCount, cellSize, gridWidth, gridHeight)
-    GameObject.init(self, x, y)
+  snapDelay = 0.2,
+  init = function(self, tile)
+    GameObject.init(self, tile.x, tile.y)
+
     self.t = math.random()
+    self.tile = tile
 
-    self.pivot = { x = 0.5, y = 0.5 }
-    self.size = { x = cellSize, y = cellSize }
-
-    self.cellSize = cellSize
-    self.gridCellCount = cellCount
-    self.gridWidth = gridWidth
-    self.gridHeight = gridHeight
-    self.gridMargin = 16
-
-    -- gridIndex
-    self.gridIndex = { x = 0, y = 0 }
+    self.size = { x = self.cellSize, y = self.cellSize }
 
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
@@ -44,21 +37,47 @@ local PuzzlePiece = Class({
 
     -- snap animation
     self.snapStartedAt = love.timer.getTime()
-    self.snapDelay = 0.2
-    self.snapPosition = { x = 0, y = 0 }
 
     -- combination parts
     self.combinationPartList = {}
     self:generateCombination()
 
-    self.color = { r = math.ceil(math.random() * 255), g = math.ceil(math.random() * 255), b = math.ceil(math.random() * 255) }
+    self.color = {
+      r = math.ceil(math.random() * 255),
+      g = math.ceil(math.random() * 255),
+      b = math.ceil(math.random() * 255)
+    }
   end
 })
 PuzzlePiece:include(GameObject)
 
 --[[------------------------------------------------------------
-Game loop
+Events
 --]]--
+
+function PuzzlePiece:grab()
+  self.wiggleStartedAt = love.timer.getTime()
+  self.previousTile = self.tile
+  self.tile.piece = nil
+  self.tile = nil
+end
+
+
+function PuzzlePiece:drop(tile)
+  if tile.piece then
+    -- this tile already has a piece in it - revert back to previous tile!
+    tile = self.previousTile
+  end
+  self.tile = tile
+  self.previousTile = nil
+  tile.piece = self
+
+  local x, y = tile.x, tile.y
+  babysitter.activeWaitThen(1, function(t)
+    self.x = useful.lerp(self.x, x, t)
+    self.y = useful.lerp(self.y, y, t)
+  end)
+end
 
 function PuzzlePiece:onPurge()
 end
@@ -71,19 +90,23 @@ function PuzzlePiece:generateCombination()
   self.combinationPartList[3] = CombinationPart(self.x, self.y, 3, true, { x = -1, y = 0 }, self.cellSize)
 end
 
-function PuzzlePiece:draw()
+--[[------------------------------------------------------------
+Game loop
+--]]--
 
-  -- snap feedback
-  love.graphics.setColor(255,0,0, 100)
-  love.graphics.rectangle("fill", self.snapPosition.x - self.cellSize, self.snapPosition.y - self.cellSize, self.cellSize, self.cellSize)
+function PuzzlePiece:draw()
 
   -- draw dat piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y, self.size.x, self.size.y)
+  love.graphics.rectangle("fill", self.x, self.y, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
   -- test
-  love.graphics.print(self.gridIndex.x .. ', ' .. self.gridIndex.y, self.x - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y)
+  if self.tile then
+    local c, r = self.tile.col, self.tile.row
+    love.graphics.setFont(fontMedium)
+    love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.35)
+  end
 end
 
 function PuzzlePiece:followCombinationParts()
@@ -110,15 +133,11 @@ function PuzzlePiece:update(dt)
   self.size.y = self.cellSize * (1 + self.wiggle.y)
 
   -- snap animation
-  local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
-  self.snapPosition.x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
-  self.snapPosition.y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
-  self.x = useful.lerp(self.x, self.snapPosition.x - self.pivot.x * self.cellSize, 0.5 * snapRatio)
-  self.y = useful.lerp(self.y, self.snapPosition.y - self.pivot.y * self.cellSize, 0.5 * snapRatio)
-
-  -- grid index
-  self.gridIndex.x = math.ceil((self.snapPosition.x - self.gridMargin) / self.gridWidth * self.gridCellCount)
-  self.gridIndex.y = math.ceil((self.snapPosition.y - self.gridMargin) / self.gridHeight * self.gridCellCount)
+  if self.tile then
+    local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
+    self.x = useful.lerp(self.x, self.tile.x, 0.5 * snapRatio)
+    self.y = useful.lerp(self.y, self.tile.y, 0.5 * snapRatio)
+  end
 
   self:followCombinationParts()
 end
@@ -147,30 +166,31 @@ function PuzzlePiece:getLeft()
 end
 
 function PuzzlePiece:checkMatching(puzzlePiece)
-  local partA, partB
-  if self.gridIndex.x == puzzlePiece.gridIndex.x then
-    if self.gridIndex.y < puzzlePiece.gridIndex.y then
-      -- check bottom
-      partA = self:getBottom()
-      partB = puzzlePiece:getTop()
-    else
-      -- check top
-      partA = self:getTop()
-      partB = puzzlePiece:getBottom()
-    end
-  elseif self.gridIndex.y == puzzlePiece.gridIndex.y then
-    if self.gridIndex.x < puzzlePiece.gridIndex.x then
-      -- check left
-      partA = self:getRight()
-      partB = puzzlePiece:getLeft()
-    else
-      -- check right
-      partA = self:getLeft()
-      partB = puzzlePiece:getRight()
-    end
-  end
-
-  return partA:checkMatching(partB), partA:shouldRepulse(partB)
+  return false
+  -- local partA, partB
+  -- if self.gridIndex.x == puzzlePiece.gridIndex.x then
+  --   if self.gridIndex.y < puzzlePiece.gridIndex.y then
+  --     -- check bottom
+  --     partA = self:getBottom()
+  --     partB = puzzlePiece:getTop()
+  --   else
+  --     -- check top
+  --     partA = self:getTop()
+  --     partB = puzzlePiece:getBottom()
+  --   end
+  -- elseif self.gridIndex.y == puzzlePiece.gridIndex.y then
+  --   if self.gridIndex.x < puzzlePiece.gridIndex.x then
+  --     -- check left
+  --     partA = self:getRight()
+  --     partB = puzzlePiece:getLeft()
+  --   else
+  --     -- check right
+  --     partA = self:getLeft()
+  --     partB = puzzlePiece:getRight()
+  --   end
+  -- end
+  --
+  -- return partA:checkMatching(partB), partA:shouldRepulse(partB)
 end
 
 --[[------------------------------------------------------------

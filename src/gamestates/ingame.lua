@@ -27,7 +27,7 @@ end
 
 function state:enter()
 	-- setup grid sizes and spacing between them
-	local spacing = 16
+	local spacing = 155
 	local newspapergrid_tiles_across = 3
 	local society_tiles_across = 6
 	local grid_tiles_down = 5
@@ -46,13 +46,16 @@ function state:enter()
 		NewspaperGridTile, tile_size, tile_size,
 		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, spacing)
 
+	-- set up the wiggle
+	PuzzlePiece.cellSize = tile_size
+
 	-- puzzle pieces
-	-- PuzzlePiece(200, 300)
+	--PuzzlePiece(200, 300)
 	-- PuzzlePiece(700, 140)
 	-- PuzzlePiece(133, 100)
 
-	-- last puzzle piece position
-	self.lastPosition = { x = 0, y = 0 }
+	self.grabbedPiece = nil
+	self.hoveredTile = nil
 end
 
 function state:leave()
@@ -66,16 +69,23 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-  -- drag puzzle piece
-	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
-  local distance = Vector.dist(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
-	if distance < self.gridCellSize then
-		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
-		self.lastPosition.x = self.puzzlePieceDragged.x
-		self.lastPosition.y = self.puzzlePieceDragged.y
-	else
-		self.puzzlePieceDragged = nil
+	if DEBUG and self.hoveredTile then
+		PuzzlePiece(self.hoveredTile)
 	end
+
+  -- drag puzzle piece
+	if self.grabbedPiece then
+		return
+	end
+	if not self.hoveredTile then
+		return
+	end
+	local piece = self.hoveredTile.piece
+	if not piece then
+		return
+	end
+	piece:grabPiece(piece)
+	self.grabbedPiece = piece
 end
 
 function state:mousereleased(x, y, button)
@@ -83,8 +93,9 @@ function state:mousereleased(x, y, button)
 	-- check for combination
 	-- GameObject.mapToType("PuzzlePiece", function(piece)
 	log:write("woop")
-	if self.puzzlePieceDragged then
-		local piece = self.puzzlePieceDragged
+	if self.grabbedPiece then
+		log:write("woop")
+		local piece = self.grabbedPiece
 		GameObject.mapToType("PuzzlePiece", function(other)
 			if piece ~= other then
 				local distance = Vector.dist(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
@@ -104,13 +115,12 @@ function state:mousereleased(x, y, button)
 			end
 		end)
 	end
-	-- end)
 
 	-- drop puzzle piece
-	if self.puzzlePieceDragged then
-		self.puzzlePieceDragged.snapStartedAt = love.timer.getTime()
-		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
-	  self.puzzlePieceDragged = nil
+	if self.grabbedPiece then
+		self.grabbedPiece.snapStartedAt = love.timer.getTime()
+		self.grabbedPiece.wiggleStartedAt = love.timer.getTime()
+	  self.grabbedPiece = nil
 	end
 end
 
@@ -145,8 +155,8 @@ function state:update(dt)
 	end
 
  	-- drag
- 	if self.puzzlePieceDragged then
-  	self.puzzlePieceDragged:drag(mx, my)
+ 	if self.grabbedPiece then
+  	self.grabbedPiece:drag(mx, my)
   end
 end
 
