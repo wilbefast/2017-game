@@ -1,5 +1,13 @@
 return {
   {
+    grid = "newspaperGrid",
+    pieceType = "PieceCandidate",
+    count = 1,
+    possiblePositions = {
+      { col = 2, row = 2 }
+    }
+  },
+  {
     grid = "societyGrid",
     pieceType = "PieceNewspaper",
     count = 1,

@@ -1,6 +1,6 @@
 return {
   PieceNewspaper = {
-    {
+    Mediapart = {
       name = "Mediapart",
       connections = {
         E = { type = "financial", convex = false },
@@ -9,7 +9,7 @@ return {
     }
   },
   PieceCandidate = {
-    {
+    Reac = {
       name = "Reac",
       connections = {
         N = { type = "financial", convex = true },
@@ -18,7 +18,7 @@ return {
         W = { type = "state", convex = true }
       }
     },
-    {
+    Ecolo = {
       name = "Ecolo",
       connections = {
         N = { type = "sexual", convex = true },
