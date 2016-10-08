@@ -92,8 +92,8 @@ end
 
 function PuzzlePiece:generateCombination()
   -- css style (top, right, bottom, left)
-  for i = 0, 3 do
-    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.floor(math.random() * 4), math.random() > 0.5, self.cellSize)
+  for i = 1, 4 do
+    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.ceil(math.random() * 4), math.random() > 0.5, self.cellSize)
   end
 end
 
@@ -111,7 +111,7 @@ function PuzzlePiece:draw()
 
   -- draw the piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x, self.y, self.size.x, self.size.y)
+  love.graphics.rectangle("fill", self.x - self.cellSize * self.wiggle.x / 2, self.y - self.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
   -- show grid coordinates
@@ -124,8 +124,8 @@ end
 
 function PuzzlePiece:followCombinationParts()
   -- combination parts
-  for i = 0, #self.combinationPartList do
-    self.combinationPartList[i]:follow(self.x, self.y)-- - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y)
+  for i = 1, #self.combinationPartList do
+    self.combinationPartList[i]:follow(self.x, self.y)
     self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
   end
 end
@@ -163,19 +163,19 @@ function PuzzlePiece:drag(x, y)
 end
 
 function PuzzlePiece:getTop()
-  return self.combinationPartList[0]
-end
-
-function PuzzlePiece:getRight()
   return self.combinationPartList[1]
 end
 
-function PuzzlePiece:getBottom()
+function PuzzlePiece:getRight()
   return self.combinationPartList[2]
 end
 
-function PuzzlePiece:getLeft()
+function PuzzlePiece:getBottom()
   return self.combinationPartList[3]
+end
+
+function PuzzlePiece:getLeft()
+  return self.combinationPartList[4]
 end
 
 function PuzzlePiece:checkMatching(puzzlePiece)

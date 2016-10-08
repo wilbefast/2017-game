@@ -27,23 +27,23 @@ local CombinationPart = Class({
     self.convex = convex
 
     self.combinationType = combinationType
-    if combinationType == 0 then
+    if combinationType == 1 then
       self.image = Resources.triangle
-    elseif combinationType == 1 then
-      self.image = Resources.square
     elseif combinationType == 2 then
-      self.image = Resources.circle
+      self.image = Resources.square
     elseif combinationType == 3 then
+      self.image = Resources.circle
+    elseif combinationType == 4 then
       self.image = Resources.trapeze
     end
 
-    if index == 0 then
+    if index == 1 then
       self.offset = { x = 0, y = -1 }
       self.rotation = 0
-    elseif index == 1 then
+    elseif index == 2 then
       self.offset = { x = 1, y = 0 }
       self.rotation = math.pi / 2
-    elseif index == 2 then
+    elseif index == 3 then
       self.rotation = math.pi
       self.offset = { x = 0, y = 1 }
     else
@@ -70,7 +70,7 @@ function CombinationPart:draw()
   else
     love.graphics.setColor(100,100,100)
   end
-  love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.size / 2, self.size / 2)
+  love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
   love.graphics.setColor(255,255,255)
 end
 
