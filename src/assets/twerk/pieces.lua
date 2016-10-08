@@ -122,6 +122,39 @@ return {
         N = { type = "sexual", convex = false }
       }
     },
+    -- Source
+    Source_Secret1 = {
+      name = "Source_Secret1",
+      team = "Enemy",
+      pieceType = "PieceSource",
+      connections = {
+        N = { type = "world", convex = false }
+        }
+      },
+      Source_Secret2 = {
+        name = "Source_Secret2",
+        team = "Enemy",
+        pieceType = "PieceSource",
+        connections = {
+          N = { type = "state", convex = false }
+        }
+      },
+      Source_Secret3 = {
+        name = "Source_Secret3",
+        team = "Enemy",
+        pieceType = "PieceSource",
+        connections = {
+          N = { type = "financial", convex = false }
+        }
+      },
+      Source_Secret4 = {
+          name = "Source_Secret4",
+          team = "Enemy",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "sexual", convex = false }
+          }
+      },
     -- Adversary
     Intelligence = {
       name = "Intelligence",
