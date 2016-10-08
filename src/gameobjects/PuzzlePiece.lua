@@ -30,6 +30,9 @@ local PuzzlePiece = Class({
     self.gridHeight = gridHeight
     self.gridMargin = 16
 
+    -- tmp
+    self.gridIndex = { x = 0, y = 0 }
+
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
     self.wiggleDelay = 0.3
@@ -76,6 +79,10 @@ function PuzzlePiece:draw()
   local y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
   self.x = useful.lerp(self.x, x - self.pivot.x * self.cellSize, 0.5 * snapRatio)
   self.y = useful.lerp(self.y, y - self.pivot.y * self.cellSize, 0.5 * snapRatio)
+
+  -- snap feedback
+  love.graphics.setColor(255,0,0, 100)
+  love.graphics.rectangle("fill", x - self.cellSize, y - self.cellSize, self.cellSize, self.cellSize)
 
   -- draw dat piece
   love.graphics.setColor(255,0,0)
