@@ -25,12 +25,16 @@ local PieceNewspaper = Class({
 
     -- css style (top, right, bottom, left)
     self.combinationParts.N:setType(1)
-    self.combinationParts.E:setType(5)
+    self.combinationParts.E.purge = true
+    self.combinationParts.E = nil
     self.combinationParts.S:setType(2)
-    self.combinationParts.W:setType(5)
+    self.combinationParts.W.purge = true
+    self.combinationParts.W = nil
 
     self.combinationParts.N.convex = false
-    self.combinationParts.E.convex = false
+    self.combinationParts.S.convex = false
+
+    self.imageTooltip = Resources.tooltipFacho
   end
 })
 PieceNewspaper:include(PuzzlePiece)

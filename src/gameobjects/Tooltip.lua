@@ -24,7 +24,9 @@ local Tooltip = Class({
     self.image = nil
     self.shouldAppear = false
     self.apparition = 0
-    self.apparitionDelay = 0
+    self.apparitionDelay = 1
+    self.disappeared = true
+    self.apparitionDirection = -1
   end
 })
 Tooltip:include(GameObject)
@@ -41,14 +43,16 @@ function Tooltip:show(x, y, image)
   self.image = image
   self.shouldAppear = true
   if x < WORLD_W / 2 then
-    self.x = WORLD_W * 3 / 4 - self.image:getWidth()
+    self.x = WORLD_W * 3 / 4 - self.image:getWidth() / 2
   else
-    self.x = WORLD_W * 1 / 4 - self.image:getWidth()
+    self.x = WORLD_W * 1 / 4 - self.image:getWidth() / 2
   end
   if y < WORLD_H / 2 then
     self.y = WORLD_H
+    self.apparitionDirection = -1
   else
     self.y = - self.image:getHeight()
+    self.apparitionDirection = 1
   end
 end
 
@@ -58,12 +62,17 @@ end
 
 function Tooltip:draw()
   if self.image then
-    love.graphics.draw(self.image, self.x, self.y + self.apparition * self.image:getHeight())
+    love.graphics.draw(self.image, self.x, self.y + self.apparitionDirection * math.sin(self.apparition * math.pi / 2) * self.image:getHeight())
   end
 end
 
 function Tooltip:update(dt)
-  self.apparition = useful.clamp(self.apparition + dt / self.apparitionDelay, 0, 1)
+  if self.shouldAppear then
+    self.apparition = useful.clamp(self.apparition + dt / self.apparitionDelay, 0, 1)
+  else
+    self.apparition = useful.clamp(self.apparition - dt / self.apparitionDelay, 0, 1)
+  end
+  self.disappeared = self.apparition == 0
 end
 
 --[[------------------------------------------------------------
