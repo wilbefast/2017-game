@@ -53,6 +53,7 @@ function love.load(arg)
   title = require("gamestates/title")
   Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
+  CombinationPart = require("gameobjects/CombinationPart")
 
   -- startup logs
   log.print = true

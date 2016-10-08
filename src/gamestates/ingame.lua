@@ -78,8 +78,6 @@ function state:update(dt)
 end
 
 function state:draw()
-	-- draw logic
-	GameObject.drawAll()
 
   -- left and right parts
   love.graphics.rectangle("line", 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
@@ -92,6 +90,9 @@ function state:draw()
   		love.graphics.line(16, 16 + y * self.gridCellSize, WORLD_W*0.5 - 16, 16 + y * self.gridCellSize)
   	end
   end
+  
+	-- draw logic
+	GameObject.drawAll()
 end
 
 --[[------------------------------------------------------------

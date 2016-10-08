@@ -22,7 +22,9 @@ local PuzzlePiece = Class({
     GameObject.init(self, x, y)
     self.t = math.random()
 
-    self.radius = cellSize
+    self.pivot = { x = 0.5, y = 0.5 }
+
+    self.cellSize = cellSize
     self.gridCellCount = cellCount
     self.gridWidth = gridWidth
     self.gridHeight = gridHeight
@@ -33,10 +35,15 @@ local PuzzlePiece = Class({
     self.wiggleDelay = 0.3
     self.wiggleScale = 0.2
     self.wiggleCount = 3
+    self.wiggle = { x = 0, y = 0 }
 
     -- snap animation
     self.snapStartedAt = love.timer.getTime()
     self.snapDelay = 0.2
+
+    -- combination parts
+    self.combinationPartList = {}
+    self:generateCombination()
   end
 })
 PuzzlePiece:include(GameObject)
@@ -48,32 +55,47 @@ Game loop
 function PuzzlePiece:onPurge()
 end
 
+function PuzzlePiece:generateCombination()
+  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, { x = -1, y = 0 }, self.cellSize)
+  self.combinationPartList[1] = CombinationPart(self.x, self.y, 0, { x = 1, y = 0 }, self.cellSize)
+end
+
 function PuzzlePiece:draw()
 
   -- wiggle animation
   local wiggleRatio = 1 - useful.clamp((love.timer.getTime() - self.wiggleStartedAt) / self.wiggleDelay, 0, 1)
   local t = self.t * self.wiggleCount * math.pi * 2
-  local sx = self.radius * (1 + self.wiggleScale * math.cos(t) * wiggleRatio)
-  local sy = self.radius * (1 + self.wiggleScale * math.cos(t + math.pi) * wiggleRatio)
-
-  -- draw dat piece
-  love.graphics.setColor(255,0,0)
-  love.graphics.rectangle("fill", self.x - 0.5 * sx, self.y - 0.5 * sy, sx, sy)
-  love.graphics.setColor(255,255,255)
-end
-
-function PuzzlePiece:update(dt)
-  self.t = self.t + dt
-  if self.t > 1 then
-    self.t = self.t - 1
-  end
+  self.wiggle.x = self.wiggleScale * math.cos(t) * wiggleRatio
+  self.wiggle.y = self.wiggleScale * math.cos(t + math.pi) * wiggleRatio
+  local sx = self.cellSize * (1 + self.wiggle.x)
+  local sy = self.cellSize * (1 + self.wiggle.y)
 
   -- snap animation
   local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
   local x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
   local y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
-  self.x = useful.lerp(self.x, x - 0.5 * self.radius, 0.5 * snapRatio)
-  self.y = useful.lerp(self.y, y - 0.5 * self.radius, 0.5 * snapRatio)
+  self.x = useful.lerp(self.x, x - self.pivot.x * self.cellSize, 0.5 * snapRatio)
+  self.y = useful.lerp(self.y, y - self.pivot.y * self.cellSize, 0.5 * snapRatio)
+
+  -- draw dat piece
+  love.graphics.setColor(255,0,0)
+  love.graphics.rectangle("fill", self.x - self.pivot.x * sx, self.y - self.pivot.y * sy, sx, sy)
+  love.graphics.setColor(255,255,255)
+
+  -- combination parts
+  for i = 0, #self.combinationPartList do
+    self.combinationPartList[i]:follow(self.x, self.y)
+    self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
+  end
+end
+
+function PuzzlePiece:update(dt)
+
+  -- timing
+  self.t = self.t + dt
+  if self.t > 1 then
+    self.t = self.t - 1
+  end
 end
 
 function PuzzlePiece:drag(x, y)
