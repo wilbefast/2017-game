@@ -39,19 +39,19 @@ function CombinationPart:onPurge()
 end
 
 function CombinationPart:draw()
-  if self.convex then
-    -- background color
-    love.graphics.setColor(91, 132, 192)
-  else
-    love.graphics.setColor(0,255,0)
-  end
-  -- local style = ""
   -- if self.convex then
-  --   style = "line"
+    -- background color
+  --   love.graphics.setColor(91, 132, 192)
   -- else
-  --   style = "fill"
+    love.graphics.setColor(0,255,0)
   -- end
-  love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
+  local style = ""
+  if self.convex then
+    style = "line"
+  else
+    style = "fill"
+  end
+  love.graphics.rectangle(style, self.x, self.y, self.size, self.size)
   love.graphics.setColor(255,255,255)
 end
 
