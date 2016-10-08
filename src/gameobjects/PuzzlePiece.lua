@@ -202,14 +202,17 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
   end
-  for dir, part in pairs(self.combinationParts) do
-    if part then
-      local otherTile = newTile[dir]
-      if otherTile and otherTile.piece then
-        local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
-        if otherPart then
-          return part:checkMatching(otherPart)
-        end
+  for _, dir in ipairs(self.directions) do
+    local part = self.combinationParts[dir]
+    local otherTile = newTile[dir]
+    if otherTile and otherTile.piece then
+      local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
+      if part and otherPart and not part:checkMatching(otherPart) then
+        return false
+      elseif part and not otherPart then
+        return false
+      elseif otherPart and not part then
+        return false
       end
     end
   end

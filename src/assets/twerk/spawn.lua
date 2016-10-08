@@ -1,14 +1,5 @@
 return {
   {
-    -- TODO: replace this with a source
-    grid = "newspaperGrid",
-    count = 1,
-    possiblePositions = {
-      { col = 2, row = 2 }
-    },
-    name = { "Ecolo" }
-  },
-  {
     grid = "societyGrid",
     count = 1,
     possiblePositions = {

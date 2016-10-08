@@ -81,6 +81,8 @@ function state:enter()
 		end
 	end
 
+	-- ensure that there are 3 source puzzle pieces
+
 	-- tooltip
 	self.tooltip = Tooltip()
 

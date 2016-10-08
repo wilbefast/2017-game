@@ -73,7 +73,7 @@ local CombinationPart = Class({
 CombinationPart:include(GameObject)
 
 --[[------------------------------------------------------------
-Game loop
+Events
 --]]--
 
 function CombinationPart:onPurge()
@@ -94,6 +94,10 @@ function CombinationPart:setType(combinationType)
   end
 end
 
+--[[------------------------------------------------------------
+Game loop
+--]]--
+
 function CombinationPart:draw()
   if self.image then
     love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
@@ -102,6 +106,10 @@ end
 
 function CombinationPart:update(dt)
 end
+
+--[[------------------------------------------------------------
+Modify
+--]]--
 
 function CombinationPart:follow(x, y)
   self.x = x + self.size * self.offset.x * (1 + self.wiggle.x) * self.pivot.x
@@ -112,6 +120,10 @@ function CombinationPart:doTheWiggle(x, y)
   self.wiggle.x = x
   self.wiggle.y = y
 end
+
+--[[------------------------------------------------------------
+Query
+--]]--
 
 function CombinationPart:checkMatching(combinationPart)
   return combinationPart.combinationType == self.combinationType and combinationPart.convex ~= self.convex
