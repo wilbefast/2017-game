@@ -118,6 +118,7 @@ function state:bringBackPiece(piece, x, y)
 	babysitter.activeWaitThen(1, function(t)
 		piece.x = useful.lerp(piece.x, x, t)
 		piece.y = useful.lerp(piece.y, y, t)
+		piece:followCombinationParts()
 	end)
 end
 

@@ -19,12 +19,12 @@ Initialisation
 local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
-  init = function(self, x, y, type, convex, offset, cellSize)
+  init = function(self, x, y, combinationType, convex, offset, cellSize, color)
     GameObject.init(self, x, y)
     self.pivot = { x = 0.5, y = 0.5 }
     self.size = 32
     self.convex = convex
-    self.type = type
+    self.combinationType = combinationType
     self.offset = offset
     self.cellSize = cellSize
     self.wiggle = { x = 0, y = 0 }
@@ -40,19 +40,23 @@ function CombinationPart:onPurge()
 end
 
 function CombinationPart:draw()
-  -- if self.convex then
-    -- background color
-  --   love.graphics.setColor(91, 132, 192)
-  -- else
-    love.graphics.setColor(0,200,0)
-  -- end
-  local style = ""
   if self.convex then
-    style = "fill"
+    love.graphics.setColor(255,255,255)
   else
-    style = "line"
+    love.graphics.setColor(0,0,0)
   end
-  love.graphics.rectangle(style, self.x, self.y, self.size, self.size)
+  local x = self.x + self.size * self.pivot.x
+  local y = self.y + self.size * self.pivot.y
+  if self.combinationType == 0 then
+    local top = y + self.size
+    if self.convex then
+      top = y - self.size
+    end
+    love.graphics.polygon("fill", x - self.size, y, x + self.size, y, x, top)
+  -- elseif self.combinationType == 1
+  else
+    love.graphics.rectangle("fill", x - self.size, y, self.size * 2, self.size)
+  end
   love.graphics.setColor(255,255,255)
 end
 
@@ -70,7 +74,7 @@ function CombinationPart:doTheWiggle(x, y)
 end
 
 function CombinationPart:checkMatching(combinationPart)
-  return combinationPart.type == self.type and combinationPart.convex ~= self.convex
+  return combinationPart.combinationType == self.combinationType and combinationPart.convex ~= self.convex
 end
 
 function CombinationPart:shouldRepulse(combinationPart)
