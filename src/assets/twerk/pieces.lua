@@ -122,6 +122,93 @@ return {
         N = { type = "sexual", convex = false }
       }
     },
+    -- Source
+    Source_Secret1 = {
+      name = "Source_Secret1",
+      team = "Neutral",
+      pieceType = "PieceSource",
+      connections = {
+        N = { type = "world", convex = false }
+        }
+      },
+      Source_Secret2 = {
+        name = "Source_Secret2",
+        team = "Neutral",
+        pieceType = "PieceSource",
+        connections = {
+          N = { type = "state", convex = false }
+        }
+      },
+      Source_Secret3 = {
+        name = "Source_Secret3",
+        team = "Neutral",
+        pieceType = "PieceSource",
+        connections = {
+          N = { type = "financial", convex = false }
+        }
+      },
+      Source_Secret4 = {
+          name = "Source_Secret4",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "sexual", convex = false }
+          }
+      },
+      Source_Public1 = {
+          name = "Source_Public1",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "sexual", convex = false }
+            S = { type = "world", convex = false }
+          }
+      },
+      Source_Public2 = {
+          name = "Source_Public2",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "sexual", convex = false }
+            S = { type = "state", convex = false }
+          }
+      },
+      Source_Public3 = {
+          name = "Source_Public3",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "sexual", convex = false }
+            S = { type = "financial", convex = false }
+          }
+      },
+      Source_Public4 = {
+          name = "Source_Public4",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "state", convex = false }
+            S = { type = "world", convex = false }
+          }
+      },
+      Source_Public5 = {
+          name = "Source_Public5",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "state", convex = false }
+            S = { type = "financial", convex = false }
+          }
+      },
+      Source_Public6 = {
+          name = "Source_Public6",
+          team = "Neutral",
+          pieceType = "PieceSource",
+          connections = {
+            N = { type = "financial", convex = false }
+            S = { type = "world", convex = false }
+          }
+      },
     -- Adversary
     Intelligence = {
       name = "Intelligence",

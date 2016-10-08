@@ -16,6 +16,7 @@ Lesser General Public License for more details.
 Initialisation
 --]]--
 
+
 local PieceSource = Class({
   type = GameObject.newType("PieceSource"),
   init = function(self, tile, args)
@@ -23,6 +24,43 @@ local PieceSource = Class({
   end
 })
 PieceSource:include(PuzzlePiece)
+
+--[[------------------------------------------------------------
+Generation
+--]]--
+
+function PieceSource.pick(numberToPick)
+  numberToPick = numberToPick or 1
+
+  -- prepare the weights of each part type
+  local partWeights = {}
+  for name, type in pairs(CombinationPart.types) do
+    partWeights[name] = type.count.Enemy.concave
+  end
+
+  -- prepare the spawn pool
+  local sourceTemplates = PuzzlePiece.databaseByType[PieceSource]
+  local drawPool = {}
+  for _, template in ipairs(sourceTemplates) do
+    for i = 1, weight do
+      table.insert(drawPool, template)
+    end
+  end
+
+  useful.shuffle(drawPool)
+  if numberToPick <= 1 then
+    return drawPool[1]
+  end
+
+  -- chaque pièce a un poid relatif à ses connexions:
+  -- un type de connexion gagne 1 de poid par connexion concave sur les pièces du camp système placé sur le plateau de jeu
+  -- Un point supplémentaire est accordé pour les connexions non occupées des candidats
+  -- Le poid des pièces à 2 connexions est ensuite divisé par 4
+  -- weight = (Sum(SimilarConnectivityOfSystemPiece) + Sum(EmptySimilarConnectivityOfCandidatePiece)) / PieceDivider
+  -- on fait ensuite un tirage aléatoire pondéré sans remise : si deux sources doivent apparaître, elles ne peuvent pas être identiques.
+
+
+end
 
 --[[------------------------------------------------------------
 Events

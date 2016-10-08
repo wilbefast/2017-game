@@ -16,22 +16,38 @@ Lesser General Public License for more details.
 Initialisation
 --]]--
 
+local database = require("assets/twerk/pieces")
+local databaseByType = {}
+for name, pieceTemplate in pairs(database) do
+  local t = pieceTemplate.pieceType
+  if not databaseByType[t] then
+    databaseByType[t] = {}
+  end
+  table.insert(databaseByType[t], pieceTemplate)
+end
+
 local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
   layer = 0,
   snapDelay = 0.2,
-  database = require("assets/twerk/pieces"),
+  database = database,
+  databaseByType = databaseByType,
 
   directions = { "N", "E", "S", "W" },
   oppositeDirections = { N = "S", E = "W", S = "N", W = "E" },
+  clockwiseDirections = { N = "E", E = "S", S = "W", W = "N" },
+  counterClockwiseDirections = { N = "W", E = "N", S = "E", W = "S" },
 
   init = function(self, tile, args)
     GameObject.init(self, tile.x, tile.y)
 
     self.t = math.random()
+
+    -- attach to tile
     self.tile = tile
     tile.piece = self
 
+    -- set size
     self.size = { x = PuzzlePiece.cellSize, y = PuzzlePiece.cellSize }
     self.rotation = 0
     self.rotationTarget = 0
@@ -50,6 +66,13 @@ local PuzzlePiece = Class({
     -- combination parts
     self.combinationParts = {}
 
+    -- set team
+    self.team = args and args.team or "Neutral"
+
+    -- set name
+    self.name = args and args.name or "???"
+
+    -- initialise connections
     local _randomiseCombinationParts = function()
       for i, dir in ipairs(self.directions) do
         local part = CombinationPart({
@@ -59,14 +82,11 @@ local PuzzlePiece = Class({
         self.combinationParts[dir] = part
       end
     end
-
     if args then
       if not args.connections then
         log:write("Missing 'connections' in template, randomising parts")
         _randomiseCombinationParts()
       else
-        --log:write("Spawning piece", args.name)
-        self.name = args.name
         for dir, connection in pairs(args.connections) do
           local part = CombinationPart({
             direction = dir,
@@ -81,6 +101,15 @@ local PuzzlePiece = Class({
       _randomiseCombinationParts()
     end
 
+    -- store connection count
+    self.partCount = 0
+    for dir, part in pairs(self.combinationParts) do
+      if not part.isNull then
+        self.partCount = self.partCount + 1
+      end
+    end
+
+    -- colour
     self.color = {
       r = math.ceil(math.random() * 255),
       g = math.ceil(math.random() * 255),
@@ -93,6 +122,24 @@ PuzzlePiece:include(GameObject)
 --[[------------------------------------------------------------
 Events
 --]]--
+
+function PuzzlePiece:rotateDirection(map)
+  local newCombinationParts = {}
+  for direction, part in pairs(self.combinationParts) do
+    local newDirection = map[direction]
+    --part.setDirection(newDirection)
+    newCombinationParts[newDirection] = part
+  end
+  self.combinationParts = newCombinationParts
+end
+
+function PuzzlePiece:rotateClockwise()
+  self:rotateDirection(self.clockwiseDirections)
+end
+
+function PuzzlePiece:rotateCounterClockwise()
+  self:rotateDirection(self.counterClockwiseDirections)
+end
 
 function PuzzlePiece:grab()
   self.wiggleStartedAt = love.timer.getTime()
@@ -161,11 +208,17 @@ function PuzzlePiece:draw()
     love.graphics.setColor(255,255,255)
   end
 
-  -- show grid coordinates
-  if self.tile then
-    local c, r = self.tile.col, self.tile.row
-    love.graphics.setFont(fontMedium)
-    love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.1)
+  -- print the name
+  love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
+
+  -- debug stuff
+  if DEBUG then
+    -- show grid coordinates
+    if self.tile then
+      local c, r = self.tile.col, self.tile.row
+      love.graphics.setFont(fontMedium)
+      love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.1)
+    end
   end
 end
 
@@ -225,7 +278,7 @@ function PuzzlePiece:rotate(direction)
   for dir, part in pairs(self.combinationParts) do
     part:rotate(direction)
   end
-  
+
   self.wiggleStartedAt = love.timer.getTime()
 end
 
