@@ -16,14 +16,13 @@ Lesser General Public License for more details.
 Initialisation
 --]]--
 
-local PieceCandidate = Class({
-  type = GameObject.newType("PieceCandidate"),
+local PieceEvidence = Class({
+  type = GameObject.newType("PieceEvidence"),
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
-    self.imageTooltip = Resources.tooltipFacho
   end
 })
-PieceCandidate:include(PuzzlePiece)
+PieceEvidence:include(PuzzlePiece)
 
 --[[------------------------------------------------------------
 Events
@@ -33,11 +32,11 @@ Events
 Game loop
 --]]--
 
-function PieceCandidate:draw()
+function PieceEvidence:draw()
   PuzzlePiece.draw(self)
 end
 
-function PieceCandidate:update(dt)
+function PieceEvidence:update(dt)
   PuzzlePiece.update(self, dt)
 end
 
@@ -45,4 +44,4 @@ end
 Export
 --]]--
 
-return PieceCandidate
+return PieceEvidence

@@ -82,6 +82,9 @@ function state:enter()
 		end
 	end
 
+	-- ensure that there are 3 source puzzle pieces
+	self:spawnSourcePieces()
+
 	-- tooltip
 	self.tooltip = Tooltip()
 
@@ -93,6 +96,24 @@ function state:leave()
 	GameObject.purgeAll()
 	self.newspaperGrid = nil
 	self.societyGrid = nil
+end
+
+--[[------------------------------------------------------------
+Game logic
+--]]--
+
+function state:spawnSourcePieces()
+	local emptyTiles = {}
+	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	local sourcesToSpawn = math.max(0, math.min(#emptyTiles, 3 - GameObject.countOfType("PieceSource")))
+	if sourcesToSpawn <= 0 then
+		return
+	end
+
+	useful.shuffle(emptyTiles)
+	for i = 1, sourcesToSpawn do
+		PieceSource(emptyTiles[i])
+	end
 end
 
 --[[------------------------------------------------------------

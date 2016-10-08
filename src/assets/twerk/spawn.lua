@@ -1,12 +1,63 @@
 return {
   {
-    -- TODO: replace this with a source
     grid = "newspaperGrid",
     count = 1,
     possiblePositions = {
-      { col = 2, row = 2 }
+      { col = 1, row = 3 },
+      { col = 1, row = 5 },
+      { col = 1, row = 1 },
+      { col = 3, row = 1 },
+      { col = 3, row = 5 }
     },
-    name = { "Ecolo" }
+    name = {"Sexual"}
+  },
+  {
+    grid = "newspaperGrid",
+    count = 1,
+    possiblePositions = {
+      { col = 1, row = 3 },
+      { col = 1, row = 5 },
+      { col = 1, row = 1 },
+      { col = 3, row = 1 },
+      { col = 3, row = 5 }
+    },
+    name = {"State"}
+  },
+  {
+    grid = "newspaperGrid",
+    count = 1,
+    possiblePositions = {
+      { col = 1, row = 3 },
+      { col = 1, row = 5 },
+      { col = 1, row = 1 },
+      { col = 3, row = 1 },
+      { col = 3, row = 5 }
+    },
+    name = {"World"}
+  },
+  {
+    grid = "newspaperGrid",
+    count = 1,
+    possiblePositions = {
+      { col = 1, row = 3 },
+      { col = 1, row = 5 },
+      { col = 1, row = 1 },
+      { col = 3, row = 1 },
+      { col = 3, row = 5 }
+    },
+    name = {"Financial"}
+  },
+  {
+    grid = "newspaperGrid",
+    count = 1,
+    possiblePositions = {
+      { col = 1, row = 3 },
+      { col = 1, row = 5 },
+      { col = 1, row = 1 },
+      { col = 3, row = 1 },
+      { col = 3, row = 5 }
+    },
+    name = {"Joker"}
   },
   {
     grid = "societyGrid",
@@ -16,7 +67,7 @@ return {
       { col = 5, row = 1 },
       { col = 6, row = 1 }
     },
-    name = { "Mediapart" }
+    name = {"Mediapart"}
   },
   {
     grid = "societyGrid",
@@ -28,7 +79,7 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    name = { "Reac" }
+    name = { "Facho", "Gaucho" }
   },
   {
     grid = "societyGrid",
@@ -40,6 +91,6 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    name = { "Ecolo" }
+    name = { "Ecolo" , "Centre" }
   }
 }

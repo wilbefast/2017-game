@@ -73,7 +73,7 @@ local CombinationPart = Class({
 CombinationPart:include(GameObject)
 
 --[[------------------------------------------------------------
-Game loop
+Events
 --]]--
 
 function CombinationPart:onPurge()
@@ -94,6 +94,10 @@ function CombinationPart:setType(combinationType)
   end
 end
 
+--[[------------------------------------------------------------
+Game loop
+--]]--
+
 function CombinationPart:draw()
   if self.image then
     love.graphics.draw(
@@ -112,6 +116,10 @@ function CombinationPart:update(dt)
   self.rotation = useful.lerp(self.rotation, self.rotationTarget, 0.5)
 end
 
+--[[------------------------------------------------------------
+Modify
+--]]--
+
 function CombinationPart:follow(x, y)
   self.x = x--+ self.size * self.offset.x * (1 + self.wiggle.x) * self.pivot.x
   self.y = y--+ self.size * self.offset.y * (1 + self.wiggle.y) * self.pivot.y
@@ -125,6 +133,10 @@ end
 function CombinationPart:rotate(radian)
   self.rotationTarget = self.rotationTarget + radian
 end
+
+--[[------------------------------------------------------------
+Query
+--]]--
 
 function CombinationPart:checkMatching(combinationPart)
   return combinationPart.combinationType == self.combinationType and combinationPart.convex ~= self.convex
