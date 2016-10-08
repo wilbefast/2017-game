@@ -76,6 +76,9 @@ function state:enter()
 
 	-- tooltip
 	self.tooltip = Tooltip()
+
+	-- timeline
+	self.timeline = Timeline()
 end
 
 function state:leave()
@@ -151,8 +154,12 @@ function state:update(dt)
 
 		local hoveredPiece = self.hoveredTile.piece
 		if hoveredPiece then
-			if hoveredPiece.imageTooltip and self.tooltip.disappeared then
-				self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
+			if hoveredPiece.imageTooltip then
+				if self.tooltip.disappeared then
+					self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
+				end
+			else
+				self.tooltip:hide()
 			end
 		else
 			self.tooltip:hide()
