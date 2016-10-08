@@ -126,6 +126,10 @@ function state:update(dt)
 	if self.hoveredTile then
 		self.hoveredTile.hovered = false
 		self.hoveredTile = nil
+	else
+		if self.tooltip.image then
+			self.tooltip:hide()
+		end
 	end
 	local newHoveredTile = self.newspaperGrid:pixelToTile(mx, my) or self.societyGrid:pixelToTile(mx, my)
 	if newHoveredTile then
@@ -134,12 +138,12 @@ function state:update(dt)
 
 		local hoveredPiece = self.hoveredTile.piece
 		if hoveredPiece then
-			if hoveredPiece.imageTooltip and self.tooltip.image ~= hoveredPiece.imageTooltip then
+			if hoveredPiece.imageTooltip and self.tooltip.disappeared then
 				self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
 			end
+		else
+			self.tooltip:hide()
 		end
-	else
-		-- self.tooltip.hide()
 	end
 
  	-- drag
