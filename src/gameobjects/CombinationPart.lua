@@ -20,10 +20,10 @@ local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
   types = {
-    financial = { image = Resources.triangle},
-    world = { image = Resources.square},
-    state = { image = Resources.circle},
-    sexual = { image = Resources.trapeze},
+    financial = { name = "financial", image = Resources.triangle},
+    world = { name = "world", image = Resources.square},
+    state = { name = "state", image = Resources.circle},
+    sexual = { name = "sexual", image = Resources.trapeze},
     null = {}
   },
   directions = {
@@ -32,16 +32,28 @@ local CombinationPart = Class({
     S = { offset = { x = 0, y = 1 }, rotation = math.pi },
     W = { offset = { x = -1, y = 0 }, rotation = math.pi * 3 / 2 }
   },
-  init = function(self, dir, x, y, combinationType, convex)
+  init = function(self, args)
+
+    local dir =  args.direction
+    local x = args.piece.x
+    local y = args.piece.y
+    local combinationType = args.type
+    local convex = args.convex
+
     GameObject.init(self, x, y)
 
-    combinationType = combinationType or self.types[useful.randIn({
-      "financial",
-      "world",
-      "state",
-      "sexual",
-      "null"
-    })]
+    if not combinationType then
+      combinationType = useful.randIn({
+        "financial",
+        "world",
+        "state",
+        "sexual",
+        "null"
+      })
+    end
+    if type(combinationType) == "string" then
+      combinationType = self.types[combinationType]
+    end
     if convex == nil then
       convex = math.random() > 0.5 and true or false
     end

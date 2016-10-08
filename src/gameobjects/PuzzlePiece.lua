@@ -20,12 +20,12 @@ local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
   layer = 0,
   snapDelay = 0.2,
+  database = require("assets/twerk/pieces"),
 
-  -- css style (top, right, bottom, left)
   directions = { "N", "E", "S", "W" },
   oppositeDirections = { N = "S", E = "W", S = "N", W = "E" },
 
-  init = function(self, tile, combinationPartArgs)
+  init = function(self, tile, args)
     GameObject.init(self, tile.x, tile.y)
 
     self.t = math.random()
@@ -47,16 +47,41 @@ local PuzzlePiece = Class({
     -- combination parts
     self.combinationParts = {}
 
-    if combinationPartArgs then
-      for dir, args in pairs(combinationPartArgs) do
-        local part = CombinationPart(dir, self.x, self.y, args.type, args.convex)
+    local _randomiseCombinationParts = function()
+      for i, dir in ipairs(self.directions) do
+        local part = CombinationPart({
+          direction = dir,
+          piece = self
+        })
         self.combinationParts[dir] = part
+      end
+    end
+
+    if args then
+      if not args.name then
+        log:write("Missing name argument, randomising parts")
+        _randomiseCombinationParts()
+      else
+        local name = useful.randIn(args.name)
+        local template = self.database[name]
+        if not template then
+          log:write("Piece not found in database", name)
+        else
+          log:write("Spawning piece", template.name)
+          self.name = template.name
+          for dir, args in pairs(template.connections) do
+            local part = CombinationPart({
+              direction = dir,
+              piece = self,
+              type = args.type,
+              convex = args.convex
+            })
+            self.combinationParts[dir] = part
+          end
+        end
       end
     else
-      for i, dir in ipairs(self.directions) do
-        local part = CombinationPart(i, self.x, self.y)
-        self.combinationParts[dir] = part
-      end
+      _randomiseCombinationParts()
     end
 
     self.color = {

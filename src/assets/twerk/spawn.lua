@@ -1,5 +1,6 @@
 return {
   {
+    -- TODO: replace this with a source
     grid = "newspaperGrid",
     pieceType = "PieceCandidate",
     count = 1,
@@ -15,6 +16,9 @@ return {
       { col = 4, row = 1 },
       { col = 5, row = 1 },
       { col = 6, row = 1 }
+    },
+    spawnArgs = {
+      name = { "Mediapart" }
     }
   },
   {
@@ -28,7 +32,7 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    args = {
+    spawnArgs = {
       name = { "Reac" }
     }
   },
@@ -43,7 +47,7 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    args = {
+    spawnArgs = {
       name = { "Ecolo" }
     }
   }

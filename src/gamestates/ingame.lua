@@ -70,7 +70,7 @@ function state:enter()
 			if not tile.piece then
 				local pieceTypeConstructor = _G[args.pieceType]
 				if pieceTypeConstructor then
-					pieceTypeConstructor(tile)
+					pieceTypeConstructor(tile, args.spawnArgs)
 				else
 					log:write("Invalid piece type", args.pieceType)
 				end

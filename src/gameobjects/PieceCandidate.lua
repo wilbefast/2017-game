@@ -18,14 +18,9 @@ Initialisation
 
 local PieceNewspaper = Class({
   type = GameObject.newType("PieceCandidate"),
-  layer = 0,
-  snapDelay = 0.2,
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, {
-      E = {  },
-      S = {  },
-      N = {  }
-     })
+    PuzzlePiece.init(self, tile, args and args)
+    self.imageTooltip = Resources.tooltipFacho
   end
 })
 PieceNewspaper:include(PuzzlePiece)

@@ -18,14 +18,8 @@ Initialisation
 
 local PieceNewspaper = Class({
   type = GameObject.newType("PieceNewspaper"),
-  layer = 0,
-  snapDelay = 0.2,
-  init = function(self, tile)
-    PuzzlePiece.init(self, tile, {
-      E = { convex = false, type = CombinationPart.types.financial },
-      W = { convex = false, type = CombinationPart.types.world }
-     })
-    self.imageTooltip = Resources.tooltipFacho
+  init = function(self, tile, args)
+    PuzzlePiece.init(self, tile, args and args)
   end
 })
 PieceNewspaper:include(PuzzlePiece)
