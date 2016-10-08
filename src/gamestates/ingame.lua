@@ -52,9 +52,8 @@ function state:enter()
 	PuzzlePiece.cellSize = tile_size
 
 	-- puzzle pieces
-	--PuzzlePiece(200, 300)
-	-- PuzzlePiece(700, 140)
-	-- PuzzlePiece(133, 100)
+	PuzzlePiece(self.newspaperGrid:gridToTile(1, 4))
+	PuzzlePiece(self.societyGrid:gridToTile(2, 3))
 
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
@@ -71,7 +70,7 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-	if DEBUG and self.hoveredTile then
+	if self.hoveredTile and button > 1 then
 		PuzzlePiece(self.hoveredTile)
 		return
 	end

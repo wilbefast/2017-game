@@ -20,6 +20,11 @@ local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
   layer = 0,
   snapDelay = 0.2,
+
+  -- css style (top, right, bottom, left)
+  directions = { "N", "E", "S", "W" },
+  oppositeDirections = { N = "S", E = "W", S = "N", W = "E" },
+
   init = function(self, tile)
     GameObject.init(self, tile.x, tile.y)
 
@@ -40,8 +45,13 @@ local PuzzlePiece = Class({
     self.snapStartedAt = love.timer.getTime()
 
     -- combination parts
-    self.combinationPartList = {}
-    self:generateCombination()
+    self.combinationParts = {}
+    -- css style (top, right, bottom, left)
+    for i, dir in ipairs(self.directions) do
+      local part = CombinationPart(
+        i, self.x, self.y, math.floor(math.random() * 4), math.random() > 0.5, self.cellSize)
+      self.combinationParts[dir] = part
+    end
 
     self.color = {
       r = math.ceil(math.random() * 255),
@@ -63,20 +73,20 @@ function PuzzlePiece:grab()
   self.tile = nil
 
   self.layer = 100
-  for i, part in ipairs(self.combinationPartList) do
-    part.layer = 500
+  for dir, part in pairs(self.combinationParts) do
+    part.layer = 101
   end
 end
 
 
 function PuzzlePiece:drop(tile)
   self.layer = nil
-  for i, part in ipairs(self.combinationPartList) do
+  for dir, part in pairs(self.combinationParts) do
     part.layer = nil
   end
 
-  if not tile or tile.piece then
-    -- this tile already has a piece in it - revert back to previous tile!
+  if not tile or tile.piece or not self:canBeMovedToTile(tile) then
+    -- this tile already has a piece in it, or the piece would not fit here - revert back to previous tile!
     tile = self.previousTile
   end
 
@@ -100,25 +110,11 @@ end
 function PuzzlePiece:onPurge()
 end
 
-function PuzzlePiece:generateCombination()
-  -- css style (top, right, bottom, left)
-  for i = 0, 3 do
-    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.floor(math.random() * 4), math.random() > 0.5, self.cellSize)
-  end
-end
-
 --[[------------------------------------------------------------
 Game loop
 --]]--
 
 function PuzzlePiece:draw()
-
-  -- snap feedback
-  -- if self.tile then
-  --   love.graphics.setColor(255,0,0, 100)
-  --   love.graphics.rectangle("fill", self.snapPosition.x - self.cellSize, self.snapPosition.y - self.cellSize, self.cellSize, self.cellSize)
-  -- end
-
   -- draw the piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
   love.graphics.rectangle("fill", self.x, self.y, self.size.x, self.size.y)
@@ -134,9 +130,9 @@ end
 
 function PuzzlePiece:followCombinationParts()
   -- combination parts
-  for i = 0, #self.combinationPartList do
-    self.combinationPartList[i]:follow(self.x, self.y)-- - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y)
-    self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
+  for dir, part in pairs(self.combinationParts) do
+    part:follow(self.x, self.y)
+    part:doTheWiggle(self.wiggle.x, self.wiggle.y)
   end
 end
 
@@ -172,48 +168,22 @@ function PuzzlePiece:drag(x, y)
   self:followCombinationParts()
 end
 
-function PuzzlePiece:getTop()
-  return self.combinationPartList[0]
-end
-
-function PuzzlePiece:getRight()
-  return self.combinationPartList[1]
-end
-
-function PuzzlePiece:getBottom()
-  return self.combinationPartList[2]
-end
-
-function PuzzlePiece:getLeft()
-  return self.combinationPartList[3]
-end
-
-function PuzzlePiece:checkMatching(puzzlePiece)
-  return false
-  -- local partA, partB
-  -- if self.gridIndex.x == puzzlePiece.gridIndex.x then
-  --   if self.gridIndex.y < puzzlePiece.gridIndex.y then
-  --     -- check bottom
-  --     partA = self:getBottom()
-  --     partB = puzzlePiece:getTop()
-  --   else
-  --     -- check top
-  --     partA = self:getTop()
-  --     partB = puzzlePiece:getBottom()
-  --   end
-  -- elseif self.gridIndex.y == puzzlePiece.gridIndex.y then
-  --   if self.gridIndex.x < puzzlePiece.gridIndex.x then
-  --     -- check left
-  --     partA = self:getRight()
-  --     partB = puzzlePiece:getLeft()
-  --   else
-  --     -- check right
-  --     partA = self:getLeft()
-  --     partB = puzzlePiece:getRight()
-  --   end
-  -- end
-  --
-  -- return partA:checkMatching(partB), partA:shouldRepulse(partB)
+function PuzzlePiece:canBeMovedToTile(newTile)
+  if not newTile then
+    return false
+  end
+  for dir, part in pairs(self.combinationParts) do
+    if part then
+      local otherTile = newTile[dir]
+      if otherTile and otherTile.piece then
+        local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
+        if otherPart then
+          return part:checkMatching(otherPart)
+        end
+      end
+    end
+  end
+  return true
 end
 
 --[[------------------------------------------------------------

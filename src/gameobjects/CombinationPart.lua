@@ -37,13 +37,14 @@ local CombinationPart = Class({
       self.image = Resources.trapeze
     end
 
-    if index == 0 then
+    -- css style (top, right, bottom, left)
+    if index == 1 then
       self.offset = { x = 0, y = -1 }
       self.rotation = 0
-    elseif index == 1 then
+    elseif index == 2 then
       self.offset = { x = 1, y = 0 }
       self.rotation = math.pi / 2
-    elseif index == 2 then
+    elseif index == 3 then
       self.rotation = math.pi
       self.offset = { x = 0, y = 1 }
     else
