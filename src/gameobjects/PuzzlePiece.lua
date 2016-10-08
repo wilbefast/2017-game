@@ -62,7 +62,7 @@ local PuzzlePiece = Class({
         log:write("Missing 'connections' in template, randomising parts")
         _randomiseCombinationParts()
       else
-        log:write("Spawning piece", args.name)
+        --log:write("Spawning piece", args.name)
         self.name = args.name
         for dir, connection in pairs(args.connections) do
           local part = CombinationPart({
@@ -201,6 +201,10 @@ end
 function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
+  end
+  local permissive = newTile.grid == ingame.newspaperGrid
+  if permissive then
+    return true
   end
   for _, dir in ipairs(self.directions) do
     local part = self.combinationParts[dir]
