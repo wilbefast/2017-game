@@ -20,10 +20,10 @@ local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
   types = {
-    financial = { name = "financial", image = Resources.triangle},
-    world = { name = "world", image = Resources.square},
-    state = { name = "state", image = Resources.circle},
-    sexual = { name = "sexual", image = Resources.trapeze},
+    financial = { image = Resources.combinations.financial },
+    world = { image = Resources.combinations.world },
+    state = { image = Resources.combinations.state },
+    sexual = { image = Resources.combinations.sexual },
     null = {}
   },
   directions = {
@@ -82,34 +82,21 @@ end
 function CombinationPart:setType(combinationType)
   self.combinationType = combinationType
   if combinationType.image then
-    self.scale = {
-      x = self.size / combinationType.image:getWidth() / 2,
-      y = self.size / combinationType.image:getHeight() / 2
-    }
-  else
-    self.scale = {
-      x = 0,
-      y = 0
-    }
+    self.image = combinationType.image[self.convex and "OUT" or "IN"]
+    if self.image then
+      self.scale = {
+        x = self.size / self.image:getWidth(),
+        y = self.size / self.image:getHeight()
+      }
+    else
+      self.scale = { x = 0, y = 0 }
+    end
   end
 end
 
 function CombinationPart:draw()
-  local image =  self.combinationType.image
-  if image then
-    if self.convex then
-      love.graphics.setColor(255,255,255)
-    else
-      love.graphics.setColor(100,100,100)
-    end
-    love.graphics.draw(image,
-      self.x + PuzzlePiece.cellSize*0.5,
-      self.y + PuzzlePiece.cellSize*0.5,
-      self.rotation, self.scale.x,
-      self.scale.y,
-      image:getWidth() / 2,
-      image:getHeight() / 2)
-    love.graphics.setColor(255,255,255)
+  if self.image then
+    love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
   end
 end
 

@@ -20,6 +20,13 @@ local PieceNewspaper = Class({
   type = GameObject.newType("PieceNewspaper"),
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
+
+    -- piece image
+    self.image = Resources.pieceNewspaper
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+
+    -- tooltip
+    self.imageTooltip = Resources.tooltipFacho
   end
 })
 PieceNewspaper:include(PuzzlePiece)
