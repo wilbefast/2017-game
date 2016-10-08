@@ -79,6 +79,9 @@ function PuzzlePiece:drop(tile)
 
   local x, y = tile.x, tile.y
   babysitter.activeWaitThen(1, function(t)
+    if not self.tile then
+      return true -- interrupt
+    end
     self.x = useful.lerp(self.x, x, t)
     self.y = useful.lerp(self.y, y, t)
   end)
