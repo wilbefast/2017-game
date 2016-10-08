@@ -223,7 +223,7 @@ function PuzzlePiece:rotate(direction)
 
   self.rotationTarget = self.rotationTarget + radian
   for dir, part in pairs(self.combinationParts) do
-    part:rotate(radian)
+    part:rotate(direction)
   end
   
   self.wiggleStartedAt = love.timer.getTime()

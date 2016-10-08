@@ -27,10 +27,10 @@ local CombinationPart = Class({
     null = {}
   },
   directions = {
-    N = { offset = { x = 0, y = -1 }, rotation = 0 },
-    E = { offset = { x = 1, y = 0 }, rotation = math.pi / 2},
-    S = { offset = { x = 0, y = 1 }, rotation = math.pi },
-    W = { offset = { x = -1, y = 0 }, rotation = math.pi * 3 / 2 }
+    N = { name = "N", offset = { x = 0, y = -1 }, rotation = 0 },
+    E = { name = "E", offset = { x = 1, y = 0 }, rotation = math.pi / 2},
+    S = { name = "S", offset = { x = 0, y = 1 }, rotation = math.pi },
+    W = { name = "W", offset = { x = -1, y = 0 }, rotation = math.pi * 3 / 2 }
   },
   init = function(self, args)
 
@@ -60,12 +60,18 @@ local CombinationPart = Class({
 
     self.pivot = { x = 0.5, y = 0.5 }
     self.wiggle = { x = 0, y = 0 }
+    self.wiggleDirection = 1
     self.size = PuzzlePiece.cellSize
     self.convex = convex
 
     local d = self.directions[dir]
     self.offset, self.rotation = d.offset, d.rotation
     self.rotationTarget = self.rotation
+    if d.name == "W" or d.name == "E" then
+      self.wiggleDirection = -1
+    else
+      -- self.wiggleDirection = -1
+    end
 
     self:setType(combinationType)
   end
@@ -105,8 +111,8 @@ function CombinationPart:draw()
       self.x + PuzzlePiece.cellSize*0.5,
       self.y + PuzzlePiece.cellSize*0.5,
       self.rotation,
-      self.scale.x * (1 - self.wiggle.x),
-      self.scale.y * (1 - self.wiggle.y),
+      self.scale.x * (1 + self.wiggleDirection * self.wiggle.x),
+      self.scale.y * (1 + self.wiggleDirection * self.wiggle.y),
       PuzzlePiece.cellSize / 2,
       self.image:getHeight())
   end
@@ -130,8 +136,17 @@ function CombinationPart:doTheWiggle(x, y)
   self.wiggle.y = y
 end
 
-function CombinationPart:rotate(radian)
+function CombinationPart:rotate(direction)
+  local radian = 0
+
+  if direction > 0 then
+    radian = math.pi/2
+  elseif direction < 0 then
+    radian = -math.pi/2
+  end
+
   self.rotationTarget = self.rotationTarget + radian
+
 end
 
 --[[------------------------------------------------------------
