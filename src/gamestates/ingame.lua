@@ -194,7 +194,10 @@ function state:update(dt)
 		if hoveredPiece then
 			if hoveredPiece.imageTooltip then
 				if self.tooltip.disappeared then
-					self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
+					self.tooltip:show(
+						hoveredPiece.x + PuzzlePiece.cellSize,
+						hoveredPiece.y + PuzzlePiece.cellSize,
+						hoveredPiece.imageTooltip)
 				end
 			else
 				self.tooltip:hide()
