@@ -18,6 +18,7 @@ Initialisation
 
 local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
+  layer = 1,
   init = function(self, x, y, type, convex, offset, cellSize)
     GameObject.init(self, x, y)
     self.pivot = { x = 0.5, y = 0.5 }

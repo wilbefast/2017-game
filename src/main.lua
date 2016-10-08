@@ -66,6 +66,9 @@ function love.load(arg)
   love.graphics.setDefaultFilter("linear", "linear")
   love.graphics.setLineStyle("smooth")
 
+  -- set z-order
+  GameObject.view_oblique = 1
+
   -- resources
   -- ... fonts
   fontSmall = love.graphics.newFont("assets/ttf/Romulus_by_pix3m.ttf", 18)

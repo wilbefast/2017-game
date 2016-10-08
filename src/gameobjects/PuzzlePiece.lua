@@ -18,6 +18,7 @@ Initialisation
 
 local PuzzlePiece = Class({
   type = GameObject.newType("PuzzlePiece"),
+  layer = 0,
   init = function(self, x, y, cellCount, cellSize, gridWidth, gridHeight)
     GameObject.init(self, x, y)
     self.t = math.random()
