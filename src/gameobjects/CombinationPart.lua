@@ -20,11 +20,11 @@ local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
   types = {
-    financial = { image = Resources.combinations.financial },
-    world = { image = Resources.combinations.world },
-    state = { image = Resources.combinations.state },
-    sexual = { image = Resources.combinations.sexual },
-    null = {}
+    financial = { name = "financial", image = Resources.combinations.financial },
+    world = { name = "world", image = Resources.combinations.world },
+    state = { name = "state", image = Resources.combinations.state },
+    sexual = { name = "sexual", image = Resources.combinations.sexual },
+    null = { name = "null" }
   },
   directions = {
     N = { offset = { x = 0, y = -1 }, rotation = 0 },
@@ -34,14 +34,20 @@ local CombinationPart = Class({
   },
   init = function(self, args)
 
+    -- unpack arguments
     local dir =  args.direction
     local x = args.piece.x
     local y = args.piece.y
     local combinationType = args.type
     local convex = args.convex
 
+    -- super
     GameObject.init(self, x, y)
 
+    -- save link to the holder
+    self.piece = args.piece
+
+    -- type of part
     if not combinationType then
       combinationType = useful.randIn({
         "financial",
@@ -54,29 +60,71 @@ local CombinationPart = Class({
     if type(combinationType) == "string" then
       combinationType = self.types[combinationType]
     end
+
+    -- convex or concase?
     if convex == nil then
       convex = math.random() > 0.5 and true or false
     end
+    self.convex = convex
 
+    -- save it all
     self.pivot = { x = 0.5, y = 0.5 }
     self.wiggle = { x = 0, y = 0 }
     self.size = PuzzlePiece.cellSize
-    self.convex = convex
 
-    local d = self.directions[dir]
-    self.offset, self.rotation = d.offset, d.rotation
-    self.rotationTarget = self.rotation
+    -- get direction
+    self:setDirection(dir)
 
+    -- set connection type
     self:setType(combinationType)
+
+    -- increment counters
+    local t = args.piece.team
+    local c = self.convex and "convex" or "concave"
+    self.combinationType.count[t][c] = self.combinationType.count[t][c] + 1
+    if self.piece:isType("PieceCandidate") then
+      self.combinationType.count.Candidate[c] = self.combinationType.count.Candidate[c] - 1
+    end
+    --log:write("there are", self.combinationType.count[t][c], c, "parts of type", self.combinationType.name, "of team", t)
   end
 })
 CombinationPart:include(GameObject)
+
+for name, template in pairs(CombinationPart.types) do
+  template.count = {
+    Player = {
+      convex = 0,
+      concave = 0
+    },
+    Enemy = {
+      convex = 0,
+      concave = 0
+    },
+    Neutral = {
+      convex = 0,
+      concave = 0
+    },
+    Candidate = {
+      convex = 0,
+      concave = 0
+    }
+  }
+end
 
 --[[------------------------------------------------------------
 Events
 --]]--
 
 function CombinationPart:onPurge()
+  -- decrement counters
+  local t = self.piece.team
+  local c = self.convex and "convex" or "concave"
+  self.combinationType.count[t][c] = self.combinationType.count[t][c] - 1
+  if self.piece:isType("PieceCandidate") then
+    self.combinationType.count.Candidate[c] = self.combinationType.count.Candidate[c] - 1
+  end
+  -- unlink
+  self.piece = nil
 end
 
 function CombinationPart:setType(combinationType)
@@ -119,6 +167,12 @@ end
 --[[------------------------------------------------------------
 Modify
 --]]--
+
+function CombinationPart:setDirection(dir)
+  local d = self.directions[dir]
+  self.offset, self.rotation = d.offset, d.rotation
+  self.rotationTarget = self.rotation
+end
 
 function CombinationPart:follow(x, y)
   self.x = x--+ self.size * self.offset.x * (1 + self.wiggle.x) * self.pivot.x
