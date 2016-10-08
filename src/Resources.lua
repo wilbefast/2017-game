@@ -16,16 +16,19 @@ return {
   pieceCandidat = love.graphics.newImage("assets/pieces/candidat.png"),
 
   combinations = {
-	  {
+	  financial = {
 	  	IN = love.graphics.newImage("assets/pieces/combination1IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination1OUT.png")
-	  },{
+	  },
+	  world = {
 	  	IN = love.graphics.newImage("assets/pieces/combination2IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination2OUT.png")
-	  },{
+	  },
+	  state = {
 	  	IN = love.graphics.newImage("assets/pieces/combination3IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination3OUT.png")
-	  },{
+	  },
+	  sexual = {
 	  	IN = love.graphics.newImage("assets/pieces/combination4IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination4OUT.png")
 	  }

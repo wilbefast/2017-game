@@ -20,17 +20,12 @@ local PieceNewspaper = Class({
   type = GameObject.newType("PieceCandidate"),
   layer = 0,
   snapDelay = 0.2,
-  init = function(self, tile)
-    PuzzlePiece.init(self, tile)
-
-    -- css style (top, right, bottom, left)
-    self.combinationParts.N:setType(1)
-    self.combinationParts.E:setType(5)
-    self.combinationParts.S:setType(2)
-    self.combinationParts.W:setType(5)
-
-    self.combinationParts.N.convex = false
-    self.combinationParts.E.convex = false
+  init = function(self, tile, args)
+    PuzzlePiece.init(self, tile, {
+      E = {  },
+      S = {  },
+      N = {  }
+     })
   end
 })
 PieceNewspaper:include(PuzzlePiece)
