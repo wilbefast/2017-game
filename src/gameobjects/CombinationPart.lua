@@ -23,10 +23,12 @@ local CombinationPart = Class({
     GameObject.init(self, x, y)
     self.index = index
     self.pivot = { x = 0.5, y = 0.5 }
+    self.wiggle = { x = 0, y = 0 }
     self.size = PuzzlePiece.cellSize
     self.convex = convex
-
+    
     self:setType(combinationType)
+    self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
 
     if index == 1 then
       self.offset = { x = 0, y = -1 }
@@ -41,9 +43,6 @@ local CombinationPart = Class({
       self.offset = { x = -1, y = 0 }
       self.rotation = math.pi * 3 / 2
     end
-    self.wiggle = { x = 0, y = 0 }
-
-    self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
   end
 })
 CombinationPart:include(GameObject)
@@ -66,6 +65,7 @@ function CombinationPart:setType(combinationType)
   elseif combinationType == 4 then
     self.image = Resources.trapeze
   end
+  self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
 end
 
 function CombinationPart:draw()

@@ -27,6 +27,9 @@ local PieceNewspaper = Class({
     self.combinationPartList[2]:setType(5)
     self.combinationPartList[3]:setType(2)
     self.combinationPartList[4]:setType(5)
+
+    self.combinationPartList[1].convex = false
+    self.combinationPartList[3].convex = false
   end
 })
 PieceNewspaper:include(PuzzlePiece)
