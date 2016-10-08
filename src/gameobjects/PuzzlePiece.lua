@@ -209,7 +209,9 @@ function PuzzlePiece:draw()
   end
 
   -- print the name
-  love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
+  useful.bindBlack()
+    love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
+  useful.bindWhite()
 
   -- debug stuff
   if DEBUG then
@@ -270,13 +272,15 @@ function PuzzlePiece:rotate(direction)
 
   if direction > 0 then
     radian = math.pi/2
+    self:rotateClockwise()
   elseif direction < 0 then
     radian = -math.pi/2
+    self:rotateCounterClockwise()
   end
 
   self.rotationTarget = self.rotationTarget + radian
   for dir, part in pairs(self.combinationParts) do
-    part:rotate(radian)
+    part:rotate(direction)
   end
 
   self.wiggleStartedAt = love.timer.getTime()

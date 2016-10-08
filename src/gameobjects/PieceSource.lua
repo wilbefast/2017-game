@@ -20,7 +20,7 @@ Initialisation
 local PieceSource = Class({
   type = GameObject.newType("PieceSource"),
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
+    PuzzlePiece.init(self, tile, args or PieceSource.pick())
   end
 })
 PieceSource:include(PuzzlePiece)
@@ -29,37 +29,35 @@ PieceSource:include(PuzzlePiece)
 Generation
 --]]--
 
-function PieceSource.pick(numberToPick)
-  numberToPick = numberToPick or 1
-
+function PieceSource.pick()
   -- prepare the weights of each part type
   local partWeights = {}
   for name, type in pairs(CombinationPart.types) do
-    partWeights[name] = type.count.Enemy.concave
+    -- TODO
+    -- ideally check that the part is also not already filled
+    partWeights[name] = type.count.Enemy.concave + type.count.Candidate.concave
   end
 
   -- prepare the spawn pool
-  local sourceTemplates = PuzzlePiece.databaseByType[PieceSource]
+  local sourceTemplates = PuzzlePiece.databaseByType.PieceSource
   local drawPool = {}
   for _, template in ipairs(sourceTemplates) do
-    for i = 1, weight do
+    local weight = 0
+    local connectionCount = 0
+    for dir, connection in pairs(template.connections) do
+      weight = weight + partWeights[connection.type]
+      connectionCount = connectionCount + 1
+    end
+    weight = 4*weight/connectionCount/connectionCount/connectionCount
+    -- TODO unique draws
+    for i = 1, math.ceil(weight) do
       table.insert(drawPool, template)
     end
   end
 
+  -- shuffle and draw
   useful.shuffle(drawPool)
-  if numberToPick <= 1 then
-    return drawPool[1]
-  end
-
-  -- chaque pièce a un poid relatif à ses connexions:
-  -- un type de connexion gagne 1 de poid par connexion concave sur les pièces du camp système placé sur le plateau de jeu
-  -- Un point supplémentaire est accordé pour les connexions non occupées des candidats
-  -- Le poid des pièces à 2 connexions est ensuite divisé par 4
-  -- weight = (Sum(SimilarConnectivityOfSystemPiece) + Sum(EmptySimilarConnectivityOfCandidatePiece)) / PieceDivider
-  -- on fait ensuite un tirage aléatoire pondéré sans remise : si deux sources doivent apparaître, elles ne peuvent pas être identiques.
-
-
+  return drawPool[1]
 end
 
 --[[------------------------------------------------------------
