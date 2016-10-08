@@ -14,6 +14,7 @@ return {
   pieceEnemy = love.graphics.newImage("assets/pieces/adversaire.png"),
   pieceAlly = love.graphics.newImage("assets/pieces/allies.png"),
   pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
+  pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
 
   combinations = {
 	  financial = {

@@ -39,6 +39,8 @@ function state:enter()
 	local grid_height = grid_tiles_down*tile_size
 	local offset_y = (WORLD_H - grid_height)*0.5
 
+	self.newspaperLimit = 650
+
 	-- newspaper grid
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
@@ -208,9 +210,11 @@ function state:update(dt)
 
  	-- drag
  	if self.grabbedPiece then
- 		if self.grabbedPiece:isType("Evidence") then
-  		self.grabbedPiece:drag(mx, my)
-  	end
+		self.grabbedPiece:drag(mx, my)
+		if not self.grabbedPiece:isType("Evidence") and mx > self.newspaperLimit then
+			self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
+			self.grabbedPiece = nil
+		end
   end
 end
 
