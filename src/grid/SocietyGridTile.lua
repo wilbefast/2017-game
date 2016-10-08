@@ -1,4 +1,4 @@
-local NewspaperGridTile = Class({
+local SocietyGridTile = Class({
   init = function(self, col, row, width, height, grid)
     self.col = col
     self.row = row
@@ -8,7 +8,7 @@ local NewspaperGridTile = Class({
   end
 })
 
-function NewspaperGridTile:draw()
+function SocietyGridTile:draw()
   if self.hovered then
     love.graphics.setLineWidth(4)
   end
@@ -17,4 +17,4 @@ function NewspaperGridTile:draw()
   love.graphics.setLineWidth(1)
 end
 
-return NewspaperGridTile
+return SocietyGridTile

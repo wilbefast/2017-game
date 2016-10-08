@@ -26,17 +26,13 @@ function state:init()
 end
 
 function state:enter()
-
+	-- setup grid sizes and spacing between them
 	local spacing = 16
-
 	local newspapergrid_tiles_across = 3
 	local society_tiles_across = 6
-
 	local grid_tiles_down = 5
-
 	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
 	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
-
 	local newspapergrid_width = newspapergrid_tiles_across * tile_size
 	local societygrid_width = society_tiles_across * tile_size
 
@@ -50,21 +46,19 @@ function state:enter()
 		NewspaperGridTile, tile_size, tile_size,
 		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, spacing)
 
-	--self.newspaperGrid = CollisionGrid()
-	self.gridCellCount = 8
-	self.gridWidth = (WORLD_W*0.5 - 32)
-	self.gridCellSize = self.gridWidth / self.gridCellCount
-	self.gridHeight = self.gridCellCount * self.gridCellSize--WORLD_H - 16
-	PuzzlePiece(200, 300, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
-	PuzzlePiece(700, 140, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
-	PuzzlePiece(133, 100, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
+	-- puzzle pieces
+	-- PuzzlePiece(200, 300)
+	-- PuzzlePiece(700, 140)
+	-- PuzzlePiece(133, 100)
 
+	-- last puzzle piece position
 	self.lastPosition = { x = 0, y = 0 }
 end
 
 function state:leave()
 	GameObject.purgeAll()
 	self.newspaperGrid = nil
+	self.societyGrid = nil
 end
 
 --[[------------------------------------------------------------
@@ -72,9 +66,6 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-	--mapToTypeWithinRadius
-  --shake = shake + 20
-
   -- drag puzzle piece
 	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
   local distance = Vector.dist(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
@@ -141,6 +132,9 @@ function state:update(dt)
   -- update logic
   GameObject.updateAll(dt)
 
+	-- hover tiles
+	
+
  	-- drag
  	if self.puzzlePieceDragged then
   	self.puzzlePieceDragged:drag(scaling.scaleMouse())
@@ -148,24 +142,12 @@ function state:update(dt)
 end
 
 function state:draw()
-
-
-  -- left and right parts
-  --love.graphics.rectangle("line", 16, 16, self.newspaperGridWidth, WORLD_H - 32)
-  --love.graphics.rectangle("line", WORLD_W*0.5 + 16, 16, self.societyGridWidth, WORLD_H - 32)
-
-  -- fake grid
-  for x = 0, 8 do
-		love.graphics.line(16 + x * self.gridCellSize, 16, 16 + x * self.gridCellSize, WORLD_H - 16)
-  	for y = 0, 8 do
-  		love.graphics.line(16, 16 + y * self.gridCellSize, WORLD_W*0.5 - 16, 16 + y * self.gridCellSize)
-  	end
-  end
-
+	-- newspaper grid
 	love.graphics.setColor(255, 255, 0)
 		self.newspaperGrid:draw()
 	useful.bindWhite()
 
+	-- society grid
 	love.graphics.setColor(0, 255, 0)
 		self.societyGrid:draw()
 	useful.bindWhite()
