@@ -29,30 +29,31 @@ function state:enter()
 	-- setup grid sizes and spacing between them
 	local spacing = 155
 	local newspapergrid_tiles_across = 3
-	local society_tiles_across = 6
+	local society_tiles_across = 9
 	local grid_tiles_down = 5
 	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
-	local tile_size = 155 --(WORLD_W - 3*spacing) / total_tiles_across
+	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
 	local newspapergrid_width = newspapergrid_tiles_across * tile_size
 	local societygrid_width = society_tiles_across * tile_size
+	local grid_height = grid_tiles_down*tile_size
+	local offset_y = (WORLD_H - grid_height)*0.5
 
 	-- newspaper grid
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
-		newspapergrid_tiles_across, grid_tiles_down, spacing, spacing)
+		newspapergrid_tiles_across, grid_tiles_down, spacing, offset_y)
 
 	-- society grid
 	self.societyGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
-		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, spacing)
+		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, offset_y)
 
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
 
 	-- puzzle pieces
-	--PuzzlePiece(200, 300)
-	-- PuzzlePiece(700, 140)
-	-- PuzzlePiece(133, 100)
+	PuzzlePiece(self.newspaperGrid:gridToTile(1, 4))
+	PuzzlePiece(self.societyGrid:gridToTile(2, 3))
 
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
@@ -75,7 +76,7 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-	if DEBUG and self.hoveredTile then
+	if self.hoveredTile and button > 1 then
 		PuzzlePiece(self.hoveredTile)
 		return
 	end
@@ -139,7 +140,7 @@ function state:update(dt)
 end
 
 function state:draw()
-	love.graphics.draw(Resources.ingame)
+	--love.graphics.draw(Resources.ingame)
 
 	-- newspaper grid
 	love.graphics.setColor(255, 255, 0)

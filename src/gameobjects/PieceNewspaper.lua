@@ -23,13 +23,14 @@ local PieceNewspaper = Class({
   init = function(self, tile)
     PuzzlePiece.init(self, tile)
 
-    self.combinationPartList[1]:setType(1)
-    self.combinationPartList[2]:setType(5)
-    self.combinationPartList[3]:setType(2)
-    self.combinationPartList[4]:setType(5)
+    -- css style (top, right, bottom, left)
+    self.combinationParts.N:setType(1)
+    self.combinationParts.E:setType(5)
+    self.combinationParts.S:setType(2)
+    self.combinationParts.W:setType(5)
 
-    self.combinationPartList[1].convex = false
-    self.combinationPartList[3].convex = false
+    self.combinationParts.N.convex = false
+    self.combinationParts.E.convex = false
   end
 })
 PieceNewspaper:include(PuzzlePiece)
