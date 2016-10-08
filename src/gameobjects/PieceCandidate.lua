@@ -20,6 +20,11 @@ local PieceCandidate = Class({
   type = GameObject.newType("PieceCandidate"),
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
+
+    -- piece image
+    self.image = Resources.pieceCandidate
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+
     self.imageTooltip = Resources.tooltipFacho
   end
 })
