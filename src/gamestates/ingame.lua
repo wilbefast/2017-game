@@ -61,7 +61,12 @@ function state:enter()
 		local i = 1
 		while i <= math.min(args.count, #args.possiblePositions) do
 			local position = useful.randIn(args.possiblePositions)
-			local tile = self.societyGrid:gridToTile(position.col, position.row)
+			local grid = self[args.grid]
+			if not grid then
+				log:write("Invalid grid name", args.grid)
+				grid = self.societyGrid
+			end
+			local tile = grid:gridToTile(position.col, position.row)
 			if not tile.piece then
 				local pieceTypeConstructor = _G[args.pieceType]
 				if pieceTypeConstructor then
