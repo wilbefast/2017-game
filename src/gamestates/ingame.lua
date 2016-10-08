@@ -133,11 +133,19 @@ function state:update(dt)
   GameObject.updateAll(dt)
 
 	-- hover tiles
-	
+	if self.hoveredTile then
+		self.hoveredTile.hovered = false
+		self.hoveredTile = nil
+	end
+	local newHoveredTile = self.newspaperGrid:pixelToTile(mx, my) or self.societyGrid:pixelToTile(mx, my)
+	if newHoveredTile then
+ 		self.hoveredTile = newHoveredTile
+		newHoveredTile.hovered = true
+	end
 
  	-- drag
  	if self.puzzlePieceDragged then
-  	self.puzzlePieceDragged:drag(scaling.scaleMouse())
+  	self.puzzlePieceDragged:drag(mx, my)
   end
 end
 
