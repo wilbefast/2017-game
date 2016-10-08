@@ -22,8 +22,8 @@ local PieceNewspaper = Class({
   snapDelay = 0.2,
   init = function(self, tile)
     PuzzlePiece.init(self, tile, {
-      N = { convex = false, type = CombinationPart.types.financial },
-      S = { convex = false, type = CombinationPart.types.world }
+      E = { convex = false, type = CombinationPart.types.financial },
+      W = { convex = false, type = CombinationPart.types.world }
      })
     self.imageTooltip = Resources.tooltipFacho
   end

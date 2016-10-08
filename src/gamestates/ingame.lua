@@ -56,8 +56,8 @@ function state:enter()
 	self.hoveredTile = nil
 
 	-- spawn all the starting pieces
-	local society = require("assets/twerk/societyInitialState")
-	for i, args in ipairs(society) do
+	local spawn = require("assets/twerk/spawn")
+	for i, args in ipairs(spawn) do
 		local i = 1
 		while i <= math.min(args.count, #args.possiblePositions) do
 			local position = useful.randIn(args.possiblePositions)

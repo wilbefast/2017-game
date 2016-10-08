@@ -20,7 +20,7 @@ local PieceNewspaper = Class({
   type = GameObject.newType("PieceCandidate"),
   layer = 0,
   snapDelay = 0.2,
-  init = function(self, tile)
+  init = function(self, tile, args)
     PuzzlePiece.init(self, tile, {
       E = {  },
       S = {  },
