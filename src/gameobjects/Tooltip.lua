@@ -20,7 +20,7 @@ local Tooltip = Class({
   type = GameObject.newType("Tooltip"),
   layer = 3,
   init = function(self)
-    GameObject.init(self)
+    GameObject.init(self, 0, 0)
     self.image = nil
     self.shouldAppear = false
     self.apparition = 0
