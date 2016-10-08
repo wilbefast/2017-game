@@ -51,15 +51,28 @@ function state:enter()
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
 
-	-- puzzle pieces
-	PuzzlePiece(self.newspaperGrid:gridToTile(1, 4))
-	PuzzlePiece(self.societyGrid:gridToTile(2, 3))
-
+	-- initialise state
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
 
-	-- test newspaper
-	PieceNewspaper(self.societyGrid:gridToTile(2,2))
+	-- spawn all the starting pieces
+	local society = require("assets/twerk/societyInitialState")
+	for i, args in ipairs(society) do
+		local i = 1
+		while i <= math.min(args.count, #args.possiblePositions) do
+			local position = useful.randIn(args.possiblePositions)
+			local tile = self.societyGrid:gridToTile(position.col, position.row)
+			if not tile.piece then
+				local pieceTypeConstructor = _G[args.pieceType]
+				if pieceTypeConstructor then
+					pieceTypeConstructor(tile)
+				else
+					log:write("Invalid piece type", args.pieceType)
+				end
+				i = i + 1
+			end
+		end
+	end
 
 	-- tooltip
 	self.tooltip = Tooltip()
