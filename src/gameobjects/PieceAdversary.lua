@@ -20,6 +20,10 @@ local PieceAdversary = Class({
   type = GameObject.newType("PieceAdversary"),
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
+
+    -- piece image
+    self.image = Resources.pieceAdversary
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PieceAdversary:include(PuzzlePiece)
