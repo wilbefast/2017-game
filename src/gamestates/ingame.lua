@@ -51,11 +51,8 @@ function state:mousepressed(x, y, button)
 
   -- drag puzzle piece
 	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
-  local distance = useful.dist2(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
-	-- log:write(distance)
-	-- WTF?!
-	-- if distance < self.gridCellSize then
-	if distance < 9000 then
+  local distance = Vector.dist(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
+	if distance < self.gridCellSize then
 		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
 	else
 		self.puzzlePieceDragged = nil
@@ -75,7 +72,7 @@ function state:mousereleased(x, y, button)
 	GameObject.mapToType("PuzzlePiece", function(piece)
 		GameObject.mapToType("PuzzlePiece", function(other)
 			if piece ~= other then
-				local distance = useful.dist2(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
+				local distance = Vector.dist(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
 				-- log:write(distance)
 				if distance <= 1 then
 					if piece:checkMatching(other) then
