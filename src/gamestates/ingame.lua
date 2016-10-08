@@ -105,6 +105,7 @@ Game logic
 --]]--
 
 function state:spawnSourcePieces()
+
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	local sourcesToSpawn = math.max(0, math.min(#emptyTiles, 3 - GameObject.countOfType("PieceSource")))
@@ -220,6 +221,9 @@ function state:update(dt)
 			self.grabbedPiece = nil
 		end
   end
+
+	-- spawn source tiles
+	self:spawnSourcePieces()
 end
 
 function state:draw()

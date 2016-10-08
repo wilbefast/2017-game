@@ -130,6 +130,7 @@ function PuzzlePiece:rotateDirection(map)
     newCombinationParts[newDirection] = part
   end
   self.combinationParts = newCombinationParts
+  self:checkForDeaths()
 end
 
 function PuzzlePiece:rotateClockwise()
@@ -170,14 +171,7 @@ function PuzzlePiece:drop(tile)
   tile.piece = self
 
   -- the piece or other pieces may be destroyed
-  self.tile.grid:map(function(t)
-		if t.piece and t.piece:shouldDie() then
-      t.piece.purge = true
-    end
-	end)
-  if self.purge then
-    return
-  end
+  self:checkForDeaths()
 
   -- wiggle into position
   self.snapStartedAt = love.timer.getTime()
@@ -275,6 +269,7 @@ function PuzzlePiece:update(dt)
   -- rotation animation
   self.rotation = useful.lerp(self.rotation, self.rotationTarget, 0.5)
 
+  -- drag combination parts behind us
   self:followCombinationParts()
 end
 
@@ -333,6 +328,17 @@ end
 Query
 --]]--
 
+function PuzzlePiece:checkForDeaths()
+  self.tile.grid:map(function(t)
+    if t.piece and t.piece:shouldDie() then
+      t.piece.purge = true
+    end
+  end)
+  if self.purge then
+    return
+  end
+end
+
 function PuzzlePiece:shouldDie()
   local allEntriesFilled = true
   local anyEntries = false
@@ -342,7 +348,7 @@ function PuzzlePiece:shouldDie()
       local otherTile = self.tile[dir]
       if otherTile and otherTile.piece then
         local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
-        if not otherPart then
+        if not otherPart or not part:checkMatching(otherPart) then
           allEntriesFilled = false
         end
       else
