@@ -63,6 +63,9 @@ function state:enter()
 
 	-- tooltip
 	self.tooltip = Tooltip()
+
+	-- timeline
+	self.timeline = Timeline()
 end
 
 function state:leave()
