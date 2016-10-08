@@ -32,7 +32,7 @@ function state:enter()
 	local society_tiles_across = 6
 	local grid_tiles_down = 5
 	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
-	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
+	local tile_size = 155 --(WORLD_W - 3*spacing) / total_tiles_across
 	local newspapergrid_width = newspapergrid_tiles_across * tile_size
 	local societygrid_width = society_tiles_across * tile_size
 
@@ -161,6 +161,8 @@ function state:update(dt)
 end
 
 function state:draw()
+	love.graphics.draw(Resources.ingame)
+
 	-- newspaper grid
 	love.graphics.setColor(255, 255, 0)
 		self.newspaperGrid:draw()

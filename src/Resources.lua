@@ -1,3 +1,4 @@
 return {
-  title = love.graphics.newImage("assets/Mediajam_dessin_perso_test.png")
+  title = love.graphics.newImage("assets/image/title.png"),
+  ingame = love.graphics.newImage("assets/image/ingame.jpg")
 }
