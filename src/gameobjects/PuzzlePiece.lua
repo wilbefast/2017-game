@@ -209,7 +209,9 @@ function PuzzlePiece:draw()
   end
 
   -- print the name
-  love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
+  useful.bindBlack()
+    love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
+  useful.bindWhite()
 
   -- debug stuff
   if DEBUG then

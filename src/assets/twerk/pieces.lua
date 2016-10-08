@@ -160,7 +160,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "sexual", convex = false }
+            N = { type = "sexual", convex = false },
             S = { type = "world", convex = false }
           }
       },
@@ -169,7 +169,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "sexual", convex = false }
+            N = { type = "sexual", convex = false },
             S = { type = "state", convex = false }
           }
       },
@@ -178,7 +178,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "sexual", convex = false }
+            N = { type = "sexual", convex = false },
             S = { type = "financial", convex = false }
           }
       },
@@ -187,7 +187,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "state", convex = false }
+            N = { type = "state", convex = false },
             S = { type = "world", convex = false }
           }
       },
@@ -196,7 +196,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "state", convex = false }
+            N = { type = "state", convex = false },
             S = { type = "financial", convex = false }
           }
       },
@@ -205,7 +205,7 @@ return {
           team = "Neutral",
           pieceType = "PieceSource",
           connections = {
-            N = { type = "financial", convex = false }
+            N = { type = "financial", convex = false },
             S = { type = "world", convex = false }
           }
       },
