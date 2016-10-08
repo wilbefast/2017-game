@@ -34,7 +34,6 @@ local CombinationPart = Class({
     self.convex = convex
 
     self:setType(combinationType)
-    self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
 
     -- css style (top, right, bottom, left)
     if index == 1 then
@@ -67,20 +66,14 @@ function CombinationPart:setType(combinationTypeIndex)
     combinationTypeIndex = 1
   end
   self.combinationType = combinationTypeIndex
-  self.image = self.types[combinationTypeIndex].image
-  self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
+  -- self.image = self.types[combinationTypeIndex].image
+  local inputType = self.convex and "OUT" or "IN"
+  self.image = Resources.combinations[combinationTypeIndex][inputType]
+  self.scale = { x = self.size / self.image:getWidth(), y = self.size / self.image:getHeight() }
 end
 
 function CombinationPart:draw()
-  if self.combinationType ~= 5 then
-    if self.convex then
-      love.graphics.setColor(255,255,255)
-    else
-      love.graphics.setColor(100,100,100)
-    end
-    love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
-    love.graphics.setColor(255,255,255)
-  end
+  love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
 end
 
 function CombinationPart:update(dt)

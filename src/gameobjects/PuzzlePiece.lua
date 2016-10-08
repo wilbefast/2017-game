@@ -117,15 +117,19 @@ Game loop
 function PuzzlePiece:draw()
 
   -- draw the piece
-  love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
-  love.graphics.setColor(255,255,255)
+  if self.image then
+    love.graphics.draw(self.image, self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, 0, self.imageScale * (1 + self.wiggle.x), self.imageScale * (1 + self.wiggle.y))
+  else
+    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+    love.graphics.rectangle("fill", self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
+    love.graphics.setColor(255,255,255)
+  end
 
   -- show grid coordinates
   if self.tile then
     local c, r = self.tile.col, self.tile.row
     love.graphics.setFont(fontMedium)
-    love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.35)
+    love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.1)
   end
 end
 

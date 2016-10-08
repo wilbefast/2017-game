@@ -5,5 +5,29 @@ return {
   square = love.graphics.newImage("assets/image/combination/square.png"),
   circle = love.graphics.newImage("assets/image/combination/circle.png"),
   trapeze = love.graphics.newImage("assets/image/combination/trapeze.png"),
-  tooltipFacho = love.graphics.newImage("assets/image/tooltip/facho.png")
+  
+  tooltipFacho = love.graphics.newImage("assets/image/tooltip/facho.png"),
+
+  pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
+  pieceSource = love.graphics.newImage("assets/pieces/source.png"),
+  pieceEvidence = love.graphics.newImage("assets/pieces/evidence.png"),
+  pieceEnemy = love.graphics.newImage("assets/pieces/adversaire.png"),
+  pieceAlly = love.graphics.newImage("assets/pieces/allies.png"),
+  pieceCandidat = love.graphics.newImage("assets/pieces/candidat.png"),
+
+  combinations = {
+	  {
+	  	IN = love.graphics.newImage("assets/pieces/combination1IN.png"),
+	  	OUT = love.graphics.newImage("assets/pieces/combination1OUT.png")
+	  },{
+	  	IN = love.graphics.newImage("assets/pieces/combination2IN.png"),
+	  	OUT = love.graphics.newImage("assets/pieces/combination2OUT.png")
+	  },{
+	  	IN = love.graphics.newImage("assets/pieces/combination3IN.png"),
+	  	OUT = love.graphics.newImage("assets/pieces/combination3OUT.png")
+	  },{
+	  	IN = love.graphics.newImage("assets/pieces/combination4IN.png"),
+	  	OUT = love.graphics.newImage("assets/pieces/combination4OUT.png")
+	  }
+	}
 }

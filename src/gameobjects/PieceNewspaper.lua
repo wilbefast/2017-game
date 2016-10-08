@@ -24,16 +24,21 @@ local PieceNewspaper = Class({
     PuzzlePiece.init(self, tile)
 
     -- css style (top, right, bottom, left)
-    self.combinationParts.N:setType(1)
     self.combinationParts.E.purge = true
     self.combinationParts.E = nil
-    self.combinationParts.S:setType(2)
     self.combinationParts.W.purge = true
     self.combinationParts.W = nil
 
     self.combinationParts.N.convex = false
     self.combinationParts.S.convex = false
+    self.combinationParts.N:setType(1)
+    self.combinationParts.S:setType(2)
 
+    -- piece image
+    self.image = Resources.pieceNewspaper
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+
+    -- tooltip
     self.imageTooltip = Resources.tooltipFacho
   end
 })
