@@ -66,9 +66,9 @@ end
 function PuzzlePiece:generateCombination()
   -- css style (top, right, bottom, left)
   self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, false, { x = 0, y = -1 }, self.cellSize)
-  self.combinationPartList[1] = CombinationPart(self.x, self.y, 0, true, { x = 1, y = 0 }, self.cellSize)
-  self.combinationPartList[2] = CombinationPart(self.x, self.y, 0, true, { x = 0, y = 1 }, self.cellSize)
-  self.combinationPartList[3] = CombinationPart(self.x, self.y, 0, true, { x = -1, y = 0 }, self.cellSize)
+  self.combinationPartList[1] = CombinationPart(self.x, self.y, 1, true, { x = 1, y = 0 }, self.cellSize)
+  self.combinationPartList[2] = CombinationPart(self.x, self.y, 2, true, { x = 0, y = 1 }, self.cellSize)
+  self.combinationPartList[3] = CombinationPart(self.x, self.y, 3, true, { x = -1, y = 0 }, self.cellSize)
 end
 
 function PuzzlePiece:draw()
