@@ -71,6 +71,7 @@ Callbacks
 function state:mousepressed(x, y, button)
 	if DEBUG and self.hoveredTile then
 		PuzzlePiece(self.hoveredTile)
+		return
 	end
 
   -- drag puzzle piece
@@ -84,43 +85,14 @@ function state:mousepressed(x, y, button)
 	if not piece then
 		return
 	end
-	piece:grabPiece(piece)
+	piece:grab(piece)
 	self.grabbedPiece = piece
 end
 
 function state:mousereleased(x, y, button)
-
-	-- check for combination
-	-- GameObject.mapToType("PuzzlePiece", function(piece)
-	log:write("woop")
 	if self.grabbedPiece then
-		log:write("woop")
-		local piece = self.grabbedPiece
-		GameObject.mapToType("PuzzlePiece", function(other)
-			if piece ~= other then
-				local distance = Vector.dist(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
-
-				if distance == 0 then
-					self:bringBackPiece(piece, self.lastPosition.x, self.lastPosition.y)
-
-				elseif distance <= 1 then
-					local match, repulse = piece:checkMatching(other)
-					if match then
-						log:write("YEAH!!!")
-
-					elseif repulse then
-						self:bringBackPiece(piece, self.lastPosition.x, self.lastPosition.y)
-					end
-				end
-			end
-		end)
-	end
-
-	-- drop puzzle piece
-	if self.grabbedPiece then
-		self.grabbedPiece.snapStartedAt = love.timer.getTime()
-		self.grabbedPiece.wiggleStartedAt = love.timer.getTime()
-	  self.grabbedPiece = nil
+		self.grabbedPiece:drop(self.hoveredTile) -- self.hoveredTile can be nil
+		self.grabbedPiece = nil
 	end
 end
 

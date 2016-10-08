@@ -25,6 +25,7 @@ local PuzzlePiece = Class({
 
     self.t = math.random()
     self.tile = tile
+    tile.piece = self
 
     self.size = { x = self.cellSize, y = self.cellSize }
 
@@ -64,10 +65,14 @@ end
 
 
 function PuzzlePiece:drop(tile)
-  if tile.piece then
+  if not tile or tile.piece then
     -- this tile already has a piece in it - revert back to previous tile!
     tile = self.previousTile
   end
+
+  self.snapStartedAt = love.timer.getTime()
+  self.wiggleStartedAt = love.timer.getTime()
+
   self.tile = tile
   self.previousTile = nil
   tile.piece = self
