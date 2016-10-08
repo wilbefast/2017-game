@@ -61,10 +61,20 @@ function PuzzlePiece:grab()
   self.previousTile = self.tile
   self.tile.piece = nil
   self.tile = nil
+
+  self.layer = 100
+  for i, part in ipairs(self.combinationPartList) do
+    part.layer = 500
+  end
 end
 
 
 function PuzzlePiece:drop(tile)
+  self.layer = nil
+  for i, part in ipairs(self.combinationPartList) do
+    part.layer = nil
+  end
+
   if not tile or tile.piece then
     -- this tile already has a piece in it - revert back to previous tile!
     tile = self.previousTile
