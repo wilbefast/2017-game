@@ -1,5 +1,5 @@
 return {
-  title = love.graphics.newImage("assets/image/title.png"),
+  title = love.graphics.newImage("assets/image/Mediajam_titre-02.png"),
   ingame = love.graphics.newImage("assets/image/ingame.jpg"),
   triangle = love.graphics.newImage("assets/image/combination/triangle.png"),
   square = love.graphics.newImage("assets/image/combination/square.png"),
@@ -13,7 +13,8 @@ return {
   pieceEvidence = love.graphics.newImage("assets/pieces/evidence.png"),
   pieceEnemy = love.graphics.newImage("assets/pieces/adversaire.png"),
   pieceAlly = love.graphics.newImage("assets/pieces/allies.png"),
-  pieceCandidat = love.graphics.newImage("assets/pieces/candidat.png"),
+  pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
+  pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
 
   combinations = {
 	  financial = {

@@ -39,6 +39,8 @@ function state:enter()
 	local grid_height = grid_tiles_down*tile_size
 	local offset_y = (WORLD_H - grid_height)*0.5
 
+	self.newspaperLimit = 650
+
 	-- newspaper grid
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
@@ -135,7 +137,7 @@ function state:mousepressed(x, y, button)
 		return
 	end
 	local piece = self.hoveredTile.piece
-	if not piece then
+	if not piece or self.hoveredTile.grid == self.societyGrid then
 		return
 	end
 
@@ -212,22 +214,28 @@ function state:update(dt)
 
  	-- drag
  	if self.grabbedPiece then
-  	self.grabbedPiece:drag(mx, my)
+		self.grabbedPiece:drag(mx, my)
+		if not self.grabbedPiece:isType("Evidence") and mx > self.newspaperLimit then
+			self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
+			self.grabbedPiece = nil
+		end
   end
 end
 
 function state:draw()
 	love.graphics.draw(Resources.ingame)
 
-	-- newspaper grid
-	love.graphics.setColor(255, 255, 0)
-		self.newspaperGrid:draw()
-	useful.bindWhite()
+	if self.grabbedPiece then
+		-- newspaper grid
+		love.graphics.setColor(255, 255, 0)
+			self.newspaperGrid:draw()
+		useful.bindWhite()
 
-	-- society grid
-	love.graphics.setColor(0, 255, 0)
-		self.societyGrid:draw()
-	useful.bindWhite()
+		-- society grid
+		love.graphics.setColor(0, 255, 0)
+			self.societyGrid:draw()
+		useful.bindWhite()
+	end
 
 	-- draw logic
 	GameObject.drawAll()

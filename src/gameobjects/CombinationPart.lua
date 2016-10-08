@@ -66,6 +66,7 @@ local CombinationPart = Class({
       convex = math.random() > 0.5 and true or false
     end
     self.convex = convex
+    self.layer = self.convex and 2 or 1
 
     -- save it all
     self.pivot = { x = 0.5, y = 0.5 }
@@ -145,8 +146,8 @@ function CombinationPart:setType(combinationType)
     self.image = combinationType.image[self.convex and "OUT" or "IN"]
     if self.image then
       self.scale = {
-        x = self.size / self.image:getWidth(),
-        y = self.size / self.image:getHeight()
+        x = PuzzlePiece.cellSize / self.image:getWidth(),
+        y = PuzzlePiece.cellSize / self.image:getHeight()
       }
     else
       self.scale = { x = 0, y = 0 }
@@ -167,8 +168,8 @@ function CombinationPart:draw()
       self.rotation,
       self.scale.x * (1 + self.wiggleDirection * self.wiggle.x),
       self.scale.y * (1 + self.wiggleDirection * self.wiggle.y),
-      PuzzlePiece.cellSize / 2,
-      self.image:getHeight())
+      self.image:getWidth() / 2,
+      self.image:getHeight() - (self.convex and 2 or 0))
   end
 end
 
