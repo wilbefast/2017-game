@@ -57,6 +57,9 @@ function state:enter()
 
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
+
+	-- test newspaper
+	PieceNewspaper(self.societyGrid:gridToTile(2,2))
 end
 
 function state:leave()

@@ -19,23 +19,22 @@ Initialisation
 local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
-  init = function(self, index, x, y, combinationType, convex, cellSize, color)
+  types = {
+    { name = "Triangle", id = 1, image = Resources.triangle},
+    { name = "Square", id = 2, image = Resources.square},
+    { name = "Circle", id = 3, image = Resources.circle},
+    { name = "Trapeze", id = 4, image = Resources.trapeze}
+  },
+  init = function(self, index, x, y, combinationType, convex, color)
     GameObject.init(self, x, y)
     self.index = index
     self.pivot = { x = 0.5, y = 0.5 }
-    self.size = cellSize
+    self.wiggle = { x = 0, y = 0 }
+    self.size = PuzzlePiece.cellSize
     self.convex = convex
 
-    self.combinationType = combinationType
-    if combinationType == 0 then
-      self.image = Resources.triangle
-    elseif combinationType == 1 then
-      self.image = Resources.square
-    elseif combinationType == 2 then
-      self.image = Resources.circle
-    elseif combinationType == 3 then
-      self.image = Resources.trapeze
-    end
+    self:setType(combinationType)
+    self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
 
     -- css style (top, right, bottom, left)
     if index == 1 then
@@ -51,9 +50,6 @@ local CombinationPart = Class({
       self.offset = { x = -1, y = 0 }
       self.rotation = math.pi * 3 / 2
     end
-    self.wiggle = { x = 0, y = 0 }
-
-    self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
   end
 })
 CombinationPart:include(GameObject)
@@ -65,14 +61,26 @@ Game loop
 function CombinationPart:onPurge()
 end
 
-function CombinationPart:draw()
-  if self.convex then
-    love.graphics.setColor(255,255,255)
-  else
-    love.graphics.setColor(100,100,100)
+function CombinationPart:setType(combinationTypeIndex)
+  if combinationTypeIndex > #self.types then
+    log:write("Invalid combination type index", combinationTypeIndex, "defaulting to 1!")
+    combinationTypeIndex = 1
   end
-  love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.size / 2, self.size / 2)
-  love.graphics.setColor(255,255,255)
+  self.combinationType = combinationTypeIndex
+  self.image = self.types[combinationTypeIndex].image
+  self.scale = { x = self.size / self.image:getWidth() / 2, y = self.size / self.image:getHeight() / 2 }
+end
+
+function CombinationPart:draw()
+  if self.combinationType ~= 5 then
+    if self.convex then
+      love.graphics.setColor(255,255,255)
+    else
+      love.graphics.setColor(100,100,100)
+    end
+    love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
+    love.graphics.setColor(255,255,255)
+  end
 end
 
 function CombinationPart:update(dt)

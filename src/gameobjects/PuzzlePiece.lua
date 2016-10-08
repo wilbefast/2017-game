@@ -32,7 +32,7 @@ local PuzzlePiece = Class({
     self.tile = tile
     tile.piece = self
 
-    self.size = { x = self.cellSize, y = self.cellSize }
+    self.size = { x = PuzzlePiece.cellSize, y = PuzzlePiece.cellSize }
 
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
@@ -49,7 +49,7 @@ local PuzzlePiece = Class({
     -- css style (top, right, bottom, left)
     for i, dir in ipairs(self.directions) do
       local part = CombinationPart(
-        i, self.x, self.y, math.floor(math.random() * 4), math.random() > 0.5, self.cellSize)
+        i, self.x, self.y, math.floor(math.random() * 4) + 1, math.random() > 0.5, self.cellSize)
       self.combinationParts[dir] = part
     end
 
@@ -115,9 +115,10 @@ Game loop
 --]]--
 
 function PuzzlePiece:draw()
+
   -- draw the piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x, self.y, self.size.x, self.size.y)
+  love.graphics.rectangle("fill", self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
   -- show grid coordinates
@@ -148,8 +149,8 @@ function PuzzlePiece:update(dt)
   local t = self.t * self.wiggleCount * math.pi * 2
   self.wiggle.x = self.wiggleScale * math.cos(t) * wiggleRatio
   self.wiggle.y = self.wiggleScale * math.cos(t + math.pi) * wiggleRatio
-  self.size.x = self.cellSize * (1 + self.wiggle.x)
-  self.size.y = self.cellSize * (1 + self.wiggle.y)
+  self.size.x = PuzzlePiece.cellSize * (1 + self.wiggle.x)
+  self.size.y = PuzzlePiece.cellSize * (1 + self.wiggle.y)
 
   -- snap animation
   if self.tile then
@@ -162,8 +163,8 @@ function PuzzlePiece:update(dt)
 end
 
 function PuzzlePiece:drag(x, y)
-  self.x = useful.lerp(self.x, x - self.cellSize*0.5, 0.5)
-  self.y = useful.lerp(self.y, y - self.cellSize*0.5, 0.5)
+  self.x = useful.lerp(self.x, x - PuzzlePiece.cellSize*0.5, 0.5)
+  self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
 
   self:followCombinationParts()
 end
