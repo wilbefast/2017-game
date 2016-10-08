@@ -34,6 +34,8 @@ function state:enter()
 	PuzzlePiece(200, 300, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
 	PuzzlePiece(700, 140, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
 	PuzzlePiece(133, 100, self.gridCellCount, self.gridCellSize, self.gridWidth, self.gridHeight)
+
+	self.lastPosition = { x = 0, y = 0 }
 end
 
 function state:leave()
@@ -54,6 +56,8 @@ function state:mousepressed(x, y, button)
   local distance = Vector.dist(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
 	if distance < self.gridCellSize then
 		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
+		self.lastPosition.x = self.puzzlePieceDragged.x
+		self.lastPosition.y = self.puzzlePieceDragged.y
 	else
 		self.puzzlePieceDragged = nil
 	end
@@ -61,26 +65,44 @@ end
 
 function state:mousereleased(x, y, button)
 
+	-- check for combination
+	-- GameObject.mapToType("PuzzlePiece", function(piece)
+	log:write("woop")
+	if self.puzzlePieceDragged then
+		local piece = self.puzzlePieceDragged
+		GameObject.mapToType("PuzzlePiece", function(other)
+			if piece ~= other then
+				local distance = Vector.dist(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
+
+				if distance == 0 then
+					self:bringBackPiece(piece, self.lastPosition.x, self.lastPosition.y)
+
+				elseif distance <= 1 then
+					local match, repulse = piece:checkMatching(other)
+					if match then
+						log:write("YEAH!!!")
+
+					elseif repulse then
+						self:bringBackPiece(piece, self.lastPosition.x, self.lastPosition.y)
+					end
+				end
+			end
+		end)
+	end
+	-- end)
+
 	-- drop puzzle piece
 	if self.puzzlePieceDragged then
 		self.puzzlePieceDragged.snapStartedAt = love.timer.getTime()
 		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
 	  self.puzzlePieceDragged = nil
 	end
+end
 
-	-- check for combination
-	GameObject.mapToType("PuzzlePiece", function(piece)
-		GameObject.mapToType("PuzzlePiece", function(other)
-			if piece ~= other then
-				local distance = Vector.dist(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
-				-- log:write(distance)
-				if distance <= 1 then
-					if piece:checkMatching(other) then
-						log:write("YEAH!!!")
-					end
-				end
-			end
-		end)
+function state:bringBackPiece(piece, x, y)
+	babysitter.activeWaitThen(1, function(t) 
+		piece.x = useful.lerp(piece.x, x, t)
+		piece.y = useful.lerp(piece.y, y, t)
 	end)
 end
 

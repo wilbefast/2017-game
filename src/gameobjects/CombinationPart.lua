@@ -47,9 +47,9 @@ function CombinationPart:draw()
   -- end
   local style = ""
   if self.convex then
-    style = "line"
-  else
     style = "fill"
+  else
+    style = "line"
   end
   love.graphics.rectangle(style, self.x, self.y, self.size, self.size)
   love.graphics.setColor(255,255,255)
@@ -70,6 +70,10 @@ end
 
 function CombinationPart:checkMatching(combinationPart)
   return combinationPart.type == self.type and combinationPart.convex ~= self.convex
+end
+
+function CombinationPart:shouldRepulse(combinationPart)
+  return combinationPart.convex and self.convex
 end
 
 --[[------------------------------------------------------------

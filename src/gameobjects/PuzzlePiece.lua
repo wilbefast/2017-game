@@ -47,6 +47,8 @@ local PuzzlePiece = Class({
     -- combination parts
     self.combinationPartList = {}
     self:generateCombination()
+
+    self.color = { r = math.ceil(math.random() * 255), g = math.ceil(math.random() * 255), b = math.ceil(math.random() * 255) }
   end
 })
 PuzzlePiece:include(GameObject)
@@ -60,9 +62,9 @@ end
 
 function PuzzlePiece:generateCombination()
   -- css style (top, right, bottom, left)
-  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, true, { x = 0, y = -1 }, self.cellSize)
+  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, false, { x = 0, y = -1 }, self.cellSize)
   self.combinationPartList[1] = CombinationPart(self.x, self.y, 0, true, { x = 1, y = 0 }, self.cellSize)
-  self.combinationPartList[2] = CombinationPart(self.x, self.y, 0, false, { x = 0, y = 1 }, self.cellSize)
+  self.combinationPartList[2] = CombinationPart(self.x, self.y, 0, true, { x = 0, y = 1 }, self.cellSize)
   self.combinationPartList[3] = CombinationPart(self.x, self.y, 0, true, { x = -1, y = 0 }, self.cellSize)
 end
 
@@ -92,7 +94,7 @@ function PuzzlePiece:draw()
   self.gridIndex.y = math.ceil((y - self.gridMargin) / self.gridHeight * self.gridCellCount)
 
   -- draw dat piece
-  love.graphics.setColor(255,0,0)
+  love.graphics.setColor(self.color.r, self.color.g, self.color.b)
   love.graphics.rectangle("fill", self.x - self.pivot.x * sx, self.y - self.pivot.y * sy, sx, sy)
   love.graphics.setColor(255,255,255)
 
@@ -137,23 +139,30 @@ function PuzzlePiece:getLeft()
 end
 
 function PuzzlePiece:checkMatching(puzzlePiece)
+  local partA, partB
   if self.gridIndex.x == puzzlePiece.gridIndex.x then
     if self.gridIndex.y < puzzlePiece.gridIndex.y then
       -- check bottom
-      return self:getBottom():checkMatching(puzzlePiece:getTop())
+      partA = self:getBottom()
+      partB = puzzlePiece:getTop()
     else
       -- check top
-      return self:getTop():checkMatching(puzzlePiece:getBottom())
+      partA = self:getTop()
+      partB = puzzlePiece:getBottom()
     end
   elseif self.gridIndex.y == puzzlePiece.gridIndex.y then
     if self.gridIndex.x < puzzlePiece.gridIndex.x then
       -- check left
-      return self:getRight():checkMatching(puzzlePiece:getLeft())
+      partA = self:getRight()
+      partB = puzzlePiece:getLeft()
     else
       -- check right
-      return self:getLeft():checkMatching(puzzlePiece:getRight())
+      partA = self:getLeft()
+      partB = puzzlePiece:getRight()
     end
   end
+
+  return partA:checkMatching(partB), partA:shouldRepulse(partB)
 end
 
 --[[------------------------------------------------------------
