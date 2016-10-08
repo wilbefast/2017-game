@@ -51,7 +51,6 @@ local PuzzlePiece = Class({
     self.size = { x = PuzzlePiece.cellSize, y = PuzzlePiece.cellSize }
     self.rotation = 0
     self.rotationTarget = 0
-    -- self.
 
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
@@ -165,13 +164,24 @@ function PuzzlePiece:drop(tile)
     tile = self.previousTile
   end
 
-  self.snapStartedAt = love.timer.getTime()
-  self.wiggleStartedAt = love.timer.getTime()
-
+  -- update position
   self.tile = tile
   self.previousTile = nil
   tile.piece = self
 
+  -- the piece or other pieces may be destroyed
+  self.tile.grid:map(function(t)
+		if t.piece and t.piece:shouldDie() then
+      t.piece.purge = true
+    end
+	end)
+  if self.purge then
+    return
+  end
+
+  -- wiggle into position
+  self.snapStartedAt = love.timer.getTime()
+  self.wiggleStartedAt = love.timer.getTime()
   local x, y = tile.x, tile.y
   babysitter.activeWaitThen(1, function(t)
     if not self.tile then
@@ -183,6 +193,14 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  self.tile.piece = nil
+  for direction, part in pairs(self.combinationParts) do
+    part.purge = true
+  end
+end
+
+function PuzzlePiece:applyEffect()
+  -- override me
 end
 
 --[[------------------------------------------------------------
@@ -309,6 +327,30 @@ function PuzzlePiece:canBeMovedToTile(newTile)
     end
   end
   return true
+end
+
+--[[------------------------------------------------------------
+Query
+--]]--
+
+function PuzzlePiece:shouldDie()
+  local allEntriesFilled = true
+  local anyEntries = false
+  for dir, part in pairs(self.combinationParts) do
+    if not part.convex then
+      anyEntries = true
+      local otherTile = self.tile[dir]
+      if otherTile and otherTile.piece then
+        local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
+        if not otherPart then
+          allEntriesFilled = false
+        end
+      else
+        allEntriesFilled = false
+      end
+    end
+  end
+  return anyEntries and allEntriesFilled
 end
 
 --[[------------------------------------------------------------

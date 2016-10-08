@@ -73,6 +73,7 @@ local CombinationPart = Class({
     self.wiggle = { x = 0, y = 0 }
     self.wiggleDirection = 1
     self.size = PuzzlePiece.cellSize
+    self.piece = args.piece
 
     local d = self.directions[dir]
     self.offset, self.rotation = d.offset, d.rotation
@@ -80,7 +81,7 @@ local CombinationPart = Class({
     if d.name == "W" or d.name == "E" then
       self.wiggleDirection = -1
     end
-    
+
     -- get direction
     self:setDirection(dir)
 
@@ -125,6 +126,9 @@ Events
 --]]--
 
 function CombinationPart:onPurge()
+  if not self.piece then
+    return
+  end
   -- decrement counters
   local t = self.piece.team
   local c = self.convex and "convex" or "concave"

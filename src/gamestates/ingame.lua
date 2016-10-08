@@ -173,6 +173,10 @@ function state:keypressed(key, uni)
   end
 end
 
+--[[------------------------------------------------------------
+Game loop
+--]]--
+
 function state:update(dt)
   -- update logic
   GameObject.updateAll(dt)
