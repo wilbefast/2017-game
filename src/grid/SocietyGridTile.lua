@@ -11,10 +11,10 @@ local SocietyGridTile = Class({
 function SocietyGridTile:draw()
   if self.hovered then
     love.graphics.setLineWidth(4)
+    local x, y = self.grid.x + (self.col - 1)*self.width, self.grid.y + (self.row - 1)*self.height
+    love.graphics.rectangle("line", x, y, self.width, self.height)
+    love.graphics.setLineWidth(1)
   end
-  local x, y = self.grid.x + (self.col - 1)*self.width, self.grid.y + (self.row - 1)*self.height
-  love.graphics.rectangle("line", x, y, self.width, self.height)
-  love.graphics.setLineWidth(1)
 end
 
 return SocietyGridTile

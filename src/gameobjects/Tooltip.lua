@@ -47,13 +47,7 @@ function Tooltip:show(x, y, image)
   else
     self.x = WORLD_W * 1 / 4 - self.image:getWidth() / 2
   end
-  if y < WORLD_H / 2 then
-    self.y = WORLD_H
-    self.apparitionDirection = -1
-  else
-    self.y = - self.image:getHeight()
-    self.apparitionDirection = 1
-  end
+  self.y = WORLD_H / 2 - self.image:getHeight() / 2
 end
 
 function Tooltip:hide()
@@ -62,7 +56,9 @@ end
 
 function Tooltip:draw()
   if self.image then
-    love.graphics.draw(self.image, self.x, self.y + self.apparitionDirection * math.sin(self.apparition * math.pi / 2) * self.image:getHeight())
+    love.graphics.setColor(255, 255, 255, self.apparition * 255)
+    love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.setColor(255, 255, 255, 255)
   end
 end
 

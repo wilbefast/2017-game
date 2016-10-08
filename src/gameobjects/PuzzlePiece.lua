@@ -33,6 +33,9 @@ local PuzzlePiece = Class({
     tile.piece = self
 
     self.size = { x = PuzzlePiece.cellSize, y = PuzzlePiece.cellSize }
+    self.rotation = 0
+    self.rotationTarget = 0
+    -- self.
 
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
@@ -143,7 +146,15 @@ function PuzzlePiece:draw()
 
   -- draw the piece
   if self.image then
-    love.graphics.draw(self.image, self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, 0, self.imageScale * (1 + self.wiggle.x), self.imageScale * (1 + self.wiggle.y))
+    love.graphics.draw(
+      self.image,
+      self.x + PuzzlePiece.cellSize / 2,
+      self.y + PuzzlePiece.cellSize / 2,
+      self.rotation,
+      self.imageScale * (1 + self.wiggle.x),
+      self.imageScale * (1 + self.wiggle.y),
+      PuzzlePiece.cellSize / 2,
+      PuzzlePiece.cellSize / 2)
   else
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
     love.graphics.rectangle("fill", self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
@@ -188,6 +199,9 @@ function PuzzlePiece:update(dt)
     self.y = useful.lerp(self.y, self.tile.y, 0.5 * snapRatio)
   end
 
+  -- rotation animation
+  self.rotation = useful.lerp(self.rotation, self.rotationTarget, 0.5)
+
   self:followCombinationParts()
 end
 
@@ -196,6 +210,23 @@ function PuzzlePiece:drag(x, y)
   self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
 
   self:followCombinationParts()
+end
+
+function PuzzlePiece:rotate(direction)
+  local radian = 0
+
+  if direction > 0 then
+    radian = math.pi/2
+  elseif direction < 0 then
+    radian = -math.pi/2
+  end
+
+  self.rotationTarget = self.rotationTarget + radian
+  for dir, part in pairs(self.combinationParts) do
+    part:rotate(radian)
+  end
+  
+  self.wiggleStartedAt = love.timer.getTime()
 end
 
 function PuzzlePiece:canBeMovedToTile(newTile)

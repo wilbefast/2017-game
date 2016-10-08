@@ -27,12 +27,13 @@ end
 
 function state:enter()
 	-- setup grid sizes and spacing between them
-	local spacing = 155
+	local spacing = 153
+	local spacingSocietyGrid = 177
 	local newspapergrid_tiles_across = 3
 	local society_tiles_across = 9
 	local grid_tiles_down = 5
 	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
-	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
+	local tile_size = 128--(WORLD_W - 3*spacing) / total_tiles_across
 	local newspapergrid_width = newspapergrid_tiles_across * tile_size
 	local societygrid_width = society_tiles_across * tile_size
 	local grid_height = grid_tiles_down*tile_size
@@ -46,7 +47,7 @@ function state:enter()
 	-- society grid
 	self.societyGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
-		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, offset_y)
+		society_tiles_across, grid_tiles_down, newspapergrid_width + spacing + spacingSocietyGrid, offset_y)
 
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
@@ -99,12 +100,13 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-	if self.hoveredTile and button > 1 then
-		PuzzlePiece(self.hoveredTile)
-		return
-	end
 
-  -- drag puzzle piece
+	-- add puzzle piece
+	-- if self.hoveredTile and button > 1 then
+	-- 	PuzzlePiece(self.hoveredTile)
+	-- 	return
+	-- end
+
 	if self.grabbedPiece then
 		return
 	end
@@ -115,8 +117,16 @@ function state:mousepressed(x, y, button)
 	if not piece then
 		return
 	end
-	piece:grab(piece)
-	self.grabbedPiece = piece
+	
+  -- drag puzzle piece
+  if button == 1 then
+		piece:grab(piece)
+		self.grabbedPiece = piece
+
+	-- rotate puzzle piece
+	elseif button == 2 then
+		piece:rotate(1)
+	end
 end
 
 function state:mousereleased(x, y, button)
@@ -180,7 +190,7 @@ function state:update(dt)
 end
 
 function state:draw()
-	--love.graphics.draw(Resources.ingame)
+	love.graphics.draw(Resources.ingame)
 
 	-- newspaper grid
 	love.graphics.setColor(255, 255, 0)
