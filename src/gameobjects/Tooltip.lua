@@ -42,18 +42,17 @@ Game loop
 function Tooltip:show(x, y, image)
   self.image = image
   self.shouldAppear = true
-  if x < WORLD_W / 2 then
-    self.x = WORLD_W * 3 / 4 - self.image:getWidth() / 2
+  if x + self.image:getWidth() > WORLD_W then
+    self.x = x - PuzzlePiece.cellSize - self.image:getWidth()
   else
-    self.x = WORLD_W * 1 / 4 - self.image:getWidth() / 2
+    self.x = x
   end
-  if y < WORLD_H / 2 then
-    self.y = WORLD_H
-    self.apparitionDirection = -1
+  if y + self.image:getHeight() > WORLD_H then
+    self.y = y - PuzzlePiece.cellSize - self.image:getHeight()
   else
-    self.y = - self.image:getHeight()
-    self.apparitionDirection = 1
+    self.y = y
   end
+  self.y = useful.clamp(self.y, 0, WORLD_H - self.image:getHeight())
 end
 
 function Tooltip:hide()
@@ -62,7 +61,9 @@ end
 
 function Tooltip:draw()
   if self.image then
-    love.graphics.draw(self.image, self.x, self.y + self.apparitionDirection * math.sin(self.apparition * math.pi / 2) * self.image:getHeight())
+    love.graphics.setColor(255, 255, 255, self.apparition * 255)
+    love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.setColor(255, 255, 255, 255)
   end
 end
 

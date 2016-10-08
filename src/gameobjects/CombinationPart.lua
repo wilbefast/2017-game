@@ -65,7 +65,7 @@ local CombinationPart = Class({
 
     local d = self.directions[dir]
     self.offset, self.rotation = d.offset, d.rotation
-
+    self.rotationTarget = self.rotation
 
     self:setType(combinationType)
   end
@@ -100,11 +100,20 @@ Game loop
 
 function CombinationPart:draw()
   if self.image then
-    love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
+    love.graphics.draw(
+      self.image,
+      self.x + PuzzlePiece.cellSize*0.5,
+      self.y + PuzzlePiece.cellSize*0.5,
+      self.rotation,
+      self.scale.x * (1 - self.wiggle.x),
+      self.scale.y * (1 - self.wiggle.y),
+      PuzzlePiece.cellSize / 2,
+      self.image:getHeight())
   end
 end
 
 function CombinationPart:update(dt)
+  self.rotation = useful.lerp(self.rotation, self.rotationTarget, 0.5)
 end
 
 --[[------------------------------------------------------------
@@ -112,13 +121,17 @@ Modify
 --]]--
 
 function CombinationPart:follow(x, y)
-  self.x = x + self.size * self.offset.x * (1 + self.wiggle.x) * self.pivot.x
-  self.y = y + self.size * self.offset.y * (1 + self.wiggle.y) * self.pivot.y
+  self.x = x--+ self.size * self.offset.x * (1 + self.wiggle.x) * self.pivot.x
+  self.y = y--+ self.size * self.offset.y * (1 + self.wiggle.y) * self.pivot.y
 end
 
 function CombinationPart:doTheWiggle(x, y)
   self.wiggle.x = x
   self.wiggle.y = y
+end
+
+function CombinationPart:rotate(radian)
+  self.rotationTarget = self.rotationTarget + radian
 end
 
 --[[------------------------------------------------------------
