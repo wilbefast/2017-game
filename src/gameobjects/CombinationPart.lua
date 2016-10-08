@@ -91,7 +91,7 @@ local CombinationPart = Class({
     local c = self.convex and "convex" or "concave"
     self.combinationType.count[t][c] = self.combinationType.count[t][c] + 1
     if self.piece:isType("PieceCandidate") then
-      self.combinationType.count.Candidate[c] = self.combinationType.count.Candidate[c] - 1
+      self.combinationType.count.Candidate[c] = self.combinationType.count.Candidate[c] + 1
     end
     --log:write("there are", self.combinationType.count[t][c], c, "parts of type", self.combinationType.name, "of team", t)
   end
