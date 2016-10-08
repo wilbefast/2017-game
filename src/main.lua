@@ -93,7 +93,6 @@ function love.load(arg)
 
   -- canvases
   WORLD_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
-  SPITTLE_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
 
   -- clear colour
   love.graphics.setBackgroundColor(0, 0, 0)

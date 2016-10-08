@@ -92,10 +92,9 @@ end
 
 function PuzzlePiece:generateCombination()
   -- css style (top, right, bottom, left)
-  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, false, { x = 0, y = -1 }, self.cellSize)
-  self.combinationPartList[1] = CombinationPart(self.x, self.y, 1, true, { x = 1, y = 0 }, self.cellSize)
-  self.combinationPartList[2] = CombinationPart(self.x, self.y, 2, true, { x = 0, y = 1 }, self.cellSize)
-  self.combinationPartList[3] = CombinationPart(self.x, self.y, 3, true, { x = -1, y = 0 }, self.cellSize)
+  for i = 0, 3 do
+    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.floor(math.random() * 4), math.random() > 0.5, self.cellSize)
+  end
 end
 
 --[[------------------------------------------------------------
@@ -104,12 +103,18 @@ Game loop
 
 function PuzzlePiece:draw()
 
-  -- draw dat piece
+  -- snap feedback
+  -- if self.tile then
+  --   love.graphics.setColor(255,0,0, 100)
+  --   love.graphics.rectangle("fill", self.snapPosition.x - self.cellSize, self.snapPosition.y - self.cellSize, self.cellSize, self.cellSize)
+  -- end
+
+  -- draw the piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
   love.graphics.rectangle("fill", self.x, self.y, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
-  -- test
+  -- show grid coordinates
   if self.tile then
     local c, r = self.tile.col, self.tile.row
     love.graphics.setFont(fontMedium)
@@ -120,7 +125,7 @@ end
 function PuzzlePiece:followCombinationParts()
   -- combination parts
   for i = 0, #self.combinationPartList do
-    self.combinationPartList[i]:follow(self.x, self.y)
+    self.combinationPartList[i]:follow(self.x, self.y)-- - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y)
     self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
   end
 end
