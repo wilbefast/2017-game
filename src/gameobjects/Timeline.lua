@@ -18,7 +18,7 @@ Initialisation
 
 local Timeline = Class({
   type = GameObject.newType("Timeline"),
-  layer = 3,
+  layer = 0,
   init = function(self)
     GameObject.init(self, 0, 0)
 
