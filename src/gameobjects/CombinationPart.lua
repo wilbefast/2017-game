@@ -20,10 +20,10 @@ local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
   types = {
-    { name = "Triangle", id = 1, image = Resources.triangle},
-    { name = "Square", id = 2, image = Resources.square},
-    { name = "Circle", id = 3, image = Resources.circle},
-    { name = "Trapeze", id = 4, image = Resources.trapeze}
+    { name = "financial", id = 1, image = Resources.triangle},
+    { name = "world", id = 2, image = Resources.square},
+    { name = "state", id = 3, image = Resources.circle},
+    { name = "sexual", id = 4, image = Resources.trapeze}
   },
   init = function(self, index, x, y, combinationType, convex, color)
     GameObject.init(self, x, y)
