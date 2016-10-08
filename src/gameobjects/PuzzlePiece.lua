@@ -148,8 +148,8 @@ function PuzzlePiece:update(dt)
 end
 
 function PuzzlePiece:drag(x, y)
-  self.x = useful.lerp(self.x, x, 0.5)
-  self.y = useful.lerp(self.y, y, 0.5)
+  self.x = useful.lerp(self.x, x - self.cellSize*0.5, 0.5)
+  self.y = useful.lerp(self.y, y - self.cellSize*0.5, 0.5)
 
   self:followCombinationParts()
 end
