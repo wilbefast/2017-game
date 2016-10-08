@@ -59,6 +59,9 @@ function state:enter()
 
 	-- test newspaper
 	PieceNewspaper(self.societyGrid:gridToTile(2,2))
+
+	-- tooltip
+	self.tooltip = Tooltip()
 end
 
 function state:leave()

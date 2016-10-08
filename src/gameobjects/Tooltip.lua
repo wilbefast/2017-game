@@ -37,9 +37,19 @@ Events
 Game loop
 --]]--
 
-function Tooltip:show(image)
+function Tooltip:show(x, y, image)
   self.image = image
   self.shouldAppear = true
+  if x < WORLD_W / 2 then
+    self.x = WORLD_W * 3 / 4 - self.image:getWidth()
+  else
+    self.x = WORLD_W * 1 / 4 - self.image:getWidth()
+  end
+  if y < WORLD_H / 2 then
+    self.y = WORLD_H
+  else
+    self.y = - self.image:getHeight()
+  end
 end
 
 function Tooltip:hide()
@@ -47,7 +57,9 @@ function Tooltip:hide()
 end
 
 function Tooltip:draw()
-    -- love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
+  if self.image then
+    love.graphics.draw(self.image, self.x, self.y + self.apparition * self.image:getHeight())
+  end
 end
 
 function Tooltip:update(dt)
