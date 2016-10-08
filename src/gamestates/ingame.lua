@@ -27,19 +27,28 @@ end
 
 function state:enter()
 
-	self.spacing = 16
+	local spacing = 16
 
 	local newspapergrid_tiles_across = 3
-	local newspapergrid_tiles_down = 5
-	local newspapergrid_tile_size = math.min(
-		math.floor((WORLD_W*0.5 - 2*self.spacing) / newspapergrid_tiles_across),
-		math.floor((WORLD_H - 2*self.spacing) / newspapergrid_tiles_down))
+	local society_tiles_across = 6
 
+	local grid_tiles_down = 5
+
+	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
+	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
+
+	local newspapergrid_width = newspapergrid_tiles_across * tile_size
+	local societygrid_width = society_tiles_across * tile_size
+
+	-- newspaper grid
 	self.newspaperGrid = CollisionGrid(
-		NewspaperGridTile,
-		newspapergrid_tile_size, newspapergrid_tile_size,
-		newspapergrid_tiles_across, newspapergrid_tiles_down,
-		self.spacing, self.spacing)
+		NewspaperGridTile, tile_size, tile_size,
+		newspapergrid_tiles_across, grid_tiles_down, spacing, spacing)
+
+	-- society grid
+	self.societyGrid = CollisionGrid(
+		NewspaperGridTile, tile_size, tile_size,
+		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, spacing)
 
 	--self.newspaperGrid = CollisionGrid()
 	self.gridCellCount = 8
@@ -153,8 +162,12 @@ function state:draw()
   	end
   end
 
-	love.graphics.setColor(255, 0, 0)
-	self.newspaperGrid:draw()
+	love.graphics.setColor(255, 255, 0)
+		self.newspaperGrid:draw()
+	useful.bindWhite()
+
+	love.graphics.setColor(0, 255, 0)
+		self.societyGrid:draw()
 	useful.bindWhite()
 
 	-- draw logic
