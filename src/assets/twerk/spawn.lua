@@ -2,28 +2,24 @@ return {
   {
     -- TODO: replace this with a source
     grid = "newspaperGrid",
-    pieceType = "PieceCandidate",
     count = 1,
     possiblePositions = {
       { col = 2, row = 2 }
-    }
+    },
+    name = { "Ecolo" }
   },
   {
     grid = "societyGrid",
-    pieceType = "PieceNewspaper",
     count = 1,
     possiblePositions = {
       { col = 4, row = 1 },
       { col = 5, row = 1 },
       { col = 6, row = 1 }
     },
-    spawnArgs = {
-      name = { "Mediapart" }
-    }
+    name = { "Mediapart" }
   },
   {
     grid = "societyGrid",
-    pieceType = "PieceCandidate",
     count = 1,
     possiblePositions = {
       { col = 2, row = 2 },
@@ -32,13 +28,10 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    spawnArgs = {
-      name = { "Reac" }
-    }
+    name = { "Reac" }
   },
   {
     grid = "societyGrid",
-    pieceType = "PieceCandidate",
     count = 1,
     possiblePositions = {
       { col = 2, row = 2 },
@@ -47,8 +40,6 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    spawnArgs = {
-      name = { "Ecolo" }
-    }
+    name = { "Ecolo" }
   }
 }

@@ -68,11 +68,13 @@ function state:enter()
 			end
 			local tile = grid:gridToTile(position.col, position.row)
 			if not tile.piece then
-				local pieceTypeConstructor = _G[args.pieceType]
-				if pieceTypeConstructor then
-					pieceTypeConstructor(tile, args.spawnArgs)
+				local name = useful.randIn(args.name)
+				local template = PuzzlePiece.database[name]
+				local pieceType = _G[template.pieceType]
+				if pieceType then
+					pieceType(tile, template)
 				else
-					log:write("Invalid piece type", args.pieceType)
+					log:write("Invalid piece type", template.pieceType)
 				end
 				i = i + 1
 			end

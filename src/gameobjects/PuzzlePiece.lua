@@ -58,26 +58,20 @@ local PuzzlePiece = Class({
     end
 
     if args then
-      if not args.name then
-        log:write("Missing name argument, randomising parts")
+      if not args.connections then
+        log:write("Missing 'connections' in template, randomising parts")
         _randomiseCombinationParts()
       else
-        local name = useful.randIn(args.name)
-        local template = self.database[name]
-        if not template then
-          log:write("Piece not found in database", name)
-        else
-          log:write("Spawning piece", template.name)
-          self.name = template.name
-          for dir, args in pairs(template.connections) do
-            local part = CombinationPart({
-              direction = dir,
-              piece = self,
-              type = args.type,
-              convex = args.convex
-            })
-            self.combinationParts[dir] = part
-          end
+        log:write("Spawning piece", args.name)
+        self.name = args.name
+        for dir, connection in pairs(args.connections) do
+          local part = CombinationPart({
+            direction = dir,
+            piece = self,
+            type = connection.type,
+            convex = connection.convex
+          })
+          self.combinationParts[dir] = part
         end
       end
     else

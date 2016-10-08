@@ -1,6 +1,7 @@
 return {
   Mediapart = {
     name = "Mediapart",
+    pieceType = "PieceNewspaper",
     connections = {
       E = { type = "financial", convex = false },
       W = { type = "world", convex = false }
@@ -8,6 +9,7 @@ return {
   },
   Reac = {
     name = "Reac",
+    pieceType = "PieceCandidate",
     connections = {
       N = { type = "financial", convex = true },
       S = { type = "world", convex = true },
@@ -17,6 +19,7 @@ return {
   },
   Ecolo = {
     name = "Ecolo",
+    pieceType = "PieceCandidate",
     connections = {
       N = { type = "sexual", convex = true },
       S = { type = "state", convex = true }
