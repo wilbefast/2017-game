@@ -24,6 +24,7 @@ local PuzzlePiece = Class({
     self.t = math.random()
 
     self.pivot = { x = 0.5, y = 0.5 }
+    self.size = { x = cellSize, y = cellSize }
 
     self.cellSize = cellSize
     self.gridCellCount = cellCount
@@ -44,6 +45,7 @@ local PuzzlePiece = Class({
     -- snap animation
     self.snapStartedAt = love.timer.getTime()
     self.snapDelay = 0.2
+    self.snapPosition = { x = 0, y = 0 }
 
     -- combination parts
     self.combinationPartList = {}
@@ -71,37 +73,20 @@ end
 
 function PuzzlePiece:draw()
 
-  -- wiggle animation
-  local wiggleRatio = 1 - useful.clamp((love.timer.getTime() - self.wiggleStartedAt) / self.wiggleDelay, 0, 1)
-  local t = self.t * self.wiggleCount * math.pi * 2
-  self.wiggle.x = self.wiggleScale * math.cos(t) * wiggleRatio
-  self.wiggle.y = self.wiggleScale * math.cos(t + math.pi) * wiggleRatio
-  local sx = self.cellSize * (1 + self.wiggle.x)
-  local sy = self.cellSize * (1 + self.wiggle.y)
-
-  -- snap animation
-  local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
-  local x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
-  local y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
-  self.x = useful.lerp(self.x, x - self.pivot.x * self.cellSize, 0.5 * snapRatio)
-  self.y = useful.lerp(self.y, y - self.pivot.y * self.cellSize, 0.5 * snapRatio)
-
   -- snap feedback
   love.graphics.setColor(255,0,0, 100)
-  love.graphics.rectangle("fill", x - self.cellSize, y - self.cellSize, self.cellSize, self.cellSize)
-
-  -- grid index
-  self.gridIndex.x = math.ceil((x - self.gridMargin) / self.gridWidth * self.gridCellCount)
-  self.gridIndex.y = math.ceil((y - self.gridMargin) / self.gridHeight * self.gridCellCount)
+  love.graphics.rectangle("fill", self.snapPosition.x - self.cellSize, self.snapPosition.y - self.cellSize, self.cellSize, self.cellSize)
 
   -- draw dat piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x - self.pivot.x * sx, self.y - self.pivot.y * sy, sx, sy)
+  love.graphics.rectangle("fill", self.x - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
   -- test
-  love.graphics.print(self.gridIndex.x .. ', ' .. self.gridIndex.y, self.x - self.pivot.x * sx, self.y - self.pivot.y * sy)
+  love.graphics.print(self.gridIndex.x .. ', ' .. self.gridIndex.y, self.x - self.pivot.x * self.size.x, self.y - self.pivot.y * self.size.y)
+end
 
+function PuzzlePiece:followCombinationParts()
   -- combination parts
   for i = 0, #self.combinationPartList do
     self.combinationPartList[i]:follow(self.x, self.y)
@@ -110,17 +95,39 @@ function PuzzlePiece:draw()
 end
 
 function PuzzlePiece:update(dt)
-
   -- timing
   self.t = self.t + dt
   if self.t > 1 then
     self.t = self.t - 1
   end
+
+  -- wiggle animation
+  local wiggleRatio = 1 - useful.clamp((love.timer.getTime() - self.wiggleStartedAt) / self.wiggleDelay, 0, 1)
+  local t = self.t * self.wiggleCount * math.pi * 2
+  self.wiggle.x = self.wiggleScale * math.cos(t) * wiggleRatio
+  self.wiggle.y = self.wiggleScale * math.cos(t + math.pi) * wiggleRatio
+  self.size.x = self.cellSize * (1 + self.wiggle.x)
+  self.size.y = self.cellSize * (1 + self.wiggle.y)
+
+  -- snap animation
+  local snapRatio = 1 - useful.clamp((love.timer.getTime() - self.snapStartedAt) / self.snapDelay, 0, 1)
+  self.snapPosition.x = (math.ceil((self.x - self.gridMargin) / self.gridWidth * self.gridCellCount) / self.gridCellCount) * self.gridWidth + self.gridMargin
+  self.snapPosition.y = (math.ceil((self.y - self.gridMargin) / self.gridHeight * self.gridCellCount) / self.gridCellCount) * self.gridHeight + self.gridMargin
+  self.x = useful.lerp(self.x, self.snapPosition.x - self.pivot.x * self.cellSize, 0.5 * snapRatio)
+  self.y = useful.lerp(self.y, self.snapPosition.y - self.pivot.y * self.cellSize, 0.5 * snapRatio)
+
+  -- grid index
+  self.gridIndex.x = math.ceil((self.snapPosition.x - self.gridMargin) / self.gridWidth * self.gridCellCount)
+  self.gridIndex.y = math.ceil((self.snapPosition.y - self.gridMargin) / self.gridHeight * self.gridCellCount)
+
+  self:followCombinationParts()
 end
 
 function PuzzlePiece:drag(x, y)
   self.x = useful.lerp(self.x, x, 0.5)
   self.y = useful.lerp(self.y, y, 0.5)
+
+  self:followCombinationParts()
 end
 
 function PuzzlePiece:getTop()

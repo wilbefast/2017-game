@@ -44,7 +44,7 @@ function CombinationPart:draw()
     -- background color
   --   love.graphics.setColor(91, 132, 192)
   -- else
-    love.graphics.setColor(0,255,0)
+    love.graphics.setColor(0,200,0)
   -- end
   local style = ""
   if self.convex then
