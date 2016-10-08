@@ -138,12 +138,11 @@ function state:mousepressed(x, y, button)
 	if not piece then
 		return
 	end
-	
+
   -- drag puzzle piece
   if button == 1 then
 		piece:grab(piece)
 		self.grabbedPiece = piece
-
 	-- rotate puzzle piece
 	elseif button == 2 then
 		piece:rotate(1)
@@ -151,7 +150,7 @@ function state:mousepressed(x, y, button)
 end
 
 function state:mousereleased(x, y, button)
-	if self.grabbedPiece then
+	if button == 1 and self.grabbedPiece then
 		self.grabbedPiece:drop(self.hoveredTile) -- self.hoveredTile can be nil
 		self.grabbedPiece = nil
 	end

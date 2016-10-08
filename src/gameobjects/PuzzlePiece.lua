@@ -272,8 +272,10 @@ function PuzzlePiece:rotate(direction)
 
   if direction > 0 then
     radian = math.pi/2
+    self:rotateClockwise()
   elseif direction < 0 then
     radian = -math.pi/2
+    self:rotateCounterClockwise()
   end
 
   self.rotationTarget = self.rotationTarget + radian
