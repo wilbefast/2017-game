@@ -48,8 +48,18 @@ Callbacks
 function state:mousepressed(x, y, button)
 	--mapToTypeWithinRadius
   --shake = shake + 20
+
+  -- catch puzzle piece
 	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
-	self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
+  local distance = useful.dist2(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
+	-- log:write(distance)
+	-- WTF?!
+	-- if distance < self.gridCellSize then
+	if distance < 9000 then
+		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
+	else
+		self.puzzlePieceDragged = nil
+	end
 end
 
 function state:mousereleased(x, y, button)
@@ -90,7 +100,7 @@ function state:draw()
   		love.graphics.line(16, 16 + y * self.gridCellSize, WORLD_W*0.5 - 16, 16 + y * self.gridCellSize)
   	end
   end
-  
+
 	-- draw logic
 	GameObject.drawAll()
 end
