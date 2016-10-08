@@ -21,19 +21,10 @@ local PieceNewspaper = Class({
   layer = 0,
   snapDelay = 0.2,
   init = function(self, tile)
-    PuzzlePiece.init(self, tile)
-
-    -- css style (top, right, bottom, left)
-    self.combinationParts.N:setType(1)
-    self.combinationParts.E.purge = true
-    self.combinationParts.E = nil
-    self.combinationParts.S:setType(2)
-    self.combinationParts.W.purge = true
-    self.combinationParts.W = nil
-
-    self.combinationParts.N.convex = false
-    self.combinationParts.S.convex = false
-
+    PuzzlePiece.init(self, tile, {
+      N = { convex = false, type = CombinationPart.types.financial },
+      S = { convex = false, type = CombinationPart.types.world }
+     })
     self.imageTooltip = Resources.tooltipFacho
   end
 })

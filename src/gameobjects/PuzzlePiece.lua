@@ -25,7 +25,7 @@ local PuzzlePiece = Class({
   directions = { "N", "E", "S", "W" },
   oppositeDirections = { N = "S", E = "W", S = "N", W = "E" },
 
-  init = function(self, tile)
+  init = function(self, tile, combinationPartArgs)
     GameObject.init(self, tile.x, tile.y)
 
     self.t = math.random()
@@ -46,11 +46,17 @@ local PuzzlePiece = Class({
 
     -- combination parts
     self.combinationParts = {}
-    -- css style (top, right, bottom, left)
-    for i, dir in ipairs(self.directions) do
-      local part = CombinationPart(
-        i, self.x, self.y, math.floor(math.random() * 4) + 1, math.random() > 0.5, self.cellSize)
-      self.combinationParts[dir] = part
+
+    if combinationPartArgs then
+      for dir, args in pairs(combinationPartArgs) do
+        local part = CombinationPart(dir, self.x, self.y, args.type, args.convex)
+        self.combinationParts[dir] = part
+      end
+    else
+      for i, dir in ipairs(self.directions) do
+        local part = CombinationPart(i, self.x, self.y)
+        self.combinationParts[dir] = part
+      end
     end
 
     self.color = {
