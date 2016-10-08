@@ -29,36 +29,53 @@ function state:enter()
 	-- setup grid sizes and spacing between them
 	local spacing = 155
 	local newspapergrid_tiles_across = 3
-	local society_tiles_across = 6
+	local society_tiles_across = 9
 	local grid_tiles_down = 5
 	local total_tiles_across = newspapergrid_tiles_across + society_tiles_across
-	local tile_size = 155 --(WORLD_W - 3*spacing) / total_tiles_across
+	local tile_size = (WORLD_W - 3*spacing) / total_tiles_across
 	local newspapergrid_width = newspapergrid_tiles_across * tile_size
 	local societygrid_width = society_tiles_across * tile_size
+	local grid_height = grid_tiles_down*tile_size
+	local offset_y = (WORLD_H - grid_height)*0.5
 
 	-- newspaper grid
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
-		newspapergrid_tiles_across, grid_tiles_down, spacing, spacing)
+		newspapergrid_tiles_across, grid_tiles_down, spacing, offset_y)
 
 	-- society grid
 	self.societyGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
-		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, spacing)
+		society_tiles_across, grid_tiles_down, newspapergrid_width + 2*spacing, offset_y)
 
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
 
-	-- puzzle pieces
-	--PuzzlePiece(200, 300)
-	-- PuzzlePiece(700, 140)
-	-- PuzzlePiece(133, 100)
-
+	-- initialise state
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
 
-	-- test newspaper
-	PieceNewspaper(self.societyGrid:gridToTile(2,2))
+	-- spawn all the starting pieces
+	local society = require("assets/twerk/societyInitialState")
+	for i, args in ipairs(society) do
+		local i = 1
+		while i <= math.min(args.count, #args.possiblePositions) do
+			local position = useful.randIn(args.possiblePositions)
+			local tile = self.societyGrid:gridToTile(position.col, position.row)
+			if not tile.piece then
+				local pieceTypeConstructor = _G[args.pieceType]
+				if pieceTypeConstructor then
+					pieceTypeConstructor(tile)
+				else
+					log:write("Invalid piece type", args.pieceType)
+				end
+				i = i + 1
+			end
+		end
+	end
+
+	-- tooltip
+	self.tooltip = Tooltip()
 end
 
 function state:leave()
@@ -72,7 +89,7 @@ Callbacks
 --]]--
 
 function state:mousepressed(x, y, button)
-	if DEBUG and self.hoveredTile then
+	if self.hoveredTile and button > 1 then
 		PuzzlePiece(self.hoveredTile)
 		return
 	end
@@ -122,11 +139,24 @@ function state:update(dt)
 	if self.hoveredTile then
 		self.hoveredTile.hovered = false
 		self.hoveredTile = nil
+	else
+		if self.tooltip.image then
+			self.tooltip:hide()
+		end
 	end
 	local newHoveredTile = self.newspaperGrid:pixelToTile(mx, my) or self.societyGrid:pixelToTile(mx, my)
 	if newHoveredTile then
  		self.hoveredTile = newHoveredTile
 		newHoveredTile.hovered = true
+
+		local hoveredPiece = self.hoveredTile.piece
+		if hoveredPiece then
+			if hoveredPiece.imageTooltip and self.tooltip.disappeared then
+				self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
+			end
+		else
+			self.tooltip:hide()
+		end
 	end
 
  	-- drag
@@ -136,7 +166,7 @@ function state:update(dt)
 end
 
 function state:draw()
-	love.graphics.draw(Resources.ingame)
+	--love.graphics.draw(Resources.ingame)
 
 	-- newspaper grid
 	love.graphics.setColor(255, 255, 0)

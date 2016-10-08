@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2014 William Dyce
+(C) Copyright 2016 William Dyce
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -17,7 +17,7 @@ Initialisation
 --]]--
 
 local PieceNewspaper = Class({
-  type = GameObject.newType("PieceNewspaper"),
+  type = GameObject.newType("PieceCandidate"),
   layer = 0,
   snapDelay = 0.2,
   init = function(self, tile)
@@ -25,16 +25,12 @@ local PieceNewspaper = Class({
 
     -- css style (top, right, bottom, left)
     self.combinationParts.N:setType(1)
-    self.combinationParts.E.purge = true
-    self.combinationParts.E = nil
+    self.combinationParts.E:setType(5)
     self.combinationParts.S:setType(2)
-    self.combinationParts.W.purge = true
-    self.combinationParts.W = nil
+    self.combinationParts.W:setType(5)
 
     self.combinationParts.N.convex = false
-    self.combinationParts.S.convex = false
-
-    self.imageTooltip = Resources.tooltipFacho
+    self.combinationParts.E.convex = false
   end
 })
 PieceNewspaper:include(PuzzlePiece)
