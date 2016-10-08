@@ -27,7 +27,7 @@ local PuzzlePiece = Class({
     self.tile = tile
     tile.piece = self
 
-    self.size = { x = self.cellSize, y = self.cellSize }
+    self.size = { x = PuzzlePiece.cellSize, y = PuzzlePiece.cellSize }
 
     -- wiggle animation
     self.wiggleStartedAt = love.timer.getTime()
@@ -93,7 +93,7 @@ end
 function PuzzlePiece:generateCombination()
   -- css style (top, right, bottom, left)
   for i = 1, 4 do
-    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.ceil(math.random() * 4), math.random() > 0.5, self.cellSize)
+    self.combinationPartList[i] = CombinationPart(i, self.x, self.y, math.ceil(math.random() * 4), math.random() > 0.5)
   end
 end
 
@@ -111,7 +111,7 @@ function PuzzlePiece:draw()
 
   -- draw the piece
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-  love.graphics.rectangle("fill", self.x - self.cellSize * self.wiggle.x / 2, self.y - self.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
+  love.graphics.rectangle("fill", self.x - PuzzlePiece.cellSize * self.wiggle.x / 2, self.y - PuzzlePiece.cellSize * self.wiggle.y / 2, self.size.x, self.size.y)
   love.graphics.setColor(255,255,255)
 
   -- show grid coordinates
@@ -125,8 +125,10 @@ end
 function PuzzlePiece:followCombinationParts()
   -- combination parts
   for i = 1, #self.combinationPartList do
-    self.combinationPartList[i]:follow(self.x, self.y)
-    self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
+    if self.combinationPartList[i] then
+      self.combinationPartList[i]:follow(self.x, self.y)
+      self.combinationPartList[i]:doTheWiggle(self.wiggle.x, self.wiggle.y)
+    end
   end
 end
 
@@ -142,8 +144,8 @@ function PuzzlePiece:update(dt)
   local t = self.t * self.wiggleCount * math.pi * 2
   self.wiggle.x = self.wiggleScale * math.cos(t) * wiggleRatio
   self.wiggle.y = self.wiggleScale * math.cos(t + math.pi) * wiggleRatio
-  self.size.x = self.cellSize * (1 + self.wiggle.x)
-  self.size.y = self.cellSize * (1 + self.wiggle.y)
+  self.size.x = PuzzlePiece.cellSize * (1 + self.wiggle.x)
+  self.size.y = PuzzlePiece.cellSize * (1 + self.wiggle.y)
 
   -- snap animation
   if self.tile then
@@ -156,8 +158,8 @@ function PuzzlePiece:update(dt)
 end
 
 function PuzzlePiece:drag(x, y)
-  self.x = useful.lerp(self.x, x - self.cellSize*0.5, 0.5)
-  self.y = useful.lerp(self.y, y - self.cellSize*0.5, 0.5)
+  self.x = useful.lerp(self.x, x - PuzzlePiece.cellSize*0.5, 0.5)
+  self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
 
   self:followCombinationParts()
 end

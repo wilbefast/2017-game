@@ -19,23 +19,14 @@ Initialisation
 local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
   layer = 1,
-  init = function(self, index, x, y, combinationType, convex, cellSize, color)
+  init = function(self, index, x, y, combinationType, convex, color)
     GameObject.init(self, x, y)
     self.index = index
     self.pivot = { x = 0.5, y = 0.5 }
-    self.size = cellSize
+    self.size = PuzzlePiece.cellSize
     self.convex = convex
 
-    self.combinationType = combinationType
-    if combinationType == 1 then
-      self.image = Resources.triangle
-    elseif combinationType == 2 then
-      self.image = Resources.square
-    elseif combinationType == 3 then
-      self.image = Resources.circle
-    elseif combinationType == 4 then
-      self.image = Resources.trapeze
-    end
+    self:setType(combinationType)
 
     if index == 1 then
       self.offset = { x = 0, y = -1 }
@@ -64,14 +55,29 @@ Game loop
 function CombinationPart:onPurge()
 end
 
-function CombinationPart:draw()
-  if self.convex then
-    love.graphics.setColor(255,255,255)
-  else
-    love.graphics.setColor(100,100,100)
+function CombinationPart:setType(combinationType)
+  self.combinationType = combinationType
+  if combinationType == 1 then
+    self.image = Resources.triangle
+  elseif combinationType == 2 then
+    self.image = Resources.square
+  elseif combinationType == 3 then
+    self.image = Resources.circle
+  elseif combinationType == 4 then
+    self.image = Resources.trapeze
   end
-  love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
-  love.graphics.setColor(255,255,255)
+end
+
+function CombinationPart:draw()
+  if self.combinationType ~= 5 then
+    if self.convex then
+      love.graphics.setColor(255,255,255)
+    else
+      love.graphics.setColor(100,100,100)
+    end
+    love.graphics.draw(self.image, self.x + PuzzlePiece.cellSize*0.5, self.y + PuzzlePiece.cellSize*0.5, self.rotation, self.scale.x, self.scale.y, self.image:getWidth() / 2, self.image:getHeight() / 2)
+    love.graphics.setColor(255,255,255)
+  end
 end
 
 function CombinationPart:update(dt)

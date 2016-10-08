@@ -55,6 +55,7 @@ function love.load(arg)
   Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
   CombinationPart = require("gameobjects/CombinationPart")
+  PieceNewspaper = require("gameobjects/PieceNewspaper")
   NewspaperGridTile = require("grid/NewspaperGridTile")
 
   -- startup logs
