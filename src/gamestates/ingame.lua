@@ -26,6 +26,21 @@ function state:init()
 end
 
 function state:enter()
+
+	self.spacing = 16
+
+	local newspapergrid_tiles_across = 3
+	local newspapergrid_tiles_down = 5
+	local newspapergrid_tile_size = math.min(
+		math.floor((WORLD_W*0.5 - 2*self.spacing) / newspapergrid_tiles_across),
+		math.floor((WORLD_H - 2*self.spacing) / newspapergrid_tiles_down))
+
+	self.newspaperGrid = CollisionGrid(
+		NewspaperGridTile,
+		newspapergrid_tile_size, newspapergrid_tile_size,
+		newspapergrid_tiles_across, newspapergrid_tiles_down,
+		self.spacing, self.spacing)
+
 	--self.newspaperGrid = CollisionGrid()
 	self.gridCellCount = 8
 	self.gridWidth = (WORLD_W*0.5 - 32)
@@ -100,7 +115,7 @@ function state:mousereleased(x, y, button)
 end
 
 function state:bringBackPiece(piece, x, y)
-	babysitter.activeWaitThen(1, function(t) 
+	babysitter.activeWaitThen(1, function(t)
 		piece.x = useful.lerp(piece.x, x, t)
 		piece.y = useful.lerp(piece.y, y, t)
 	end)
@@ -125,9 +140,10 @@ end
 
 function state:draw()
 
+
   -- left and right parts
-  love.graphics.rectangle("line", 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
-  love.graphics.rectangle("line", WORLD_W*0.5 + 16, 16, WORLD_W*0.5 - 32, WORLD_H - 32)
+  --love.graphics.rectangle("line", 16, 16, self.newspaperGridWidth, WORLD_H - 32)
+  --love.graphics.rectangle("line", WORLD_W*0.5 + 16, 16, self.societyGridWidth, WORLD_H - 32)
 
   -- fake grid
   for x = 0, 8 do
@@ -136,6 +152,10 @@ function state:draw()
   		love.graphics.line(16, 16 + y * self.gridCellSize, WORLD_W*0.5 - 16, 16 + y * self.gridCellSize)
   	end
   end
+
+	love.graphics.setColor(255, 0, 0)
+	self.newspaperGrid:draw()
+	useful.bindWhite()
 
 	-- draw logic
 	GameObject.drawAll()

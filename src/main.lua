@@ -41,6 +41,7 @@ function love.load(arg)
   Vector = require("unrequited/Vector")
   GameState = require("unrequited/GameState")
   GameObject = require("unrequited/GameObject")
+  CollisionGrid = require("unrequited/CollisionGrid")
   babysitter = require("unrequited/babysitter")
   useful = require("unrequited/useful")
   audio = require("unrequited/audio")
@@ -54,6 +55,7 @@ function love.load(arg)
   Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
   CombinationPart = require("gameobjects/CombinationPart")
+  NewspaperGridTile = require("grid/NewspaperGridTile")
 
   -- startup logs
   log.print = true
