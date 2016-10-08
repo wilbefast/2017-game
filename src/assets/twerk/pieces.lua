@@ -213,7 +213,7 @@ return {
     Ally_Whistleblower1 = {
         name = "Ally_Whistleblower1",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "financial", convex = true }
@@ -222,7 +222,7 @@ return {
     Ally_Whistleblower2 = {
         name = "Ally_Whistleblower2",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "sexual", convex = true }
@@ -231,7 +231,7 @@ return {
     Ally_Whistleblower3 = {
         name = "Ally_Whistleblower3",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "world", convex = true }
@@ -240,7 +240,7 @@ return {
     Ally_Whistleblower4 = {
         name = "Ally_Whistleblower4",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "state", convex = true }
@@ -250,7 +250,7 @@ return {
     Ally_Judge1 = {
         name = "Ally_Judge1",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "financial", convex = true }
@@ -259,7 +259,7 @@ return {
     Ally_Judge2 = {
         name = "Ally_Judge2",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "sexual", convex = true }
@@ -268,7 +268,7 @@ return {
     Ally_Judge3 = {
         name = "Ally_Judge3",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "world", convex = true }
@@ -277,7 +277,7 @@ return {
     Ally_Judge4 = {
         name = "Ally_Judge4",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "state", convex = true }
@@ -287,7 +287,7 @@ return {
     Ally_PublicOpinion1 = {
         name = "Ally_PublicOpinion1",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "financial", convex = true }
@@ -296,7 +296,7 @@ return {
     Ally_PublicOpinion2 = {
         name = "Ally_PublicOpinion2",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "sexual", convex = true }
@@ -305,7 +305,7 @@ return {
     Ally_PublicOpinion3 = {
         name = "Ally_PublicOpinion3",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "world", convex = true }
@@ -314,7 +314,7 @@ return {
     Ally_PublicOpinion4 = {
         name = "Ally_PublicOpinion4",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "state", convex = true }
@@ -324,7 +324,7 @@ return {
     Ally_Diffamation1 = {
         name = "Ally_Diffamation1",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "financial", convex = true }
@@ -333,7 +333,7 @@ return {
     Ally_Diffamation2 = {
         name = "Ally_Diffamation2",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "sexual", convex = true }
@@ -342,7 +342,7 @@ return {
     Ally_Diffamation3 = {
         name = "Ally_Diffamation3",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "world", convex = true }
@@ -351,7 +351,7 @@ return {
     Ally_Diffamation4 = {
         name = "Ally_Diffamation4",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
           N = { type = "state", convex = true }
@@ -361,7 +361,7 @@ return {
     Adversary_RandomEvent1 = {
         name = "Adversary_RandomEvent1",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
           N = { type = "financial", convex = true }
@@ -370,7 +370,7 @@ return {
     Adversary_RandomEvent2 = {
         name = "Adversary_RandomEvent2",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
           N = { type = "sexual", convex = true }
@@ -379,7 +379,7 @@ return {
     Adversary_RandomEvent3 = {
         name = "Adversary_RandomEvent3",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
           N = { type = "world", convex = true }
@@ -388,7 +388,7 @@ return {
     Adversary_RandomEvent4 = {
         name = "Adversary_RandomEvent4",
         team = "Player",
-        lifetime = 5
+        lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
           N = { type = "state", convex = true }
@@ -550,5 +550,5 @@ return {
         W = { type = "financial", convex = true },
         E = { type = "financial", convex = false }
       }
-    },
+    }
 }
