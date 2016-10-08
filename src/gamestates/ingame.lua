@@ -135,7 +135,7 @@ function state:mousepressed(x, y, button)
 		return
 	end
 	local piece = self.hoveredTile.piece
-	if not piece then
+	if not piece or self.hoveredTile.grid == self.societyGrid then
 		return
 	end
 
@@ -208,22 +208,26 @@ function state:update(dt)
 
  	-- drag
  	if self.grabbedPiece then
-  	self.grabbedPiece:drag(mx, my)
+ 		if self.grabbedPiece:isType("Evidence") then
+  		self.grabbedPiece:drag(mx, my)
+  	end
   end
 end
 
 function state:draw()
 	love.graphics.draw(Resources.ingame)
 
-	-- newspaper grid
-	love.graphics.setColor(255, 255, 0)
-		self.newspaperGrid:draw()
-	useful.bindWhite()
+	if self.grabbedPiece then
+		-- newspaper grid
+		love.graphics.setColor(255, 255, 0)
+			self.newspaperGrid:draw()
+		useful.bindWhite()
 
-	-- society grid
-	love.graphics.setColor(0, 255, 0)
-		self.societyGrid:draw()
-	useful.bindWhite()
+		-- society grid
+		love.graphics.setColor(0, 255, 0)
+			self.societyGrid:draw()
+		useful.bindWhite()
+	end
 
 	-- draw logic
 	GameObject.drawAll()
