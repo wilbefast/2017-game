@@ -131,6 +131,15 @@ function state:update(dt)
 	if newHoveredTile then
  		self.hoveredTile = newHoveredTile
 		newHoveredTile.hovered = true
+
+		local hoveredPiece = self.hoveredTile.piece
+		if hoveredPiece then
+			if hoveredPiece.imageTooltip and self.tooltip.image ~= hoveredPiece.imageTooltip then
+				self.tooltip:show(mx, my, hoveredPiece.imageTooltip)
+			end
+		end
+	else
+		-- self.tooltip.hide()
 	end
 
  	-- drag
