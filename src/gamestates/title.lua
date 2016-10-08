@@ -51,7 +51,7 @@ end
 
 function state:draw()
   -- background
-  love.graphics.draw(Resources.title, 0, 0)
+  -- love.graphics.draw(Resources.title, 0, 0)
 end
 
 

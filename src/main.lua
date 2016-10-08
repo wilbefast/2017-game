@@ -93,7 +93,7 @@ function love.load(arg)
 
   -- canvases
   WORLD_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
-  SPITTLE_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
+  PUZZLE_PIECE_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
 
   -- clear colour
   love.graphics.setBackgroundColor(0, 0, 0)
@@ -165,6 +165,11 @@ function love.draw()
     GameState.draw()
   useful.popCanvas()
 
+  useful.pushCanvas(PUZZLE_PIECE_CANVAS)
+    love.graphics.clear(0,0,0,0)
+    GameState.drawPieces()
+  useful.popCanvas()
+
   love.graphics.push()
     -- scaling
     love.graphics.scale(WINDOW_SCALE, WINDOW_SCALE)
@@ -174,6 +179,7 @@ function love.draw()
       (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
     -- draw the canvas
     love.graphics.draw(WORLD_CANVAS, 0, 0)
+    love.graphics.draw(PUZZLE_PIECE_CANVAS, 0, 0)
   love.graphics.pop() -- pop offset
 
   -- capture GIF footage

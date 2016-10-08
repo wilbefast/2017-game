@@ -175,6 +175,11 @@ function state:draw()
 	GameObject.drawAll()
 end
 
+function state:drawPieces()
+	GameObject.mapToType("PuzzlePiece", function(piece) piece:drawPiece() end)
+	GameObject.mapToType("CombinationPart", function(part) part:drawPart() end)
+end
+
 --[[------------------------------------------------------------
 EXPORT
 --]]------------------------------------------------------------
