@@ -30,7 +30,7 @@ local PuzzlePiece = Class({
     self.gridHeight = gridHeight
     self.gridMargin = 16
 
-    -- tmp
+    -- gridIndex
     self.gridIndex = { x = 0, y = 0 }
 
     -- wiggle animation
@@ -59,8 +59,11 @@ function PuzzlePiece:onPurge()
 end
 
 function PuzzlePiece:generateCombination()
-  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, { x = -1, y = 0 }, self.cellSize)
-  self.combinationPartList[1] = CombinationPart(self.x, self.y, 0, { x = 1, y = 0 }, self.cellSize)
+  -- css style (top, right, bottom, left)
+  self.combinationPartList[0] = CombinationPart(self.x, self.y, 0, true, { x = 0, y = -1 }, self.cellSize)
+  self.combinationPartList[1] = CombinationPart(self.x, self.y, 0, true, { x = 1, y = 0 }, self.cellSize)
+  self.combinationPartList[2] = CombinationPart(self.x, self.y, 0, false, { x = 0, y = 1 }, self.cellSize)
+  self.combinationPartList[3] = CombinationPart(self.x, self.y, 0, true, { x = -1, y = 0 }, self.cellSize)
 end
 
 function PuzzlePiece:draw()
@@ -84,10 +87,17 @@ function PuzzlePiece:draw()
   love.graphics.setColor(255,0,0, 100)
   love.graphics.rectangle("fill", x - self.cellSize, y - self.cellSize, self.cellSize, self.cellSize)
 
+  -- grid index
+  self.gridIndex.x = math.ceil((x - self.gridMargin) / self.gridWidth * self.gridCellCount)
+  self.gridIndex.y = math.ceil((y - self.gridMargin) / self.gridHeight * self.gridCellCount)
+
   -- draw dat piece
   love.graphics.setColor(255,0,0)
   love.graphics.rectangle("fill", self.x - self.pivot.x * sx, self.y - self.pivot.y * sy, sx, sy)
   love.graphics.setColor(255,255,255)
+
+  -- test
+  love.graphics.print(self.gridIndex.x .. ', ' .. self.gridIndex.y, self.x - self.pivot.x * sx, self.y - self.pivot.y * sy)
 
   -- combination parts
   for i = 0, #self.combinationPartList do
@@ -108,6 +118,42 @@ end
 function PuzzlePiece:drag(x, y)
   self.x = useful.lerp(self.x, x, 0.5)
   self.y = useful.lerp(self.y, y, 0.5)
+end
+
+function PuzzlePiece:getTop()
+  return self.combinationPartList[0]
+end
+
+function PuzzlePiece:getRight()
+  return self.combinationPartList[1]
+end
+
+function PuzzlePiece:getBottom()
+  return self.combinationPartList[2]
+end
+
+function PuzzlePiece:getLeft()
+  return self.combinationPartList[3]
+end
+
+function PuzzlePiece:checkMatching(puzzlePiece)
+  if self.gridIndex.x == puzzlePiece.gridIndex.x then
+    if self.gridIndex.y < puzzlePiece.gridIndex.y then
+      -- check bottom
+      return self:getBottom():checkMatching(puzzlePiece:getTop())
+    else
+      -- check top
+      return self:getTop():checkMatching(puzzlePiece:getBottom())
+    end
+  elseif self.gridIndex.y == puzzlePiece.gridIndex.y then
+    if self.gridIndex.x < puzzlePiece.gridIndex.x then
+      -- check left
+      return self:getRight():checkMatching(puzzlePiece:getLeft())
+    else
+      -- check right
+      return self:getLeft():checkMatching(puzzlePiece:getRight())
+    end
+  end
 end
 
 --[[------------------------------------------------------------

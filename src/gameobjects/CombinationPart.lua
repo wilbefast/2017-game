@@ -18,10 +18,11 @@ Initialisation
 
 local CombinationPart = Class({
   type = GameObject.newType("CombinationPart"),
-  init = function(self, x, y, type, offset, cellSize)
+  init = function(self, x, y, type, convex, offset, cellSize)
     GameObject.init(self, x, y)
     self.pivot = { x = 0.5, y = 0.5 }
     self.size = 32
+    self.convex = convex
     self.type = type
     self.offset = offset
     self.cellSize = cellSize
@@ -38,7 +39,18 @@ function CombinationPart:onPurge()
 end
 
 function CombinationPart:draw()
-  love.graphics.setColor(0,255,0)
+  if self.convex then
+    -- background color
+    love.graphics.setColor(91, 132, 192)
+  else
+    love.graphics.setColor(0,255,0)
+  end
+  -- local style = ""
+  -- if self.convex then
+  --   style = "line"
+  -- else
+  --   style = "fill"
+  -- end
   love.graphics.rectangle("fill", self.x, self.y, self.size, self.size)
   love.graphics.setColor(255,255,255)
 end
@@ -54,6 +66,10 @@ end
 function CombinationPart:doTheWiggle(x, y)
   self.wiggle.x = x
   self.wiggle.y = y
+end
+
+function CombinationPart:checkMatching(combinationPart)
+  return combinationPart.type == self.type and combinationPart.convex ~= self.convex
 end
 
 --[[------------------------------------------------------------

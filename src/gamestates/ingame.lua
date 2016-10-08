@@ -49,7 +49,7 @@ function state:mousepressed(x, y, button)
 	--mapToTypeWithinRadius
   --shake = shake + 20
 
-  -- catch puzzle piece
+  -- drag puzzle piece
 	self.puzzlePieceDragged = GameObject.getNearestOfType("PuzzlePiece", x, y)
   local distance = useful.dist2(x, y, self.puzzlePieceDragged.x, self.puzzlePieceDragged.y)
 	-- log:write(distance)
@@ -63,11 +63,28 @@ function state:mousepressed(x, y, button)
 end
 
 function state:mousereleased(x, y, button)
+
+	-- drop puzzle piece
 	if self.puzzlePieceDragged then
 		self.puzzlePieceDragged.snapStartedAt = love.timer.getTime()
 		self.puzzlePieceDragged.wiggleStartedAt = love.timer.getTime()
 	  self.puzzlePieceDragged = nil
 	end
+
+	-- check for combination
+	GameObject.mapToType("PuzzlePiece", function(piece)
+		GameObject.mapToType("PuzzlePiece", function(other)
+			if piece ~= other then
+				local distance = useful.dist2(piece.gridIndex.x, piece.gridIndex.y, other.gridIndex.x, other.gridIndex.y)
+				-- log:write(distance)
+				if distance <= 1 then
+					if piece:checkMatching(other) then
+						log:write("YEAH!!!")
+					end
+				end
+			end
+		end)
+	end)
 end
 
 function state:keypressed(key, uni)
