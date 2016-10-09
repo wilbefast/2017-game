@@ -65,6 +65,14 @@ function PieceSource.pick()
 end
 
 --[[------------------------------------------------------------
+Events
+--]]--
+
+function PieceSource:applyEffect()
+  ingame:spawnEvidencePieceFromSource(self)
+end
+
+--[[------------------------------------------------------------
 Game loop
 --]]--
 

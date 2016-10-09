@@ -108,6 +108,10 @@ function state:spawnSourcePieces()
 
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	if #emptyTiles <= 3  then
+		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		return
+	end
 	local sourcesToSpawn = math.max(0, math.min(#emptyTiles, 3 - GameObject.countOfType("PieceSource")))
 	if sourcesToSpawn <= 0 then
 		return
@@ -117,6 +121,18 @@ function state:spawnSourcePieces()
 	for i = 1, sourcesToSpawn do
 		PieceSource(emptyTiles[i])
 	end
+end
+
+function state:spawnEvidencePieceFromSource(source)
+	local emptyTiles = {}
+	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	if #emptyTiles <= 3  then
+		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		return
+	end
+
+	useful.shuffle(emptyTiles)
+	PieceEvidence(emptyTiles[1])
 end
 
 --[[------------------------------------------------------------

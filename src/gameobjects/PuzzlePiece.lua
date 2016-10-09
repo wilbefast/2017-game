@@ -142,6 +142,7 @@ function PuzzlePiece:rotateCounterClockwise()
 end
 
 function PuzzlePiece:grab()
+  self.grabbed = true
   self.wiggleStartedAt = love.timer.getTime()
   self.previousTile = self.tile
   self.tile.piece = nil
@@ -155,6 +156,7 @@ end
 
 
 function PuzzlePiece:drop(tile)
+  self.grabbed = false
   self.layer = nil
   for dir, part in pairs(self.combinationParts) do
     part.layer = nil
@@ -220,19 +222,22 @@ function PuzzlePiece:draw()
     love.graphics.setColor(255,255,255)
   end
 
-  -- print the name
-  -- useful.bindBlack()
-  --   love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
-  -- useful.bindWhite()
-
   -- debug stuff
   if DEBUG then
+    love.graphics.setFont(fontMedium)
+    useful.bindBlack()
+
+    -- print the name
+    love.graphics.print(self.name, self.x + self.size.x*0.35, self.y + self.size.y*0.3)
+    love.graphics.print(self:typename(), self.x + self.size.x*0.35, self.y + self.size.y*0.5)
+
     -- show grid coordinates
     if self.tile then
       local c, r = self.tile.col, self.tile.row
-      love.graphics.setFont(fontMedium)
       love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.1)
     end
+
+    useful.bindWhite()
   end
 end
 
@@ -271,12 +276,18 @@ function PuzzlePiece:update(dt)
 
   -- drag combination parts behind us
   self:followCombinationParts()
+
+  -- for great justice!
+  if (self.tile and self.tile.piece ~= self) or (not self.tile and not self.grabbed) then
+    self.purge = true
+  end
 end
 
 function PuzzlePiece:drag(x, y)
   self.x = useful.lerp(self.x, x - PuzzlePiece.cellSize*0.5, 0.5)
   self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
 
+  -- drag combination parts behind us
   self:followCombinationParts()
 end
 
@@ -332,6 +343,7 @@ function PuzzlePiece:checkForDeaths()
   self.tile.grid:map(function(t)
     if t.piece and t.piece:shouldDie() then
       t.piece.purge = true
+      self:applyEffect()
     end
   end)
   if self.purge then
