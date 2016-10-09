@@ -28,6 +28,7 @@ local Timeline = Class({
 
     -- normalized position
     self.ratioCurrentRound = 0
+    self.ratioCurrentTarget = 0
 
     -- image
     self.timelineCursor = Resources.timelineCursor
@@ -37,11 +38,16 @@ local Timeline = Class({
     self.height = 32
     self.cursorWidth = 16
     self.cursorHeight = 16
-    self.timelineLeft = 712
+    self.timelineLeft = 716
     self.timelineRight = 1860
     self.timelineWidth = self.timelineRight - self.timelineLeft
-    self.timelineTop = WORLD_H - 100
-    self.timelineBottom = self.timelineTop + 30
+    self.timelineTop = WORLD_H - 155
+    self.timelineBottom = self.timelineTop + self.timelineCursor:getHeight()
+
+    -- animation
+    self.animStart = -1000
+    self.animDelay = 1
+    self.animScale = 0.5
   end
 })
 Timeline:include(GameObject)
@@ -59,18 +65,26 @@ function Timeline:combinationHasBeenMade(piece)
   local pieceType = piece:typename()
   if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
     self.currentRound = self.currentRound + 1
-    self.ratioCurrentRound = self.currentRound / self.roundTotal
+    self.ratioCurrentTarget = self.currentRound / self.roundTotal
+    self.animStart = love.timer.getTime()
   end
 end
 
 function Timeline:draw()
   -- current cursor
   local currentX = self.timelineLeft + self.timelineWidth*self.ratioCurrentRound
+  local scale = 1 + self.animScale * math.sin(math.pi * useful.clamp((love.timer.getTime() - self.animStart) / self.animDelay, 0, 1))
   love.graphics.setColor(255, 255, 255)
-  love.graphics.draw(self.timelineCursor, currentX, self.timelineTop)
+  love.graphics.draw(
+    self.timelineCursor,
+    currentX - self.timelineCursor:getWidth() * scale / 2,
+    self.timelineBottom - scale * self.timelineCursor:getHeight(),
+    0,
+    scale)
 end
 
 function Timeline:update(dt)
+  self.ratioCurrentRound = useful.lerp(self.ratioCurrentRound, self.ratioCurrentTarget, 0.5)
 end
 
 --[[------------------------------------------------------------

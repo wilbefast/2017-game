@@ -324,6 +324,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if permissive then
     return true
   end
+  local shouldTakeRound = 0
   for _, dir in ipairs(self.directions) do
     local part = self.combinationParts[dir]
     local otherTile = newTile[dir]
@@ -336,7 +337,14 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       elseif otherPart and not part then
         return false
       end
+      if part and otherPart then
+        shouldTakeRound = shouldTakeRound + (part:checkMatching(otherPart) and 1 or 0)
+      end
     end
+  end
+  log:write("shouldTakeRound : " .. shouldTakeRound)
+  for i = 1, shouldTakeRound do
+    ingame.timeline:combinationHasBeenMade(self)
   end
   return true
 end
