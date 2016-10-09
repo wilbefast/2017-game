@@ -1,0 +1,37 @@
+multiplier uniquement embouts OUT (convexe)
+
+EVIDENCE
+R 246
+G 206
+B 43
+
+ALLIES
+R 0
+G 171
+B 157
+
+JOURNALISTE
+R 47
+G 25
+B 100
+
+CANDIDAT
+R 255
+G 100
+B 90
+
+JOURNAL
+R 0
+G 0
+B 0
+
+SOURCE
+R 50
+G 160
+B 105
+
+ADVERSAIRE
+R 218
+G 0
+B 35
+
