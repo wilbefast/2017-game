@@ -6,7 +6,7 @@ return {
   circle = love.graphics.newImage("assets/image/combination/circle.png"),
   trapeze = love.graphics.newImage("assets/image/combination/trapeze.png"),
   
-  tooltipFacho = love.graphics.newImage("assets/image/tooltip/facho.png"),
+  facho_f = love.graphics.newImage("assets/image/tooltip/facho_f.png"),
 
   pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
   pieceSource = love.graphics.newImage("assets/pieces/source.png"),
@@ -15,6 +15,8 @@ return {
   pieceAlly = love.graphics.newImage("assets/pieces/allies.png"),
   pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
   pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
+
+
 
   combinations = {
 	  financial = {

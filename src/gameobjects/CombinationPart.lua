@@ -169,7 +169,7 @@ function CombinationPart:draw()
       self.scale.x * (1 + self.wiggleDirection * self.wiggle.x),
       self.scale.y * (1 + self.wiggleDirection * self.wiggle.y),
       self.image:getWidth() / 2,
-      self.image:getHeight() - (self.convex and 2 or 0))
+      self.image:getHeight())
   end
 end
 

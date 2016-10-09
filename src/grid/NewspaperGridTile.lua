@@ -15,6 +15,12 @@ function NewspaperGridTile:draw()
     love.graphics.rectangle("line", x, y, self.width, self.height)
     love.graphics.setLineWidth(1)
   end
+  if DEBUG then
+    if self.piece then
+      local x, y = self.grid.x + (self.col - 1)*self.width, self.grid.y + (self.row - 1)*self.height
+      love.graphics.rectangle("fill", x, y, self.width, self.height)
+    end
+  end
 end
 
 return NewspaperGridTile
