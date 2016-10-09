@@ -209,6 +209,10 @@ Game loop
 --]]--
 
 function PuzzlePiece:draw()
+  -- draw the parts
+  for dir, part in pairs(self.combinationParts) do
+    --part:draw_from_piece()
+  end
 
   -- draw the piece
   if self.image then

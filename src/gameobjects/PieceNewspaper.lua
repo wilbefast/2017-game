@@ -18,6 +18,11 @@ Initialisation
 
 local PieceNewspaper = Class({
   type = GameObject.newType("PieceNewspaper"),
+  partColour = {
+    r = 0,
+    g = 0,
+    b = 0,
+  },
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
 

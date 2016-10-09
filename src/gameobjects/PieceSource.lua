@@ -19,6 +19,11 @@ Initialisation
 
 local PieceSource = Class({
   type = GameObject.newType("PieceSource"),
+  partColour = {
+    r = 50,
+    g = 160,
+    b = 105,
+  },
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args or PieceSource.pick())
 
