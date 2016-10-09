@@ -38,6 +38,8 @@ local PuzzlePiece = Class({
   clockwiseDirections = { N = "E", E = "S", S = "W", W = "N" },
   counterClockwiseDirections = { N = "W", E = "N", S = "E", W = "S" },
 
+  wipCanvas = love.graphics.newCanvas(128, 128),
+
   init = function(self, tile, args)
     GameObject.init(self, tile.x, tile.y)
 
@@ -123,6 +125,30 @@ local PuzzlePiece = Class({
       g = math.ceil(math.random() * 255),
       b = math.ceil(math.random() * 255)
     }
+
+    -- image
+    local originalImage = args.image
+
+    local w, h = self.wipCanvas:getWidth(), self.wipCanvas:getHeight()
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      for dir, part in pairs(self.combinationParts) do
+        part:erase_concave()
+      end
+    useful.popCanvas()
+
+    local mask = love.graphics.newImage(self.wipCanvas:newImageData())
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      love.graphics.setShader(Resources.erase)
+      Resources.erase:send("mask", mask)
+      love.graphics.draw(originalImage)
+      love.graphics.setShader(nil)
+    useful.popCanvas()
+
+    self.image = love.graphics.newImage(self.wipCanvas:newImageData())
+
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PuzzlePiece:include(GameObject)
@@ -197,6 +223,7 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  self.image = nil
   ingame.pouf:emit(self.tile)
   self.tile.piece = nil
   for direction, part in pairs(self.combinationParts) do
@@ -215,7 +242,7 @@ Game loop
 function PuzzlePiece:draw()
   -- draw the parts
   for dir, part in pairs(self.combinationParts) do
-    --part:draw_from_piece()
+    part:draw_from_piece()
   end
 
   -- draw the piece
@@ -348,9 +375,8 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
       if part and otherPart and not part:checkMatching(otherPart) then
         return false
-      elseif part and not otherPart then
-        return false
-      elseif otherPart and not part then
+      elseif part and part.convex and not otherPart then
+      elseif otherPart and otherPart.convex and not part then
         return false
       end
       if part and otherPart then

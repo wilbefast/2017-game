@@ -24,11 +24,9 @@ local PieceEvidence = Class({
     b = 43,
   },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args or PieceEvidence.pick())
-
-    -- piece image
-    self.image = Resources.pieceEvidence
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+    local args = args or PieceEvidence.pick()
+    args.image = Resources.pieceEvidence
+    PuzzlePiece.init(self, tile, args)
   end
 })
 PieceEvidence:include(PuzzlePiece)

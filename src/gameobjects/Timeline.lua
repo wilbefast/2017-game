@@ -60,7 +60,7 @@ local Timeline = Class({
     self.timelineLeft = 716
     self.timelineRight = 1860
     self.timelineWidth = self.timelineRight - self.timelineLeft
-    self.timelineTop = WORLD_H - 155
+    self.timelineTop = WORLD_H - 190
     self.timelineBottom = self.timelineTop + self.timelineCursor:getHeight()
 
     -- animation

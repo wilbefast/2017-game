@@ -24,11 +24,9 @@ local PieceCandidate = Class({
     b = 90,
   },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args or PieceCandidate.pick())
-
-    -- piece image
-    self.image = Resources.pieceCandidate
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+    local args = args or PieceCandidate.pick()
+    args.image = Resources.pieceCandidate
+    PuzzlePiece.init(self, tile, args)
 
     -- tooltip
     if args and args.tooltip and Resources[args.tooltip .. "_f"] then

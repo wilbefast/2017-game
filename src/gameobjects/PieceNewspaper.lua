@@ -24,11 +24,9 @@ local PieceNewspaper = Class({
     b = 0,
   },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
-
-    -- piece image
-    self.image = Resources.pieceNewspaper
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+    local args = args or {}
+    args.image = Resources.pieceNewspaper
+    PuzzlePiece.init(self, tile, args)
   end
 })
 PieceNewspaper:include(PuzzlePiece)

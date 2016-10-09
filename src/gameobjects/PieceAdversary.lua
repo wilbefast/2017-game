@@ -24,11 +24,10 @@ local PieceAdversary = Class({
     b = 35,
   },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
+    local args = args or {}
+    args.image = Resources.pieceAdversary
+    PuzzlePiece.init(self, tile, args)
 
-    -- piece image
-    self.image = Resources.pieceAdversary
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PieceAdversary:include(PuzzlePiece)
