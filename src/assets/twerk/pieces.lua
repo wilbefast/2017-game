@@ -3,6 +3,7 @@ return {
     Mediapart = {
       name = "Mediapart",
       team = "Player",
+      tooltip = "mediapart",
       pieceType = "PieceNewspaper",
       connections = {
         E = { type = "financial", convex = false },
@@ -13,6 +14,7 @@ return {
     Financial = {
       name = "Financial",
       team = "Player",
+      tooltip = "journalist_financial",
       pieceType = "PieceJournalist",
       connections = {
         N = { type = "financial", convex = true }
@@ -21,6 +23,7 @@ return {
     World = {
       name = "World",
       team = "Player",
+      tooltip = "journalist_world",
       pieceType = "PieceJournalist",
       connections = {
         N = { type = "world", convex = true }
@@ -29,6 +32,7 @@ return {
     Sexual = {
       name = "Sexual",
       team = "Player",
+      tooltip = "journalist_sexual",
       pieceType = "PieceJournalist",
       connections = {
         N = { type = "sexual", convex = true }
@@ -37,6 +41,7 @@ return {
     State = {
       name = "State",
       team = "Player",
+      tooltip = "journalist_state",
       pieceType = "PieceJournalist",
       connections = {
         N = { type = "state", convex = true }
@@ -45,6 +50,7 @@ return {
     Joker=  {
       name = "Joker",
       team = "Player",
+      tooltip = "journalist_joker",
       pieceType = "PieceJournalist",
       connections = {
         N = { type = "financial", convex = true },
@@ -57,6 +63,7 @@ return {
     Reac = {
       name = "Reac",
       team = "Enemy",
+      tooltip = "reac",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "financial", convex = false },
@@ -68,6 +75,7 @@ return {
     Socialo = {
       name = "Socialo",
       team = "Enemy",
+      tooltip = "socialo",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "financial", convex = false },
@@ -90,6 +98,7 @@ return {
     Gaucho = {
       name = "Gaucho",
       team = "Enemy",
+      tooltip = "gaucho",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "financial", convex = false },
@@ -100,6 +109,7 @@ return {
     Centre = {
       name = "Centre",
       team = "Enemy",
+      tooltip = "centre",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "financial", convex = false },
@@ -109,6 +119,7 @@ return {
     Ecolo = {
       name = "Ecolo",
       team = "Enemy",
+      tooltip = "ecolo",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "sexual", convex = false },
@@ -118,6 +129,7 @@ return {
     Ailleurs = {
       name = "Ailleurs",
       team = "Enemy",
+      tooltip = "ailleurs",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "sexual", convex = false }
@@ -127,6 +139,7 @@ return {
     Source_Secret1 = {
       name = "Source_Secret1",
       team = "Neutral",
+      tooltip = "source_secret1",
       pieceType = "PieceSource",
       connections = {
         N = { type = "world", convex = false }
@@ -135,6 +148,7 @@ return {
       Source_Secret2 = {
         name = "Source_Secret2",
         team = "Neutral",
+        tooltip = "source_secret2",
         pieceType = "PieceSource",
         connections = {
           N = { type = "state", convex = false }
@@ -143,6 +157,7 @@ return {
       Source_Secret3 = {
         name = "Source_Secret3",
         team = "Neutral",
+        tooltip = "source_secret3",
         pieceType = "PieceSource",
         connections = {
           N = { type = "financial", convex = false }
@@ -151,6 +166,7 @@ return {
       Source_Secret4 = {
           name = "Source_Secret4",
           team = "Neutral",
+          tooltip = "source_secret1",
           pieceType = "PieceSource",
           connections = {
             N = { type = "sexual", convex = false }
@@ -159,6 +175,7 @@ return {
       Source_Public1 = {
           name = "Source_Public1",
           team = "Neutral",
+          tooltip = "source_public1",
           pieceType = "PieceSource",
           connections = {
             N = { type = "sexual", convex = false },
@@ -168,6 +185,7 @@ return {
       Source_Public2 = {
           name = "Source_Public2",
           team = "Neutral",
+          tooltip = "source_public2",
           pieceType = "PieceSource",
           connections = {
             N = { type = "sexual", convex = false },
@@ -177,6 +195,7 @@ return {
       Source_Public3 = {
           name = "Source_Public3",
           team = "Neutral",
+          tooltip = "source_public3",
           pieceType = "PieceSource",
           connections = {
             N = { type = "sexual", convex = false },
@@ -186,6 +205,7 @@ return {
       Source_Public4 = {
           name = "Source_Public4",
           team = "Neutral",
+          tooltip = "source_public1",
           pieceType = "PieceSource",
           connections = {
             N = { type = "state", convex = false },
@@ -195,6 +215,7 @@ return {
       Source_Public5 = {
           name = "Source_Public5",
           team = "Neutral",
+          tooltip = "source_public2",
           pieceType = "PieceSource",
           connections = {
             N = { type = "state", convex = false },
@@ -204,6 +225,7 @@ return {
       Source_Public6 = {
           name = "Source_Public6",
           team = "Neutral",
+          tooltip = "source_public3",
           pieceType = "PieceSource",
           connections = {
             N = { type = "financial", convex = false },
@@ -214,6 +236,7 @@ return {
     Ally_Whistleblower1 = {
         name = "Ally_Whistleblower1",
         team = "Player",
+        tooltip = "ally_whistleblower1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -225,6 +248,7 @@ return {
         team = "Player",
         lifetime = 5,
         pieceType = "PieceAlly",
+        tooltip = "ally_whistleblower2",
         connections = {
           N = { type = "sexual", convex = true }
         }
@@ -234,6 +258,7 @@ return {
         team = "Player",
         lifetime = 5,
         pieceType = "PieceAlly",
+        tooltip = "ally_whistleblower3",
         connections = {
           N = { type = "world", convex = true }
         }
@@ -241,6 +266,7 @@ return {
     Ally_Whistleblower4 = {
         name = "Ally_Whistleblower4",
         team = "Player",
+        tooltip = "ally_whistleblower1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -250,6 +276,7 @@ return {
     -- Ally: Judge
     Ally_Judge1 = {
         name = "Ally_Judge1",
+        tooltip = "ally_judge1",
         team = "Player",
         lifetime = 5,
         pieceType = "PieceAlly",
@@ -260,6 +287,7 @@ return {
     Ally_Judge2 = {
         name = "Ally_Judge2",
         team = "Player",
+        tooltip = "ally_judge1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -269,6 +297,7 @@ return {
     Ally_Judge3 = {
         name = "Ally_Judge3",
         team = "Player",
+        tooltip = "ally_judge1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -278,6 +307,7 @@ return {
     Ally_Judge4 = {
         name = "Ally_Judge4",
         team = "Player",
+        tooltip = "ally_judge1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -288,6 +318,7 @@ return {
     Ally_PublicOpinion1 = {
         name = "Ally_PublicOpinion1",
         team = "Player",
+        tooltip = "ally_publicopinion1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -297,6 +328,7 @@ return {
     Ally_PublicOpinion2 = {
         name = "Ally_PublicOpinion2",
         team = "Player",
+        tooltip = "ally_publicopinion1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -306,6 +338,7 @@ return {
     Ally_PublicOpinion3 = {
         name = "Ally_PublicOpinion3",
         team = "Player",
+        tooltip = "ally_publicopinion1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -315,6 +348,7 @@ return {
     Ally_PublicOpinion4 = {
         name = "Ally_PublicOpinion4",
         team = "Player",
+        tooltip = "ally_publicopinion1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -325,6 +359,7 @@ return {
     Ally_Diffamation1 = {
         name = "Ally_Diffamation1",
         team = "Player",
+        tooltip = "ally_diffamation1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -334,6 +369,7 @@ return {
     Ally_Diffamation2 = {
         name = "Ally_Diffamation2",
         team = "Player",
+        tooltip = "ally_diffamation1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -343,6 +379,7 @@ return {
     Ally_Diffamation3 = {
         name = "Ally_Diffamation3",
         team = "Player",
+        tooltip = "ally_diffamation1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -352,6 +389,7 @@ return {
     Ally_Diffamation4 = {
         name = "Ally_Diffamation4",
         team = "Player",
+        tooltip = "ally_diffamation1",
         lifetime = 5,
         pieceType = "PieceAlly",
         connections = {
@@ -546,11 +584,161 @@ return {
     Evidence_Document1 = {
       name = "Evidence_Document1",
       team = "Player",
-      tooltip = "evidence_document.png",
+      tooltip = "evidence_document1",
       pieceType = "PieceEvidence",
       connections = {
         W = { type = "financial", convex = true },
         E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Document2 = {
+      name = "Evidence_Document2",
+      team = "Player",
+      tooltip = "evidence_document2",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "financial", convex = true },
+        E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Document3 = {
+      name = "Evidence_Document3",
+      team = "Player",
+      tooltip = "evidence_document3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "financial", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Document4 = {
+      name = "Evidence_Document4",
+      team = "Player",
+      tooltip = "evidence_document1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "financial", convex = true },
+        E = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_Tape1 = {
+      name = "Evidence_Tape1",
+      team = "Player",
+      tooltip = "evidence_tape1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Tape2 = {
+      name = "Evidence_Tape2",
+      team = "Player",
+      tooltip = "evidence_tape2",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Tape3 = {
+      name = "Evidence_Tape3",
+      team = "Player",
+      tooltip = "evidence_tape3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Tape4 = {
+      name = "Evidence_Tape4",
+      team = "Player",
+      tooltip = "evidence_tape1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_Video1 = {
+      name = "Evidence_Video1",
+      team = "Player",
+      tooltip = "evidence_video1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Video2 = {
+      name = "Evidence_Video2",
+      team = "Player",
+      tooltip = "evidence_video2",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Video3 = {
+      name = "Evidence_Video3",
+      team = "Player",
+      tooltip = "evidence_video3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Video4 = {
+      name = "Evidence_Video4",
+      team = "Player",
+      tooltip = "evidence_video1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_Photo1 = {
+        name = "Evidence_Photo1",
+        team = "Player",
+        tooltip = "evidence_photo1",
+        pieceType = "PieceEvidence",
+        connections = {
+          W = { type = "sexual", convex = true },
+          E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Photo2 = {
+      name = "Evidence_Photo2",
+      team = "Player",
+      tooltip = "evidence_photo2",
+      pieceType = "PieceEvidence",
+      connections = {
+          W = { type = "sexual", convex = true },
+          E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Photo3 = {
+      name = "Evidence_Photo3",
+      team = "Player",
+      tooltip = "evidence_photo3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "sexual", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Photo4 = {
+      name = "Evidence_Photo4",
+      team = "Player",
+      tooltip = "evidence_photo1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "sexual", convex = true },
+        E = { type = "sexual", convex = false }
       }
     }
 }
