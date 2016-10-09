@@ -128,6 +128,9 @@ local PuzzlePiece = Class({
 
     -- image
     local originalImage = args.image
+    if not originalImage then
+      log:write("No image found for PuzzlePiece")
+    end
 
     local w, h = self.wipCanvas:getWidth(), self.wipCanvas:getHeight()
     useful.pushCanvas(self.wipCanvas)

@@ -23,12 +23,13 @@ local PieceEvidence = Class({
     g = 206,
     b = 43,
   },
+  maxCredibility = 3,
   init = function(self, tile, args)
     local args = args or PieceEvidence.pick()
     args.image = Resources.pieceEvidence
     PuzzlePiece.init(self, tile, args)
 
-    self.credibility = 1
+    self.credibility = 0
   end
 })
 PieceEvidence:include(PuzzlePiece)
@@ -45,6 +46,28 @@ end
 function PieceEvidence:onSuccessfulDrop(targetTile)
   if targetTile.grid.isSociety then
     ingame:tick()
+
+    local probAdversary = (self.credibility + 1)/(self.maxCredibility + 1)
+    probAdversary = 0.75*probAdversary*probAdversary
+
+    local probAlly = 1 - (self.credibility + 1)/(self.maxCredibility + 1)
+    probAlly = 0.75*probAlly*probAlly
+
+    local probNothing = 1 - probAdversary - probAlly
+
+    log:write("Random draw must be above", probAdversary, "for ally or", probAdversary + probAlly, "for nothing")
+    local draw = math.random()
+    log:write("Random draw was", draw)
+
+    if draw <= probAdversary then
+      -- attack on our evidence
+      ingame:spawnAdversaryPieceFromEvidence(self)
+    elseif draw <= probAdversary + probAlly then
+      -- defense of our evidence
+      ingame:spawnAllyPieceFromEvidence(self)
+    else
+      -- nothing
+    end
   end
 end
 
@@ -73,6 +96,7 @@ Generation
 function PieceEvidence.pick()
   return useful.randIn(PuzzlePiece.databaseByType.PieceEvidence)
 end
+
 
 --[[------------------------------------------------------------
 Events

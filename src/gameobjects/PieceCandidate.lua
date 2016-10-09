@@ -54,7 +54,7 @@ function PieceCandidate:update(dt)
   PuzzlePiece.update(self, dt)
 end
 
-function PieceCandidate:pick()
+function PieceCandidate.pick()
   if #ingame.timeline.candidateList > 0 then
     local picked = ingame.timeline.candidateList[1]
     table.remove(ingame.timeline.candidateList, 1)

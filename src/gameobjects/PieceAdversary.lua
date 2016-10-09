@@ -24,10 +24,9 @@ local PieceAdversary = Class({
     b = 35,
   },
   init = function(self, tile, args)
-    local args = args or {}
-    args.image = Resources.pieceAdversary
+    local args = args or PieceAdversary.pick()
+    args.image = Resources.pieceEnemy
     PuzzlePiece.init(self, tile, args)
-
   end
 })
 PieceAdversary:include(PuzzlePiece)
@@ -39,6 +38,11 @@ Events
 --[[------------------------------------------------------------
 Game loop
 --]]--
+
+function PieceAdversary.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceAdversary)
+end
+
 
 function PieceAdversary:draw()
   PuzzlePiece.draw(self)

@@ -90,14 +90,6 @@ return {
    pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
    pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
 
-  pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
-  pieceSource = love.graphics.newImage("assets/pieces/source.png"),
-  pieceEvidence = love.graphics.newImage("assets/pieces/evidence.png"),
-  pieceEnemy = love.graphics.newImage("assets/pieces/adversaire.png"),
-  pieceAlly = love.graphics.newImage("assets/pieces/allies.png"),
-  pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
-  pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
-
   timelineCursor = love.graphics.newImage("assets/image/curseur.png"),
   poof = love.graphics.newImage("assets/image/poof.png"),
 

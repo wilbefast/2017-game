@@ -223,8 +223,21 @@ function state:spawnEvidencePieceFromEvidence(source)
 		return
 	end
 	local evidence = self:trySpawn(PieceEvidence, emptyTiles, 1)
-	evidence.credibility = source.credibility + 1
+	evidence.credibility = math.min(evidence.maxCredibility, source.credibility + 1)
 end
+
+function state:spawnAdversaryPieceFromEvidence(evidence)
+	local emptyTiles = {}
+	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	self:trySpawn(PieceAdversary, emptyTiles, 1)
+end
+
+function state:spawnAllyPieceFromEvidence(evidence)
+	local emptyTiles = {}
+	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	self:trySpawn(PieceAlly, emptyTiles, 1)
+end
+
 
 function state:getEnding()
 	if self:countPiecesOfType("PieceNewspaper") <= 0 then

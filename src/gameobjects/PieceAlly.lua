@@ -24,7 +24,7 @@ local PieceAlly = Class({
     b = 157,
   },
   init = function(self, tile, args)
-    local args = args or {}
+    local args = args or PieceAlly.pick()
     args.image = Resources.pieceAlly
     PuzzlePiece.init(self, tile, args)
 
@@ -33,12 +33,13 @@ local PieceAlly = Class({
 PieceAlly:include(PuzzlePiece)
 
 --[[------------------------------------------------------------
-Events
---]]--
-
---[[------------------------------------------------------------
 Game loop
 --]]--
+
+function PieceAlly.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceAlly)
+end
+
 
 function PieceAlly:draw()
   PuzzlePiece.draw(self)
