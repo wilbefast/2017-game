@@ -79,6 +79,7 @@ return {
     Facho = {
       name = "Facho",
       team = "Enemy",
+      tooltip = "facho",
       pieceType = "PieceCandidate",
       connections = {
         N = { type = "financial", convex = false },
@@ -545,6 +546,7 @@ return {
     Evidence_Document1 = {
       name = "Evidence_Document1",
       team = "Player",
+      tooltip = "evidence_document.png",
       pieceType = "PieceEvidence",
       connections = {
         W = { type = "financial", convex = true },
