@@ -369,13 +369,13 @@ function state:draw()
 
 	if self.grabbedPiece then
 		-- newspaper grid
-		love.graphics.setColor(255, 255, 0)
+		love.graphics.setColor(82, 129, 114)
 			self.newspaperGrid:draw()
 		useful.bindWhite()
 
 		-- society grid
 		if self.grabbedPiece:isType("PieceEvidence") then
-			love.graphics.setColor(0, 255, 0)
+			love.graphics.setColor(163, 156, 137)
 				self.societyGrid:draw()
 			useful.bindWhite()
 		end
