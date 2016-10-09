@@ -83,33 +83,37 @@ Events
 Game loop
 --]]--
 
-function Timeline:combinationHasBeenMade(piece)
+function Timeline:tick()
   if self.actionStart + self.actionDelay < love.timer.getTime() then
-    local pieceType = piece:typename()
-    if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
-      self.currentRound = self.currentRound + 1
+    self.currentRound = self.currentRound + 1
 
-      if self.currentRound > self.roundTotal then
-        GameState.switch(gameover)
-      else
-        self.ratioCurrentTarget = self.currentRound / self.roundTotal
-        self.animStart = love.timer.getTime()
-        self.actionStart = love.timer.getTime()
-      end
-
-      self.roundCandidate = self.roundCandidate + 1
-      if self.roundCandidate >= self.roundStepCandidate then
-        self.roundCandidate = 0
-
-        local emptyTiles = {}
-        for key, tile in ipairs(self.candidateTiles) do
-          if not tile.piece then
-            table.insert(emptyTiles, tile)
-          end
-        end
-        ingame:trySpawn(PieceCandidate, emptyTiles, 1)
-      end
+    if self.currentRound > self.roundTotal then
+      GameState.switch(gameover)
+    else
+      self.ratioCurrentTarget = self.currentRound / self.roundTotal
+      self.animStart = love.timer.getTime()
+      self.actionStart = love.timer.getTime()
     end
+
+    self.roundCandidate = self.roundCandidate + 1
+    if self.roundCandidate >= self.roundStepCandidate then
+      self.roundCandidate = 0
+
+      local emptyTiles = {}
+      for key, tile in ipairs(self.candidateTiles) do
+        if not tile.piece then
+          table.insert(emptyTiles, tile)
+        end
+      end
+      ingame:trySpawn(PieceCandidate, emptyTiles, 1)
+    end
+  end
+end
+
+function Timeline:combinationHasBeenMade(piece)
+  local pieceType = piece:typename()
+  if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
+    self:tick()
   end
 end
 

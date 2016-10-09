@@ -243,6 +243,10 @@ end
 Events
 --]]--
 
+function state:tick()
+	self.timeline:tick()
+end
+
 function state:combinationHasBeenMade(piece)
 	self.timeline:combinationHasBeenMade(piece)
 

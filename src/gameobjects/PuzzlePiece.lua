@@ -188,6 +188,13 @@ function PuzzlePiece:grab()
   end
 end
 
+function PuzzlePiece:onSuccessfulDrop(targetTile)
+  -- override me
+end
+
+function PuzzlePiece:onFailedDrop(targetTile)
+  -- override me
+end
 
 function PuzzlePiece:drop(tile)
   self.grabbed = false
@@ -198,7 +205,10 @@ function PuzzlePiece:drop(tile)
 
   if not tile or tile.piece or not self:canBeMovedToTile(tile) then
     -- this tile already has a piece in it, or the piece would not fit here - revert back to previous tile!
+    self:onFailedDrop(tile)
     tile = self.previousTile
+  else
+    self:onSuccessfulDrop(tile)
   end
 
   -- update position
@@ -367,7 +377,6 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if permissive then
     return true
   end
-  local shouldTakeRound = 0
   for _, dir in ipairs(self.directions) do
     local part = self.combinationParts[dir]
     local otherTile = newTile[dir]
@@ -379,13 +388,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       elseif otherPart and otherPart.convex and not part then
         return false
       end
-      if part and otherPart and (part:isType("PieceEvidence") or otherPart:isType("PieceEvidence")) then
-        shouldTakeRound = shouldTakeRound + (part:checkMatching(otherPart) and 1 or 0)
-      end
     end
-  end
-  if shouldTakeRound > 0 then
-    ingame:combinationHasBeenMade(self)
   end
   return true
 end

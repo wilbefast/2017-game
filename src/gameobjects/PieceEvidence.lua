@@ -42,6 +42,15 @@ function PieceEvidence:applyEffect()
   ingame:spawnEvidencePieceFromEvidence(self)
 end
 
+function PieceEvidence:onSuccessfulDrop(targetTile)
+  if targetTile.grid.isSociety then
+    ingame:tick()
+  end
+end
+
+function PieceEvidence:onFailedDrop(targetTile)
+end
+
 --[[------------------------------------------------------------
 Query
 --]]--
