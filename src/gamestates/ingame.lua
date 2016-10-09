@@ -26,6 +26,10 @@ function state:init()
 end
 
 function state:enter()
+	GameObject.purgeAll()
+	self.newspaperGrid = nil
+	self.societyGrid = nil
+
 	-- setup grid sizes and spacing between them
 	local spacing = 153
 	local spacingSocietyGrid = 177
@@ -154,6 +158,7 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 	if #candidateTiles <= 0 then
 		return
 	end
+	useful.shuffle(candidateTiles)
 	local numberToSpawn = numberToSpawn or 1
 	local spawnedPieces = 0
 	local i = 1
@@ -162,17 +167,21 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 		else
 			local tile = candidateTiles[i]
 			-- TODO - check whether a spawn is actually possible on this tile
-			class(tile)
+			local piece = class(tile)
+			log:write("\tspawning piece", piece.name, "at", tile.col, tile.row)
 			spawnedPieces = spawnedPieces + 1
 
 			self.pouf:emit(tile)
 		end
 		i = i + 1
 	end
+	if spawnedPieces < numberToSpawn then
+		log:write("Only able to spawn", spawnedPieces, "of", numberToSpawn, "into a set of", #candidateTiles, "tiles")
+	end
 end
 
 function state:spawnSourcePieces()
-
+	log:write("Spawning source pieces...")
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	if #emptyTiles <= 3  then
@@ -188,10 +197,12 @@ function state:spawnSourcePieces()
 end
 
 function state:spawnEvidencePieceFromSource(source)
+	log:write("Spawning evidence...")
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	if #emptyTiles <= 3  then
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
 		return
 	end
 	self:trySpawn(PieceEvidence, emptyTiles)

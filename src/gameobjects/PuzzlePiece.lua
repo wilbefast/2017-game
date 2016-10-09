@@ -350,10 +350,6 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       end
     end
   end
-  --log:write("shouldTakeRound : " .. shouldTakeRound)
-  for i = 1, shouldTakeRound do
-    ingame.timeline:combinationHasBeenMade(self)
-  end
   return true
 end
 
@@ -365,7 +361,7 @@ function PuzzlePiece:checkForDeaths()
   self.tile.grid:map(function(t)
     if t.piece and t.piece:shouldDie() then
       t.piece.purge = true
-      self:applyEffect()
+      t.piece:applyEffect()
     end
   end)
   if self.purge then

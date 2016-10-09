@@ -69,6 +69,7 @@ Events
 --]]--
 
 function PieceSource:applyEffect()
+  log:write("PIECE SOURCE HAS APPLIED")
   PuzzlePiece.applyEffect(self)
   ingame:spawnEvidencePieceFromSource(self)
 end

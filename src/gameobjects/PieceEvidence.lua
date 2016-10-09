@@ -19,7 +19,7 @@ Initialisation
 local PieceEvidence = Class({
   type = GameObject.newType("PieceEvidence"),
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args)
+    PuzzlePiece.init(self, tile, args or PieceEvidence.pick())
 
     -- piece image
     self.image = Resources.pieceEvidence
@@ -27,6 +27,15 @@ local PieceEvidence = Class({
   end
 })
 PieceEvidence:include(PuzzlePiece)
+
+--[[------------------------------------------------------------
+Events
+--]]--
+
+function PieceSource:applyEffect()
+  PuzzlePiece.applyEffect(self)
+  ingame:spawnEvidencePieceFromSource(self)
+end
 
 --[[------------------------------------------------------------
 Generation

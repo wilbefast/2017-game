@@ -22,7 +22,7 @@ local Timeline = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
 
-    self.roundTotal = 5
+    self.roundTotal = 25
     self.roundStep = 1
     self.currentRound = 0
 
