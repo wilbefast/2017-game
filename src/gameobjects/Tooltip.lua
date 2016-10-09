@@ -26,14 +26,14 @@ local Tooltip = Class({
     -- alpha animation
     self.shouldAppear = false
     self.apparition = 0
-    self.apparitionDelay = 0.5
+    self.apparitionDelay = 0.3
     self.disappeared = true
     self.apparitionDirection = -1
 
     -- show delay
     self.hovered = false
     self.hoverStart = -1000
-    self.hoverDelay = 1
+    self.hoverDelay = 0.5
   end
 })
 Tooltip:include(GameObject)
