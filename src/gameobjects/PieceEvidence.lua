@@ -32,9 +32,9 @@ PieceEvidence:include(PuzzlePiece)
 Events
 --]]--
 
-function PieceSource:applyEffect()
+function PieceEvidence:applyEffect()
   PuzzlePiece.applyEffect(self)
-  ingame:spawnEvidencePieceFromSource(self)
+  ingame:spawnEvidencePieceFromEvidence(self)
 end
 
 --[[------------------------------------------------------------

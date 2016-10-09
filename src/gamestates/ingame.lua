@@ -109,13 +109,13 @@ Query
 function state:countPiecesOfType(type, grid)
 	if grid then
 		return grid:count(function(t)
-			return t.piece and t.piece:isType(type)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
 		end)
 	else
 		return self.newspaperGrid:count(function(t)
-			return t.piece and t.piece:isType(type)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
 		end) + self.societyGrid:count(function(t)
-			return t.piece and t.piece:isType(type)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
 		end)
 	end
 end
@@ -123,13 +123,13 @@ end
 function state:countPiecesOfTypeSuchThat(type, suchThat, grid)
 	if grid then
 		return grid:count(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end)
 	else
 		return self.newspaperGrid:count(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end) + self.societyGrid:count(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end)
 	end
 end
@@ -137,13 +137,13 @@ end
 function state:isPieceOfTypeSuchThat(type, suchThat, grid)
 	if grid then
 		return grid:any(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end)
 	else
 		return self.newspaperGrid:any(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end) or self.societyGrid:any(function(t)
-			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
 		end)
 	end
 end
@@ -162,6 +162,7 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 	local numberToSpawn = numberToSpawn or 1
 	local spawnedPieces = 0
 	local i = 1
+	log:write("Spawning", GameObject.typename(class))
 	while spawnedPieces < numberToSpawn and i <= #candidateTiles do
 		if false then
 		else
@@ -181,7 +182,7 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 end
 
 function state:spawnSourcePieces()
-	log:write("Spawning source pieces...")
+
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	if #emptyTiles <= 3  then
@@ -197,7 +198,6 @@ function state:spawnSourcePieces()
 end
 
 function state:spawnEvidencePieceFromSource(source)
-	log:write("Spawning evidence...")
 	local emptyTiles = {}
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	if #emptyTiles <= 3  then
@@ -206,6 +206,30 @@ function state:spawnEvidencePieceFromSource(source)
 		return
 	end
 	self:trySpawn(PieceEvidence, emptyTiles)
+end
+
+function state:spawnEvidencePieceFromEvidence(source)
+	local emptyTiles = {}
+	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	if #emptyTiles <= 3  then
+		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
+		return
+	end
+	self:trySpawn(PieceEvidence, emptyTiles)
+end
+
+--[[------------------------------------------------------------
+Events
+--]]--
+
+function state:combinationHasBeenMade(piece)
+	self.timeline:combinationHasBeenMade(piece)
+
+	-- win if there are no candidates
+	if self:countPiecesOfType("PieceCandidate") <= 0 then
+		GameState.switch(gameover)
+	end
 end
 
 --[[------------------------------------------------------------
