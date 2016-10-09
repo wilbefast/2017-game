@@ -245,7 +245,7 @@ function state:update(dt)
  	-- drag
  	if self.grabbedPiece then
 		self.grabbedPiece:drag(mx, my)
-		if not self.grabbedPiece:isType("Evidence") and mx > self.newspaperLimit then
+		if not self.grabbedPiece:isType("PieceEvidence") and mx > self.newspaperLimit then
 			self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
 			self.grabbedPiece = nil
 		end
