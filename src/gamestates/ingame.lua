@@ -104,6 +104,25 @@ end
 Game logic
 --]]--
 
+function state:trySpawn(class, candidateTiles, numberToSpawn)
+	if #candidateTiles <= 0 then
+		return
+	end
+	local numberToSpawn = numberToSpawn or 1
+	local spawnedPieces = 0
+	local i = 1
+	while spawnedPieces < numberToSpawn and i <= #candidateTiles do
+		if false then
+		else
+			local tile = candidateTiles[i]
+			-- TODO - check whether a spawn is actually possible on this tile
+			class(tile)
+			spawnedPieces = spawnedPieces + 1
+		end
+		i = i + 1
+	end
+end
+
 function state:spawnSourcePieces()
 
 	local emptyTiles = {}
@@ -112,15 +131,11 @@ function state:spawnSourcePieces()
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
 		return
 	end
-	local sourcesToSpawn = math.max(0, math.min(#emptyTiles, 3 - GameObject.countOfType("PieceSource")))
+	local sourcesToSpawn = math.max(0, math.min(#emptyTiles - 3, 3 - GameObject.countOfType("PieceSource")))
 	if sourcesToSpawn <= 0 then
 		return
 	end
-
-	useful.shuffle(emptyTiles)
-	for i = 1, sourcesToSpawn do
-		PieceSource(emptyTiles[i])
-	end
+	self:trySpawn(PieceSource, emptyTiles, 3)
 end
 
 function state:spawnEvidencePieceFromSource(source)
@@ -130,9 +145,7 @@ function state:spawnEvidencePieceFromSource(source)
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
 		return
 	end
-
-	useful.shuffle(emptyTiles)
-	PieceEvidence(emptyTiles[1])
+	self:trySpawn(PieceEvidence, emptyTiles)
 end
 
 --[[------------------------------------------------------------

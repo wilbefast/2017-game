@@ -314,7 +314,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
   end
-  local permissive = newTile.grid == ingame.newspaperGrid
+  local permissive = false--newTile.grid == ingame.newspaperGrid
   if permissive then
     return true
   end
