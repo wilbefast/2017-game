@@ -44,11 +44,43 @@ return {
    ally_diffamation1 = love.graphics.newImage("assets/image/tooltip/ally_diffamation1.png"),
    ally_publicopinion1 = love.graphics.newImage("assets/image/tooltip/ally_publicopinion1.png"),
    -- tooltip adversary
-
+   adversary_spindoctor1 = love.graphics.newImage("assets/image/tooltip/adversary_spindoctor1.png"),
+   adversary_spindoctor2 = love.graphics.newImage("assets/image/tooltip/adversary_spindoctor2.png"),
+   adversary_spindoctor3 = love.graphics.newImage("assets/image/tooltip/adversary_spindoctor3.png"),
+   adversary_secretservice1 = love.graphics.newImage("assets/image/tooltip/adversary_secretservice1.png"),
+   adversary_secretservice2 = love.graphics.newImage("assets/image/tooltip/adversary_secretservice2.png"),
+   adversary_secretservice3 = love.graphics.newImage("assets/image/tooltip/adversary_secretservice3.png"),
+   adversary_trial1 = love.graphics.newImage("assets/image/tooltip/adversary_trial1.png"),
+   adversary_trial2 = love.graphics.newImage("assets/image/tooltip/adversary_trial2.png"),
+   adversary_trial3 = love.graphics.newImage("assets/image/tooltip/adversary_trial3.png"),
+   adversary_randomevent1 = love.graphics.newImage("assets/image/tooltip/adversary_randomevent1.png"),
+   adversary_randomevent2 = love.graphics.newImage("assets/image/tooltip/adversary_randomevent2.png"),
+   adversary_randomevent3 = love.graphics.newImage("assets/image/tooltip/adversary_randomevent3.png"),
+   adversary_randomevent4 = love.graphics.newImage("assets/image/tooltip/adversary_randomevent4.png"),
    -- tooltip evidence
    evidence_document1 = love.graphics.newImage("assets/image/tooltip/evidence_document1.png"),
    evidence_document2 = love.graphics.newImage("assets/image/tooltip/evidence_document2.png"),
    evidence_document3 = love.graphics.newImage("assets/image/tooltip/evidence_document3.png"),
+
+   evidence_tape1 = love.graphics.newImage("assets/image/tooltip/evidence_tape1.png"),
+   evidence_tape2 = love.graphics.newImage("assets/image/tooltip/evidence_tape2.png"),
+   evidence_tape3 = love.graphics.newImage("assets/image/tooltip/evidence_tape3.png"),
+
+   evidence_video1 = love.graphics.newImage("assets/image/tooltip/evidence_video1.png"),
+   evidence_video2 = love.graphics.newImage("assets/image/tooltip/evidence_video2.png"),
+   evidence_video3 = love.graphics.newImage("assets/image/tooltip/evidence_video3.png"),
+
+   evidence_photo1 = love.graphics.newImage("assets/image/tooltip/evidence_photo1.png"),
+   evidence_photo2 = love.graphics.newImage("assets/image/tooltip/evidence_photo2.png"),
+   evidence_photo3 = love.graphics.newImage("assets/image/tooltip/evidence_photo3.png"),
+
+   evidence_secretsource1 = love.graphics.newImage("assets/image/tooltip/evidence_secretsource1.png"),
+   evidence_secretsource2 = love.graphics.newImage("assets/image/tooltip/evidence_secretsource2.png"),
+   evidence_secretsource3 = love.graphics.newImage("assets/image/tooltip/evidence_secretsource3.png"),
+
+   evidence_publicsource1 = love.graphics.newImage("assets/image/tooltip/evidence_publicsource1.png"),
+   evidence_publicsource2 = love.graphics.newImage("assets/image/tooltip/evidence_publicsource2.png"),
+   evidence_publicsource3 = love.graphics.newImage("assets/image/tooltip/evidence_publicsource3.png"),
 
    pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
    pieceSource = love.graphics.newImage("assets/pieces/source.png"),

@@ -400,6 +400,7 @@ return {
     Adversary_RandomEvent1 = {
         name = "Adversary_RandomEvent1",
         team = "Player",
+        tooltip = "adversary_randomevent1",
         lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
@@ -409,6 +410,7 @@ return {
     Adversary_RandomEvent2 = {
         name = "Adversary_RandomEvent2",
         team = "Player",
+        tooltip = "adversary_randomevent2",
         lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
@@ -418,6 +420,7 @@ return {
     Adversary_RandomEvent3 = {
         name = "Adversary_RandomEvent3",
         team = "Player",
+        tooltip = "adversary_randomevent3",
         lifetime = 5,
         pieceType = "PieceAdversary",
         connections = {
@@ -429,6 +432,7 @@ return {
         team = "Player",
         lifetime = 5,
         pieceType = "PieceAdversary",
+        tooltip = "adversary_randomevent4",
         connections = {
           N = { type = "state", convex = true }
         }
@@ -437,6 +441,7 @@ return {
     Adversary_SecretServices1 = {
       name = "Adversary_SecretServices1",
       team = "Enemy",
+      tooltip = "adversary_secretservice1",
       pieceType = "PieceAdversary",
       connections = {
         E = { type = "world", convex = true },
@@ -446,6 +451,7 @@ return {
     Adversary_SecretServices2 = {
       name = "Adversary_SecretServices2",
       team = "Enemy",
+      tooltip = "adversary_secretservice2",
       pieceType = "PieceAdversary",
       connections = {
         E = { type = "world", convex = true },
@@ -455,6 +461,7 @@ return {
     Adversary_SecretServices3 = {
       name = "Adversary_SecretServices3",
       team = "Enemy",
+      tooltip = "adversary_secretservice3",
       pieceType = "PieceAdversary",
       connections = {
         E = { type = "world", convex = true },
@@ -464,6 +471,7 @@ return {
     Adversary_SecretServices4 = {
       name = "Adversary_SecretServices4",
       team = "Enemy",
+      tooltip = "adversary_secretservice1",
       pieceType = "PieceAdversary",
       connections = {
         E = { type = "world", convex = true },
@@ -474,6 +482,7 @@ return {
     Adversary_Trials1 = {
       name = "Adversary_Trials1",
       team = "Enemy",
+      tooltip = "adversary_trial1",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "financial", convex = true },
@@ -483,6 +492,7 @@ return {
     Adversary_Trials2 = {
       name = "Adversary_Trials2",
       team = "Enemy",
+      tooltip = "adversary_trial2",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "financial", convex = true },
@@ -492,6 +502,7 @@ return {
     Adversary_Trials3 = {
       name = "Adversary_Trials3",
       team = "Enemy",
+      tooltip = "adversary_trial3",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "financial", convex = true },
@@ -501,6 +512,7 @@ return {
     Adversary_Trials4 = {
       name = "Adversary_Trials4",
       team = "Enemy",
+      tooltip = "adversary_trial1",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "financial", convex = true },
@@ -511,6 +523,7 @@ return {
     Adversary_SpinDoctor1 = {
       name = "Adversary_SpinDoctor1",
       team = "Enemy",
+      tooltip = "adversary_spindoctor1",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "state", convex = true },
@@ -520,6 +533,7 @@ return {
     Adversary_SpinDoctor2 = {
       name = "Adversary_SpinDoctor2",
       team = "Enemy",
+      tooltip = "adversary_spindoctor2",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "state", convex = true },
@@ -529,6 +543,7 @@ return {
     Adversary_SpinDoctor3 = {
       name = "Adversary_SpinDoctor3",
       team = "Enemy",
+      tooltip = "adversary_spindoctor3",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "state", convex = true },
@@ -538,6 +553,7 @@ return {
     Adversary_SpinDoctor4 = {
       name = "Adversary_SpinDoctor4",
       team = "Enemy",
+      tooltip = "adversary_spindoctor1",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "state", convex = true },
@@ -547,6 +563,7 @@ return {
     Adversary_SpinDoctor5 = {
       name = "Adversary_SpinDoctor5",
       team = "Enemy",
+      tooltip = "adversary_spindoctor2",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "sexual", convex = true },
@@ -556,6 +573,7 @@ return {
     Adversary_SpinDoctor6 = {
       name = "Adversary_SpinDoctor6",
       team = "Enemy",
+        tooltip = "adversary_spindoctor3",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "sexual", convex = true },
@@ -565,6 +583,7 @@ return {
     Adversary_SpinDoctor7 = {
       name = "Adversary_SpinDoctor7",
       team = "Enemy",
+      tooltip = "adversary_spindoctor1",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "sexual", convex = true },
@@ -574,6 +593,7 @@ return {
     Adversary_SpinDoctor8 = {
       name = "Adversary_SpinDoctor8",
       team = "Enemy",
+      tooltip = "adversary_spindoctor2",
       pieceType = "PieceAdversary",
       connections = {
         W = { type = "sexual", convex = true },
@@ -739,6 +759,248 @@ return {
       connections = {
         W = { type = "sexual", convex = true },
         E = { type = "sexual", convex = false }
+      }
+    },
+    -- Evidence: Secret Source
+    Evidence_SecretSource1 = {
+        name = "Evidence_SecretSource1",
+        team = "Player",
+        tooltip = "evidence_secretsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "sexual", convex = true },
+          E = { type = "sexual", convex = false },
+          W = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_SecretSource2 = {
+        name = "Evidence_SecretSource2",
+        team = "Player",
+        tooltip = "evidence_secretsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "sexual", convex = false },
+          E = { type = "sexual", convex = false },
+          W = { type = "sexual", convex = true }
+      }
+    },
+    Evidence_SecretSource3 = {
+        name = "Evidence_SecretSource3",
+        team = "Player",
+        tooltip = "evidence_secretsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "financial", convex = true },
+          S = { type = "financial", convex = true },
+          E = { type = "financial", convex = false },
+          W = { type = "financial", convex = false }
+      }
+    },
+    Evidence_SecretSource4 = {
+        name = "Evidence_SecretSource4",
+        team = "Player",
+        tooltip = "evidence_secretsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "financial", convex = true },
+          S = { type = "financial", convex = false },
+          E = { type = "financial", convex = false },
+          W = { type = "financial", convex = true }
+      }
+    },
+    Evidence_SecretSource5 = {
+        name = "Evidence_SecretSource5",
+        team = "Player",
+        tooltip = "evidence_secretsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "world", convex = true },
+          S = { type = "world", convex = true },
+          E = { type = "world", convex = false },
+          W = { type = "world", convex = false }
+      }
+    },
+    Evidence_SecretSource6 = {
+        name = "Evidence_SecretSource6",
+        team = "Player",
+        tooltip = "evidence_secretsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "world", convex = true },
+          S = { type = "world", convex = false },
+          E = { type = "world", convex = false },
+          W = { type = "world", convex = true }
+      }
+    },
+    Evidence_SecretSource7 = {
+        name = "Evidence_SecretSource7",
+        team = "Player",
+        tooltip = "evidence_secretsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "state", convex = true },
+          E = { type = "state", convex = false },
+          W = { type = "state", convex = false }
+      }
+    },
+    Evidence_SecretSource8 = {
+        name = "Evidence_SecretSource8",
+        team = "Player",
+        tooltip = "evidence_secretsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "state", convex = false },
+          E = { type = "state", convex = false },
+          W = { type = "state", convex = true }
+      }
+    },
+    -- Evidence Public Source
+    Evidence_PublicSource1 = {
+        name = "Evidence_PublicSource1",
+        team = "Player",
+        tooltip = "evidence_publicsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "sexual", convex = false },
+          E = { type = "financial", convex = false },
+          W = { type = "financial", convex = true }
+      }
+    },
+    Evidence_PublicSource2 = {
+        name = "Evidence_PublicSource2",
+        team = "Player",
+        tooltip = "evidence_publicsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "financial", convex = false },
+          E = { type = "sexual", convex = false },
+          W = { type = "financial", convex = true }
+      }
+    },
+    Evidence_PublicSource3 = {
+        name = "Evidence_PublicSource3",
+        team = "Player",
+        tooltip = "evidence_publicsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "sexual", convex = false },
+          E = { type = "state", convex = false },
+          W = { type = "state", convex = true }
+      }
+    },
+    Evidence_PublicSource4 = {
+        name = "Evidence_PublicSource4",
+        team = "Player",
+        tooltip = "evidence_publicsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "state", convex = false },
+          E = { type = "sexual", convex = false },
+          W = { type = "state", convex = true }
+      }
+    },
+    Evidence_PublicSource5 = {
+        name = "Evidence_PublicSource5",
+        team = "Player",
+        tooltip = "evidence_publicsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "sexual", convex = false },
+          E = { type = "world", convex = false },
+          W = { type = "world", convex = true }
+      }
+    },
+    Evidence_PublicSource6 = {
+        name = "Evidence_PublicSource6",
+        team = "Player",
+        tooltip = "evidence_publicsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "sexual", convex = true },
+          S = { type = "world", convex = false },
+          E = { type = "sexual", convex = false },
+          W = { type = "world", convex = true }
+      }
+    },
+    Evidence_PublicSource7 = {
+        name = "Evidence_PublicSource7",
+        team = "Player",
+        tooltip = "evidence_publicsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "state", convex = false },
+          E = { type = "world", convex = false },
+          W = { type = "world", convex = true }
+      }
+    },
+    Evidence_PublicSource8 = {
+        name = "Evidence_PublicSource8",
+        team = "Player",
+        tooltip = "evidence_publicsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "world", convex = false },
+          E = { type = "state", convex = false },
+          W = { type = "world", convex = true }
+      }
+    },
+    Evidence_PublicSource9 = {
+        name = "Evidence_PublicSource9",
+        team = "Player",
+        tooltip = "evidence_publicsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "state", convex = false },
+          E = { type = "financial", convex = false },
+          W = { type = "financial", convex = true }
+      }
+    },
+    Evidence_PublicSource10 = {
+        name = "Evidence_PublicSource10",
+        team = "Player",
+        tooltip = "evidence_publicsource1",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state",     convex = true },
+          S = { type = "financial", convex = false },
+          E = { type = "state",     convex = false },
+          W = { type = "financial", convex = true }
+      }
+    },
+    Evidence_PublicSource11 = {
+        name = "Evidence_PublicSource11",
+        team = "Player",
+        tooltip = "evidence_publicsource2",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state",     convex = true },
+          S = { type = "world",     convex = false },
+          E = { type = "state",     convex = false },
+          W = { type = "world",     convex = true }
+      }
+    },
+    Evidence_PublicSource12 = {
+        name = "Evidence_PublicSource12",
+        team = "Player",
+        tooltip = "evidence_publicsource3",
+        pieceType = "PieceEvidence",
+        connections = {
+          N = { type = "state", convex = true },
+          S = { type = "state", convex = false },
+          E = { type = "world", convex = false },
+          W = { type = "world", convex = true }
       }
     }
 }
