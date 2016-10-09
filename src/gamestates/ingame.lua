@@ -84,14 +84,14 @@ function state:enter()
 		end
 	end
 
+	-- specific gui
+	self.tooltip = Tooltip()
+	self.timeline = Timeline()
+	self.pouf = Pouf()
+
 	-- ensure that there are 3 source puzzle pieces
 	self:spawnSourcePieces()
 
-	-- tooltip
-	self.tooltip = Tooltip()
-
-	-- timeline
-	self.timeline = Timeline()
 end
 
 function state:leave()
@@ -118,6 +118,8 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 			-- TODO - check whether a spawn is actually possible on this tile
 			class(tile)
 			spawnedPieces = spawnedPieces + 1
+			
+			self.pouf:emit(tile)
 		end
 		i = i + 1
 	end

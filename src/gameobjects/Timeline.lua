@@ -30,8 +30,7 @@ local Timeline = Class({
     self.ratioCurrentRound = 0
 
     -- image
-    self.image = Resources.timeline
-    self.image:setWrap("repeat")
+    self.timelineCursor = Resources.timelineCursor
 
     -- layout
     self.margin = 8
@@ -42,10 +41,7 @@ local Timeline = Class({
     self.timelineRight = 1860
     self.timelineWidth = self.timelineRight - self.timelineLeft
     self.timelineTop = WORLD_H - 100
-    self.timelineBottom = self.timelineTop + self.image:getHeight()
-
-    -- tmp
-    self.background = love.graphics.newQuad(0, 0, self.timelineWidth, self.height, self.image:getWidth(), self.image:getHeight())
+    self.timelineBottom = self.timelineTop + 30
   end
 })
 Timeline:include(GameObject)
@@ -68,19 +64,10 @@ function Timeline:combinationHasBeenMade(piece)
 end
 
 function Timeline:draw()
-
-  -- bar
-  love.graphics.setColor(255, 255, 255)
-  love.graphics.draw(self.image, self.background, self.timelineLeft, self.timelineTop)
-
   -- current cursor
-  love.graphics.setColor(255, 0, 0)
-  love.graphics.setLineWidth(2)
   local currentX = self.timelineLeft + self.timelineWidth*self.ratioCurrentRound
-  love.graphics.polygon("fill", currentX - self.cursorWidth, self.timelineTop - self.cursorHeight, currentX, self.timelineTop, currentX + self.cursorWidth, self.timelineTop - self.cursorHeight)
-  love.graphics.line(currentX, self.timelineBottom, currentX, self.timelineTop)
-
   love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(self.timelineCursor, currentX, self.timelineTop)
 end
 
 function Timeline:update(dt)

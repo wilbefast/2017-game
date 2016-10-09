@@ -16,7 +16,8 @@ return {
   pieceCandidate = love.graphics.newImage("assets/pieces/candidat.png"),
   pieceJournalist = love.graphics.newImage("assets/pieces/journaliste.png"),
 
-  timeline = love.graphics.newImage("assets/image/timeline.png"),
+  timelineCursor = love.graphics.newImage("assets/image/curseur.png"),
+  poof = love.graphics.newImage("assets/image/poof.png"),
 
   combinations = {
 	  financial = {

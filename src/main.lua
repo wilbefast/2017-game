@@ -65,6 +65,7 @@ function love.load(arg)
   NewspaperGridTile = require("grid/NewspaperGridTile")
   Tooltip = require("gameobjects/Tooltip")
   Timeline = require("gameobjects/Timeline")
+  Pouf = require("gameobjects/Pouf")
 
   -- startup logs
   log.print = true

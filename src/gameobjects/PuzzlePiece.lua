@@ -194,6 +194,7 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  ingame.pouf:emit(self.tile)
   self.tile.piece = nil
   for direction, part in pairs(self.combinationParts) do
     part.purge = true
