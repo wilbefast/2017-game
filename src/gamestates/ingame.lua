@@ -99,6 +99,54 @@ function state:leave()
 end
 
 --[[------------------------------------------------------------
+Query
+--]]--
+
+function state:countPiecesOfType(type, grid)
+	if grid then
+		return grid:count(function(t)
+			return t.piece and t.piece:isType(type)
+		end)
+	else
+		return self.newspaperGrid:count(function(t)
+			return t.piece and t.piece:isType(type)
+		end) + self.societyGrid:count(function(t)
+			return t.piece and t.piece:isType(type)
+		end)
+	end
+end
+
+function state:countPiecesOfTypeSuchThat(type, suchThat, grid)
+	if grid then
+		return grid:count(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	else
+		return self.newspaperGrid:count(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end) + self.societyGrid:count(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	end
+end
+
+function state:isPieceOfTypeSuchThat(type, suchThat, grid)
+	if grid then
+		return grid:any(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	else
+		return self.newspaperGrid:any(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end) or self.societyGrid:any(function(t)
+			return t.piece and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	end
+end
+
+
+
+--[[------------------------------------------------------------
 Game logic
 --]]--
 
@@ -131,11 +179,12 @@ function state:spawnSourcePieces()
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
 		return
 	end
-	local sourcesToSpawn = math.max(0, math.min(#emptyTiles - 3, 3 - GameObject.countOfType("PieceSource")))
+	local sourcePieces = self:countPiecesOfType("PieceSource", self.newspaperGrid)
+	local sourcesToSpawn = math.max(0, math.min(#emptyTiles - 3, 3 - sourcePieces))
 	if sourcesToSpawn <= 0 then
 		return
 	end
-	self:trySpawn(PieceSource, emptyTiles, 3)
+	self:trySpawn(PieceSource, emptyTiles, sourcesToSpawn)
 end
 
 function state:spawnEvidencePieceFromSource(source)
@@ -265,10 +314,10 @@ function state:update(dt)
 				self.grabbedPiece:setStretch(stretchRatio)
 			end
 		end
-  end
-
-	-- spawn source tiles
-	self:spawnSourcePieces()
+  else
+		-- spawn source tiles
+		self:spawnSourcePieces()
+	end
 end
 
 function state:draw()

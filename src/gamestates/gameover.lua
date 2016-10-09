@@ -18,6 +18,21 @@ GAMEOVER GAMESTATE
 
 local state = GameState.new()
 
+local endings = {
+  win = {
+    background = Resources.gameover.win
+  },
+  killed = {
+    background = Resources.gameover.killed
+  },
+  extremist = {
+    background = Resources.gameover.extremist
+  },
+  standard = {
+    background = Resources.gameover.standard
+  },
+}
+
 --[[------------------------------------------------------------
 GameState navigation
 --]]--
@@ -26,6 +41,17 @@ function state:init()
 end
 
 function state:enter()
+
+  if ingame:countPiecesOfType("PieceNewspaper") <= 0 then
+    self.ending = endings.kill
+  elseif ingame:countPiecesOfType("PieceCandidate") <= 0 then
+    self.ending = endings.win
+  elseif ingame:countPiecesOfType("PieceCandidate") >= 4
+  or ingame:isPieceOfTypeSuchThat("PieceCandidate", function(p) return p.name == "Reac" or p.name == "Socialo" end) then
+    self.ending = endings.standard
+  else
+    self.ending = endings.extremist
+  end
 end
 
 function state:leave()
@@ -48,7 +74,7 @@ function state:update(dt)
 end
 
 function state:draw()
-  love.graphics.print("gameover", 32, 32)
+  love.graphics.draw(self.ending.background)
 end
 
 

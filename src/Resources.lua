@@ -5,7 +5,7 @@ return {
   square = love.graphics.newImage("assets/image/combination/square.png"),
   circle = love.graphics.newImage("assets/image/combination/circle.png"),
   trapeze = love.graphics.newImage("assets/image/combination/trapeze.png"),
-  
+
   facho_f = love.graphics.newImage("assets/image/tooltip/facho_f.png"),
 
   pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
@@ -18,6 +18,13 @@ return {
 
   timelineCursor = love.graphics.newImage("assets/image/curseur.png"),
   poof = love.graphics.newImage("assets/image/poof.png"),
+
+  gameover = {
+    win = love.graphics.newImage("assets/image/end_01.jpg"),
+    standard = love.graphics.newImage("assets/image/end_02.jpg"),
+    extremist = love.graphics.newImage("assets/image/end_03.jpg"),
+    killed = love.graphics.newImage("assets/image/end_04.jpg")
+  },
 
   combinations = {
 	  financial = {

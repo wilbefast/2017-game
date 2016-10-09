@@ -49,11 +49,11 @@ function love.load(arg)
   log:setLength(21)
 
   -- game-specific code
+  Resources = require("Resources")
   scaling = require("scaling")
   ingame = require("gamestates/ingame")
   title = require("gamestates/title")
   gameover = require("gamestates/gameover")
-  Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
   CombinationPart = require("gameobjects/CombinationPart")
   PieceNewspaper = require("gameobjects/PieceNewspaper")
