@@ -79,7 +79,7 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    name = { "Facho", "Gaucho" }
+    name = { "Facho" }
   },
   {
     grid = "societyGrid",
@@ -91,6 +91,6 @@ return {
       { col = 3, row = 4 },
       { col = 7, row = 4 }
     },
-    name = { "Ecolo" , "Centre" }
+    name = { "Ecolo" }
   }
 }

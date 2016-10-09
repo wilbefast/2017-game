@@ -33,7 +33,7 @@ local Tooltip = Class({
     -- show delay
     self.hovered = false
     self.hoverStart = -1000
-    self.hoverDelay = 0.5
+    self.hoverDelay = 1
   end
 })
 Tooltip:include(GameObject)
