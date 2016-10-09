@@ -13,39 +13,47 @@ Lesser General Public License for more details.
 --]]
 
 --[[------------------------------------------------------------
-Initialisation
---]]--
+GAMEOVER GAMESTATE
+--]]------------------------------------------------------------
 
-local PieceNewspaper = Class({
-  type = GameObject.newType("PieceNewspaper"),
-  init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
-
-    -- piece image
-    self.image = Resources.pieceNewspaper
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
-  end
-})
-PieceNewspaper:include(PuzzlePiece)
+local state = GameState.new()
 
 --[[------------------------------------------------------------
-Events
+GameState navigation
 --]]--
 
---[[------------------------------------------------------------
-Game loop
---]]--
-
-function PieceNewspaper:draw()
-  PuzzlePiece.draw(self)
+function state:init()
 end
 
-function PieceNewspaper:update(dt)
-  PuzzlePiece.update(self, dt)
+function state:enter()
+end
+
+function state:leave()
 end
 
 --[[------------------------------------------------------------
-Export
+Callbacks
 --]]--
 
-return PieceNewspaper
+
+function state:keypressed(key, uni)
+  GameState.switch(title)
+end
+
+function state:mousepressed()
+  GameState.switch(title)
+end
+
+function state:update(dt)
+end
+
+function state:draw()
+  love.graphics.print("gameover", 32, 32)
+end
+
+
+--[[------------------------------------------------------------
+EXPORT
+--]]------------------------------------------------------------
+
+return state

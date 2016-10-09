@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2014 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -131,7 +131,6 @@ function PuzzlePiece:rotateDirection(map)
   local newCombinationParts = {}
   for direction, part in pairs(self.combinationParts) do
     local newDirection = map[direction]
-    --part.setDirection(newDirection)
     newCombinationParts[newDirection] = part
   end
   self.combinationParts = newCombinationParts
@@ -164,7 +163,7 @@ function PuzzlePiece:drop(tile)
   self.grabbed = false
   self.layer = nil
   for dir, part in pairs(self.combinationParts) do
-    part.layer = nil
+    part:resetLayer()
   end
 
   if not tile or tile.piece or not self:canBeMovedToTile(tile) then
@@ -194,6 +193,7 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  ingame.pouf:emit(self.tile)
   self.tile.piece = nil
   for direction, part in pairs(self.combinationParts) do
     part.purge = true
@@ -201,7 +201,7 @@ function PuzzlePiece:onPurge()
 end
 
 function PuzzlePiece:applyEffect()
-  -- override me
+  ingame.timeline:combinationHasBeenMade(self)
 end
 
 --[[------------------------------------------------------------
@@ -315,6 +315,15 @@ function PuzzlePiece:rotate(direction)
   self.wiggleStartedAt = love.timer.getTime()
 end
 
+function PuzzlePiece:setStretch(ratio)
+  if math.abs(self.rotation) < 0.01 or math.abs(self.rotation - math.pi) < 0.01 then
+    self.wiggle.x = -ratio * 0.5
+  else
+    self.wiggle.y = -ratio * 0.5
+  end
+  self:followCombinationParts()
+end
+
 function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
@@ -323,6 +332,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if permissive then
     return true
   end
+  local shouldTakeRound = 0
   for _, dir in ipairs(self.directions) do
     local part = self.combinationParts[dir]
     local otherTile = newTile[dir]
@@ -335,7 +345,14 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       elseif otherPart and not part then
         return false
       end
+      if part and otherPart then
+        shouldTakeRound = shouldTakeRound + (part:checkMatching(otherPart) and 1 or 0)
+      end
     end
+  end
+  --log:write("shouldTakeRound : " .. shouldTakeRound)
+  for i = 1, shouldTakeRound do
+    ingame.timeline:combinationHasBeenMade(self)
   end
   return true
 end

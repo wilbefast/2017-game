@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2016 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -52,6 +52,7 @@ function love.load(arg)
   scaling = require("scaling")
   ingame = require("gamestates/ingame")
   title = require("gamestates/title")
+  gameover = require("gamestates/gameover")
   Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
   CombinationPart = require("gameobjects/CombinationPart")
@@ -65,6 +66,7 @@ function love.load(arg)
   NewspaperGridTile = require("grid/NewspaperGridTile")
   Tooltip = require("gameobjects/Tooltip")
   Timeline = require("gameobjects/Timeline")
+  Pouf = require("gameobjects/Pouf")
 
   -- startup logs
   log.print = true

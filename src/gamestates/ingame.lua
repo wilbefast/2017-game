@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2016 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -84,20 +84,18 @@ function state:enter()
 		end
 	end
 
+	-- specific gui
+	self.tooltip = Tooltip()
+	self.timeline = Timeline()
+	self.pouf = Pouf()
+
 	-- ensure that there are 3 source puzzle pieces
 	self:spawnSourcePieces()
 
-	-- tooltip
-	self.tooltip = Tooltip()
-
-	-- timeline
-	self.timeline = Timeline()
 end
 
 function state:leave()
 	GameObject.purgeAll()
-	self.newspaperGrid = nil
-	self.societyGrid = nil
 end
 
 --[[------------------------------------------------------------
@@ -118,6 +116,8 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 			-- TODO - check whether a spawn is actually possible on this tile
 			class(tile)
 			spawnedPieces = spawnedPieces + 1
+
+			self.pouf:emit(tile)
 		end
 		i = i + 1
 	end
@@ -183,7 +183,11 @@ end
 
 function state:mousereleased(x, y, button)
 	if button == 1 and self.grabbedPiece then
-		self.grabbedPiece:drop(self.hoveredTile) -- self.hoveredTile can be nil
+		if self.hoveredTile and not self.grabbedPiece:isType("PieceEvidence") and self.hoveredTile.grid == self.societyGrid then
+			self.grabbedPiece:drop(self.grabbedPiece.previousTile)
+		else
+			self.grabbedPiece:drop(self.hoveredTile) -- self.hoveredTile can be nil
+		end
 		self.grabbedPiece = nil
 	end
 end
@@ -245,9 +249,21 @@ function state:update(dt)
  	-- drag
  	if self.grabbedPiece then
 		self.grabbedPiece:drag(mx, my)
-		if not self.grabbedPiece:isType("PieceEvidence") and mx > self.newspaperLimit then
-			self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
-			self.grabbedPiece = nil
+		if not self.grabbedPiece:isType("PieceEvidence") then
+			if mx > self.newspaperLimit + PuzzlePiece.cellSize then
+				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize)
+				self.grabbedPiece:followCombinationParts()
+				self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
+				self.grabbedPiece = nil
+			else
+				local stretchRatio = 0
+				-- local stretchRatio = useful.smoothstep(
+				-- 	self.newspaperLimit - PuzzlePiece.cellSize/2,
+				-- 	self.newspaperLimit + PuzzlePiece.cellSize,
+				-- 	mx)
+				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize + PuzzlePiece.cellSize * stretchRatio / 4)
+				self.grabbedPiece:setStretch(stretchRatio)
+			end
 		end
   end
 
@@ -265,9 +281,11 @@ function state:draw()
 		useful.bindWhite()
 
 		-- society grid
-		love.graphics.setColor(0, 255, 0)
-			self.societyGrid:draw()
-		useful.bindWhite()
+		if self.grabbedPiece:isType("PieceEvidence") then
+			love.graphics.setColor(0, 255, 0)
+				self.societyGrid:draw()
+			useful.bindWhite()
+		end
 	end
 
 	-- draw logic

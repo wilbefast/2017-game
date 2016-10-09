@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2014 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -22,16 +22,32 @@ local Timeline = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
 
-    self.ratioCurrentCursor = 0
+    self.roundTotal = 5
+    self.roundStep = 1
+    self.currentRound = 0
 
-    self.roundCount = 100
-    self.roundStep = 5
-    self.step = self.roundCount / self.roundStep
+    -- normalized position
+    self.ratioCurrentRound = 0
+    self.ratioCurrentTarget = 0
 
+    -- image
+    self.timelineCursor = Resources.timelineCursor
+
+    -- layout
     self.margin = 8
     self.height = 32
     self.cursorWidth = 16
     self.cursorHeight = 16
+    self.timelineLeft = 716
+    self.timelineRight = 1860
+    self.timelineWidth = self.timelineRight - self.timelineLeft
+    self.timelineTop = WORLD_H - 155
+    self.timelineBottom = self.timelineTop + self.timelineCursor:getHeight()
+
+    -- animation
+    self.animStart = -1000
+    self.animDelay = 1
+    self.animScale = 0.5
   end
 })
 Timeline:include(GameObject)
@@ -44,33 +60,36 @@ Events
 Game loop
 --]]--
 
-function Timeline:draw()
+function Timeline:combinationHasBeenMade(piece)
+  local pieceType = piece:typename()
+  if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
+    self.currentRound = self.currentRound + 1
 
-  local barBottom = WORLD_H - self.margin
-  local barTop = barBottom - self.height
+    if self.currentRound > self.roundTotal then
+      GameState.switch(gameover)
+    else
+      self.ratioCurrentTarget = self.currentRound / self.roundTotal
+      self.animStart = love.timer.getTime()
+    end
 
-  -- bar
-  love.graphics.setColor(100, 100, 100)
-  love.graphics.rectangle("fill", self.margin, barBottom - self.height / 2, WORLD_W - self.margin * 2, self.height / 2)
-
-  love.graphics.setColor(255, 0, 0)
-  love.graphics.setLineWidth(2)
-  
-  -- lines
-  for x = 0, self.step do
-    love.graphics.line(self.margin + x * self.step * self.roundStep, barBottom, self.margin + x * self.step * self.roundStep, barTop)
   end
+end
 
+function Timeline:draw()
   -- current cursor
-  local currentX = (WORLD_W - self.margin * 2) * self.ratioCurrentCursor
-  love.graphics.polygon("fill", currentX - self.cursorWidth, barTop - self.cursorHeight, currentX, barTop, currentX + self.cursorWidth, barTop - self.cursorHeight)
-  love.graphics.line(currentX, barBottom, currentX, barTop - self.cursorHeight)
-
+  local currentX = self.timelineLeft + self.timelineWidth*self.ratioCurrentRound
+  local scale = 1 + self.animScale * math.sin(math.pi * useful.clamp((love.timer.getTime() - self.animStart) / self.animDelay, 0, 1))
   love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(
+    self.timelineCursor,
+    currentX - self.timelineCursor:getWidth() * scale / 2,
+    self.timelineBottom - scale * self.timelineCursor:getHeight(),
+    0,
+    scale)
 end
 
 function Timeline:update(dt)
-  self.ratioCurrentCursor = useful.round((math.sin(love.timer.getTime() * 0.2) * 0.5 + 0.5) * self.roundCount) / self.roundCount
+  self.ratioCurrentRound = useful.lerp(self.ratioCurrentRound, self.ratioCurrentTarget, 0.5)
 end
 
 --[[------------------------------------------------------------
