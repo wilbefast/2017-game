@@ -38,6 +38,8 @@ local PuzzlePiece = Class({
   clockwiseDirections = { N = "E", E = "S", S = "W", W = "N" },
   counterClockwiseDirections = { N = "W", E = "N", S = "E", W = "S" },
 
+  wipCanvas = love.graphics.newCanvas(128, 128),
+
   init = function(self, tile, args)
     GameObject.init(self, tile.x, tile.y)
 
@@ -98,8 +100,12 @@ local PuzzlePiece = Class({
       end
 
       -- tooltip
-      if args.tooltip and Resources[args.tooltip] then
-        self.imageTooltip = Resources[args.tooltip]
+      if args.tooltip then
+        if Resources[args.tooltip] then
+          self.imageTooltip = Resources[args.tooltip]
+        else
+          self.tooltipName = args.tooltip
+        end
       end
     else
       _randomiseCombinationParts()
@@ -119,6 +125,30 @@ local PuzzlePiece = Class({
       g = math.ceil(math.random() * 255),
       b = math.ceil(math.random() * 255)
     }
+
+    -- image
+    local originalImage = args.image
+
+    local w, h = self.wipCanvas:getWidth(), self.wipCanvas:getHeight()
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      for dir, part in pairs(self.combinationParts) do
+        part:erase_concave()
+      end
+    useful.popCanvas()
+
+    local mask = love.graphics.newImage(self.wipCanvas:newImageData())
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      love.graphics.setShader(Resources.erase)
+      Resources.erase:send("mask", mask)
+      love.graphics.draw(originalImage)
+      love.graphics.setShader(nil)
+    useful.popCanvas()
+
+    self.image = love.graphics.newImage(self.wipCanvas:newImageData())
+
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PuzzlePiece:include(GameObject)
@@ -193,6 +223,7 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  self.image = nil
   ingame.pouf:emit(self.tile)
   self.tile.piece = nil
   for direction, part in pairs(self.combinationParts) do
@@ -201,7 +232,7 @@ function PuzzlePiece:onPurge()
 end
 
 function PuzzlePiece:applyEffect()
-  ingame.timeline:combinationHasBeenMade(self)
+  ingame:combinationHasBeenMade(self)
 end
 
 --[[------------------------------------------------------------
@@ -209,6 +240,10 @@ Game loop
 --]]--
 
 function PuzzlePiece:draw()
+  -- draw the parts
+  for dir, part in pairs(self.combinationParts) do
+    part:draw_from_piece()
+  end
 
   -- draw the piece
   if self.image then
@@ -328,7 +363,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
   end
-  local permissive = false--newTile.grid == ingame.newspaperGrid
+  local permissive = newTile.grid == ingame.newspaperGrid
   if permissive then
     return true
   end
@@ -340,19 +375,17 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
       if part and otherPart and not part:checkMatching(otherPart) then
         return false
-      elseif part and not otherPart then
-        return false
-      elseif otherPart and not part then
+      elseif part and part.convex and not otherPart then
+      elseif otherPart and otherPart.convex and not part then
         return false
       end
-      if part and otherPart then
+      if part and otherPart and (part:isType("PieceEvidence") or otherPart:isType("PieceEvidence")) then
         shouldTakeRound = shouldTakeRound + (part:checkMatching(otherPart) and 1 or 0)
       end
     end
   end
-  --log:write("shouldTakeRound : " .. shouldTakeRound)
-  for i = 1, shouldTakeRound do
-    ingame.timeline:combinationHasBeenMade(self)
+  if shouldTakeRound > 0 then
+    ingame:combinationHasBeenMade(self)
   end
   return true
 end
@@ -365,12 +398,29 @@ function PuzzlePiece:checkForDeaths()
   self.tile.grid:map(function(t)
     if t.piece and t.piece:shouldDie() then
       t.piece.purge = true
-      self:applyEffect()
+      t.piece:applyEffect()
     end
   end)
   if self.purge then
     return
   end
+end
+
+function PuzzlePiece:isAttack(newTile, targetTypeName)
+  for _, dir in ipairs(self.directions) do
+    local part = self.combinationParts[dir]
+    local otherTile = newTile[dir]
+    if otherTile and otherTile.piece then
+      local otherPiece = otherTile.piece
+      if otherPiece:isType(targetTypeName) then
+        local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
+        if part and part.convex and otherPart and part:checkMatching(otherPart) then
+          return true
+        end
+      end
+    end
+  end
+  return false
 end
 
 function PuzzlePiece:shouldDie()
@@ -390,7 +440,20 @@ function PuzzlePiece:shouldDie()
       end
     end
   end
-  return anyEntries and allEntriesFilled
+
+  local die = anyEntries and allEntriesFilled
+
+  if self:isType("PieceCandidate") and die then
+    for dir, part in pairs(self.combinationParts) do
+      local otherTile = self.tile[dir]
+      if otherTile and otherTile.piece then
+        otherTile.piece.purge = true
+        otherTile.piece = nil
+      end
+    end
+  end
+
+  return die
 end
 
 --[[------------------------------------------------------------

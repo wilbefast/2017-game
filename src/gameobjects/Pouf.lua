@@ -18,7 +18,7 @@ Initialisation
 
 local Pouf = Class({
   type = GameObject.newType("Pouf"),
-  layer = 0,
+  layer = 100,
   init = function(self)
     GameObject.init(self, 0, 0)
 

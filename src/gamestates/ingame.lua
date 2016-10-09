@@ -26,6 +26,10 @@ function state:init()
 end
 
 function state:enter()
+	GameObject.purgeAll()
+	self.newspaperGrid = nil
+	self.societyGrid = nil
+
 	-- setup grid sizes and spacing between them
 	local spacing = 153
 	local spacingSocietyGrid = 177
@@ -45,11 +49,13 @@ function state:enter()
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
 		newspapergrid_tiles_across, grid_tiles_down, spacing, offset_y)
+	self.newspaperGrid.isNewspaper = true
 
 	-- society grid
 	self.societyGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
 		society_tiles_across, grid_tiles_down, newspapergrid_width + spacing + spacingSocietyGrid, offset_y)
+	self.societyGrid.isSociety = true
 
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
@@ -99,6 +105,54 @@ function state:leave()
 end
 
 --[[------------------------------------------------------------
+Query
+--]]--
+
+function state:countPiecesOfType(type, grid)
+	if grid then
+		return grid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
+		end)
+	else
+		return self.newspaperGrid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
+		end) + self.societyGrid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type)
+		end)
+	end
+end
+
+function state:countPiecesOfTypeSuchThat(type, suchThat, grid)
+	if grid then
+		return grid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	else
+		return self.newspaperGrid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end) + self.societyGrid:count(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	end
+end
+
+function state:isPieceOfTypeSuchThat(type, suchThat, grid)
+	if grid then
+		return grid:any(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	else
+		return self.newspaperGrid:any(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end) or self.societyGrid:any(function(t)
+			return t.piece and not t.piece.purge and t.piece:isType(type) and suchThat(t.piece)
+		end)
+	end
+end
+
+
+
+--[[------------------------------------------------------------
 Game logic
 --]]--
 
@@ -106,20 +160,30 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 	if #candidateTiles <= 0 then
 		return
 	end
+	useful.shuffle(candidateTiles)
 	local numberToSpawn = numberToSpawn or 1
 	local spawnedPieces = 0
 	local i = 1
+	log:write("Spawning", GameObject.typename(class))
 	while spawnedPieces < numberToSpawn and i <= #candidateTiles do
 		if false then
 		else
 			local tile = candidateTiles[i]
 			-- TODO - check whether a spawn is actually possible on this tile
-			class(tile)
+			local piece = class(tile)
+			log:write("\tspawning piece", piece.name, "at", tile.col, tile.row)
 			spawnedPieces = spawnedPieces + 1
 
 			self.pouf:emit(tile)
+
+			if numberToSpawn == 1 then
+				return piece
+			end
 		end
 		i = i + 1
+	end
+	if spawnedPieces < numberToSpawn then
+		log:write("Only able to spawn", spawnedPieces, "of", numberToSpawn, "into a set of", #candidateTiles, "tiles")
 	end
 end
 
@@ -131,11 +195,12 @@ function state:spawnSourcePieces()
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
 		return
 	end
-	local sourcesToSpawn = math.max(0, math.min(#emptyTiles - 3, 3 - GameObject.countOfType("PieceSource")))
+	local sourcePieces = self:countPiecesOfType("PieceSource", self.newspaperGrid)
+	local sourcesToSpawn = math.max(0, math.min(#emptyTiles - 3, 3 - sourcePieces))
 	if sourcesToSpawn <= 0 then
 		return
 	end
-	self:trySpawn(PieceSource, emptyTiles, 3)
+	self:trySpawn(PieceSource, emptyTiles, sourcesToSpawn)
 end
 
 function state:spawnEvidencePieceFromSource(source)
@@ -143,9 +208,49 @@ function state:spawnEvidencePieceFromSource(source)
 	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	if #emptyTiles <= 3  then
 		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
 		return
 	end
-	self:trySpawn(PieceEvidence, emptyTiles)
+	self:trySpawn(PieceEvidence, emptyTiles, 1)
+end
+
+function state:spawnEvidencePieceFromEvidence(source)
+	local emptyTiles = {}
+	self.newspaperGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+	if #emptyTiles <= 3  then
+		-- there must be no more than 12 pieces in the newspaper section (=> 3 spaces)
+		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
+		return
+	end
+	local evidence = self:trySpawn(PieceEvidence, emptyTiles, 1)
+	evidence.credibility = source.credibility + 1
+end
+
+function state:getEnding()
+	if self:countPiecesOfType("PieceNewspaper") <= 0 then
+		return "killed"
+	elseif self:countPiecesOfType("PieceCandidate") <= 0 then
+		return "win"
+	elseif self:countPiecesOfType("PieceCandidate") >= 4
+	or self:isPieceOfTypeSuchThat("PieceCandidate", function(p) return p.name == "Reac" or p.name == "Socialo" end) then
+		return "standard"
+	else
+		return "extremist"
+	end
+end
+
+--[[------------------------------------------------------------
+Events
+--]]--
+
+function state:combinationHasBeenMade(piece)
+	self.timeline:combinationHasBeenMade(piece)
+
+	-- win if there are no candidates
+	if self:countPiecesOfType("PieceCandidate") <= 0 then
+		gameover:setEnding(self:getEnding())
+		GameState.switch(gameover)
+	end
 end
 
 --[[------------------------------------------------------------
@@ -204,6 +309,9 @@ function state:keypressed(key, uni)
   if key == "escape" then
     shake = shake + 2
 		GameState.switch(title)
+	elseif DEBUG then
+		-- gameover:setEnding(self:getEnding())
+		-- GameState.switch(gameover)
   end
 end
 
@@ -219,24 +327,31 @@ function state:update(dt)
 	if self.hoveredTile then
 		self.hoveredTile.hovered = false
 		self.hoveredTile = nil
-	else
-		if self.tooltip.image then
-			self.tooltip:hide()
-		end
 	end
 	local newHoveredTile = self.newspaperGrid:pixelToTile(mx, my) or self.societyGrid:pixelToTile(mx, my)
 	if newHoveredTile then
  		self.hoveredTile = newHoveredTile
 		newHoveredTile.hovered = true
+	end
 
+	-- tooltip
+	if self.hoveredTile then
 		local hoveredPiece = self.hoveredTile.piece
 		if hoveredPiece then
 			if hoveredPiece.imageTooltip then
 				if self.tooltip.disappeared then
-					self.tooltip:show(
-						hoveredPiece.x + PuzzlePiece.cellSize,
-						hoveredPiece.y + PuzzlePiece.cellSize,
-						hoveredPiece.imageTooltip)
+					if self.tooltip.hovered then
+						if self.tooltip:hoverDelayComplete() then
+							self.tooltip:show(
+								hoveredPiece.x + PuzzlePiece.cellSize,
+								hoveredPiece.y + PuzzlePiece.cellSize,
+								hoveredPiece.imageTooltip)
+						end
+					else
+						self.tooltip:hover()
+					end
+				elseif self.tooltip.image ~= hoveredPiece.imageTooltip then
+					self.tooltip:hide()
 				end
 			else
 				self.tooltip:hide()
@@ -244,6 +359,8 @@ function state:update(dt)
 		else
 			self.tooltip:hide()
 		end
+	else
+		self.tooltip:hide()
 	end
 
  	-- drag
@@ -257,18 +374,18 @@ function state:update(dt)
 				self.grabbedPiece = nil
 			else
 				local stretchRatio = 0
-				-- local stretchRatio = useful.smoothstep(
-				-- 	self.newspaperLimit - PuzzlePiece.cellSize/2,
-				-- 	self.newspaperLimit + PuzzlePiece.cellSize,
-				-- 	mx)
+				local stretchRatio = state.smoothstep(
+					self.newspaperLimit - PuzzlePiece.cellSize/2,
+					self.newspaperLimit + PuzzlePiece.cellSize,
+					mx)
 				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize + PuzzlePiece.cellSize * stretchRatio / 4)
 				self.grabbedPiece:setStretch(stretchRatio)
 			end
 		end
-  end
-
-	-- spawn source tiles
-	self:spawnSourcePieces()
+  else
+		-- spawn source tiles
+		self:spawnSourcePieces()
+	end
 end
 
 function state:draw()
@@ -276,13 +393,13 @@ function state:draw()
 
 	if self.grabbedPiece then
 		-- newspaper grid
-		love.graphics.setColor(255, 255, 0)
+		love.graphics.setColor(82, 129, 114)
 			self.newspaperGrid:draw()
 		useful.bindWhite()
 
 		-- society grid
 		if self.grabbedPiece:isType("PieceEvidence") then
-			love.graphics.setColor(0, 255, 0)
+			love.graphics.setColor(163, 156, 137)
 				self.societyGrid:draw()
 			useful.bindWhite()
 		end
@@ -290,6 +407,12 @@ function state:draw()
 
 	-- draw logic
 	GameObject.drawAll()
+end
+
+-- https://www.khronos.org/opengles/sdk/docs/man31/html/smoothstep.xhtml
+function state.smoothstep (edge0, edge1, x)
+  local t = useful.clamp((x - edge0) / (edge1 - edge0), 0, 1)
+  return t * t * (3 - 2 * t)
 end
 
 --[[------------------------------------------------------------

@@ -22,9 +22,28 @@ local Timeline = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
 
-    self.roundTotal = 5
-    self.roundStep = 1
+    self.roundTotal = 100
     self.currentRound = 0
+
+    self.roundCandidate = 0
+    self.roundStepCandidate = 15
+    self.candidateTiles = {
+      ingame.societyGrid:gridToTile(2, 2),
+      ingame.societyGrid:gridToTile(8, 2),
+      ingame.societyGrid:gridToTile(5, 3),
+      ingame.societyGrid:gridToTile(3, 4),
+      ingame.societyGrid:gridToTile(7, 4)
+    }
+    self.currentCandidate = 0
+    local database = require("assets/twerk/pieces")
+    self.candidateList = {
+      database.Reac,
+      database.Socialo,
+      database.Gaucho,
+      database.Centre,
+      database.Ailleur
+    }
+    useful.shuffle(self.candidateList)
 
     -- normalized position
     self.ratioCurrentRound = 0
@@ -41,13 +60,17 @@ local Timeline = Class({
     self.timelineLeft = 716
     self.timelineRight = 1860
     self.timelineWidth = self.timelineRight - self.timelineLeft
-    self.timelineTop = WORLD_H - 155
+    self.timelineTop = WORLD_H - 190
     self.timelineBottom = self.timelineTop + self.timelineCursor:getHeight()
 
     -- animation
     self.animStart = -1000
     self.animDelay = 1
     self.animScale = 0.5
+
+    -- sorry
+    self.actionStart = -1000
+    self.actionDelay = 0.5
   end
 })
 Timeline:include(GameObject)
@@ -61,17 +84,32 @@ Game loop
 --]]--
 
 function Timeline:combinationHasBeenMade(piece)
-  local pieceType = piece:typename()
-  if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
-    self.currentRound = self.currentRound + 1
+  if self.actionStart + self.actionDelay < love.timer.getTime() then
+    local pieceType = piece:typename()
+    if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
+      self.currentRound = self.currentRound + 1
 
-    if self.currentRound > self.roundTotal then
-      GameState.switch(gameover)
-    else
-      self.ratioCurrentTarget = self.currentRound / self.roundTotal
-      self.animStart = love.timer.getTime()
+      if self.currentRound > self.roundTotal then
+        GameState.switch(gameover)
+      else
+        self.ratioCurrentTarget = self.currentRound / self.roundTotal
+        self.animStart = love.timer.getTime()
+        self.actionStart = love.timer.getTime()
+      end
+
+      self.roundCandidate = self.roundCandidate + 1
+      if self.roundCandidate >= self.roundStepCandidate then
+        self.roundCandidate = 0
+
+        local emptyTiles = {}
+        for key, tile in ipairs(self.candidateTiles) do
+          if not tile.piece then
+            table.insert(emptyTiles, tile)
+          end
+        end
+        ingame:trySpawn(PieceCandidate, emptyTiles, 1)
+      end
     end
-
   end
 end
 

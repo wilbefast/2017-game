@@ -49,11 +49,11 @@ function love.load(arg)
   log:setLength(21)
 
   -- game-specific code
+  Resources = require("Resources")
   scaling = require("scaling")
   ingame = require("gamestates/ingame")
   title = require("gamestates/title")
   gameover = require("gamestates/gameover")
-  Resources = require("Resources")
   PuzzlePiece = require("gameobjects/PuzzlePiece")
   CombinationPart = require("gameobjects/CombinationPart")
   PieceNewspaper = require("gameobjects/PieceNewspaper")
@@ -179,9 +179,9 @@ function love.draw()
     -- scaling
     love.graphics.scale(WINDOW_SCALE, WINDOW_SCALE)
     -- playable area is the centre sub-rect of the screen
-    love.graphics.translate(
-      (WINDOW_W - VIEW_W)*0.5/WINDOW_SCALE + useful.signedRand(shake),
-      (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
+    -- love.graphics.translate(
+    --   (WINDOW_W - VIEW_W)*0.5/WINDOW_SCALE + useful.signedRand(shake),
+    --   (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
     -- draw the canvas
     love.graphics.draw(WORLD_CANVAS, 0, 0)
   love.graphics.pop() -- pop offset

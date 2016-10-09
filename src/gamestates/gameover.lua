@@ -18,6 +18,25 @@ GAMEOVER GAMESTATE
 
 local state = GameState.new()
 
+local endings = {
+  win = {
+    background = Resources.gameover.win,
+    name = "win"
+  },
+  killed = {
+    background = Resources.gameover.killed,
+    name = "killed"
+  },
+  extremist = {
+    background = Resources.gameover.extremist,
+    name = "extremist"
+  },
+  standard = {
+    background = Resources.gameover.standard,
+    name = "standard"
+  },
+}
+
 --[[------------------------------------------------------------
 GameState navigation
 --]]--
@@ -32,9 +51,21 @@ function state:leave()
 end
 
 --[[------------------------------------------------------------
-Callbacks
+Modification
 --]]--
 
+function state:setEnding(endingName)
+  self.ending = endings[endingName]
+  if not self.ending then
+    log:write("Invalid ending", endingName)
+  else
+    log:write("Ending is", self.ending.name)
+  end
+end
+
+--[[------------------------------------------------------------
+Callbacks
+--]]--
 
 function state:keypressed(key, uni)
   GameState.switch(title)
@@ -48,7 +79,7 @@ function state:update(dt)
 end
 
 function state:draw()
-  love.graphics.print("gameover", 32, 32)
+  love.graphics.draw(self.ending.background)
 end
 
 

@@ -22,11 +22,18 @@ local Tooltip = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
     self.image = nil
+
+    -- alpha animation
     self.shouldAppear = false
     self.apparition = 0
-    self.apparitionDelay = 1
+    self.apparitionDelay = 0.5
     self.disappeared = true
     self.apparitionDirection = -1
+
+    -- show delay
+    self.hovered = false
+    self.hoverStart = -1000
+    self.hoverDelay = 1
   end
 })
 Tooltip:include(GameObject)
@@ -57,6 +64,7 @@ end
 
 function Tooltip:hide()
   self.shouldAppear = false
+  self.hovered = false
 end
 
 function Tooltip:draw()
@@ -74,6 +82,15 @@ function Tooltip:update(dt)
     self.apparition = useful.clamp(self.apparition - dt / self.apparitionDelay, 0, 1)
   end
   self.disappeared = self.apparition == 0
+end
+
+function Tooltip:hover()
+  self.hovered = true
+  self.hoverStart = love.timer.getTime()
+end
+
+function Tooltip:hoverDelayComplete()
+  return self.hoverStart + self.hoverDelay < love.timer.getTime()
 end
 
 --[[------------------------------------------------------------

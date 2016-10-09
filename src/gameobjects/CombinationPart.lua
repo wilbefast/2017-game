@@ -66,6 +66,7 @@ local CombinationPart = Class({
       convex = math.random() > 0.5 and true or false
     end
     self.convex = convex
+    self.concave = not convex
     self.layer = self.convex and 2 or 1
 
     -- save it all
@@ -75,11 +76,10 @@ local CombinationPart = Class({
     self.size = PuzzlePiece.cellSize
     self.piece = args.piece
 
+    -- set direction
     local d = self.directions[dir]
     self.offset, self.rotation = d.offset, d.rotation
     self.rotationTarget = self.rotation
-
-    -- get direction
     self:setDirection(dir)
 
     -- set connection type
@@ -93,6 +93,9 @@ local CombinationPart = Class({
       self.combinationType.count.Candidate[c] = self.combinationType.count.Candidate[c] + 1
     end
     --log:write("there are", self.combinationType.count[t][c], c, "parts of type", self.combinationType.name, "of team", t)
+
+    -- colour
+    self.colour = self.piece.partColour
   end
 })
 CombinationPart:include(GameObject)
@@ -160,8 +163,23 @@ end
 Game loop
 --]]--
 
-function CombinationPart:draw()
-  if self.image then
+function CombinationPart:erase_concave()
+  if self.concave then
+    love.graphics.draw(
+      self.image,
+      PuzzlePiece.cellSize*0.5,
+      PuzzlePiece.cellSize*0.5,
+      self.rotation,
+      self.scale.x,
+      self.scale.y,
+      self.image:getWidth() / 2,
+      self.image:getHeight())
+  end
+end
+
+function CombinationPart:draw_from_piece()
+  if self.image and self.convex then
+    love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b)
     love.graphics.draw(
       self.image,
       self.x + PuzzlePiece.cellSize*0.5,
@@ -171,6 +189,7 @@ function CombinationPart:draw()
       self.scale.y * (1 + self.wiggle.y),
       self.image:getWidth() / 2,
       self.image:getHeight())
+    useful.bindWhite()
   end
 end
 

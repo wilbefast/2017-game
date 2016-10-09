@@ -101,6 +101,13 @@ return {
   timelineCursor = love.graphics.newImage("assets/image/curseur.png"),
   poof = love.graphics.newImage("assets/image/poof.png"),
 
+  gameover = {
+    win = love.graphics.newImage("assets/image/end_01.jpg"),
+    standard = love.graphics.newImage("assets/image/end_02.jpg"),
+    extremist = love.graphics.newImage("assets/image/end_03.jpg"),
+    killed = love.graphics.newImage("assets/image/end_04.jpg")
+  },
+
   combinations = {
 	  financial = {
 	  	IN = love.graphics.newImage("assets/pieces/combination1IN.png"),
@@ -118,5 +125,7 @@ return {
 	  	IN = love.graphics.newImage("assets/pieces/combination4IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination4OUT.png")
 	  }
-	}
+	},
+
+  erase = love.graphics.newShader("assets/shaders/erase.glsl")
 }

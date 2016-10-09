@@ -18,12 +18,16 @@ Initialisation
 
 local PieceAlly = Class({
   type = GameObject.newType("PieceAlly"),
+  partColour = {
+    r = 0,
+    g = 171,
+    b = 157,
+  },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
+    local args = args or {}
+    args.image = Resources.pieceAlly
+    PuzzlePiece.init(self, tile, args)
 
-    -- piece image
-    self.image = Resources.pieceAlly
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PieceAlly:include(PuzzlePiece)

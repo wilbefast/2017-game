@@ -18,16 +18,21 @@ Initialisation
 
 local PieceCandidate = Class({
   type = GameObject.newType("PieceCandidate"),
+  partColour = {
+    r = 255,
+    g = 100,
+    b = 90,
+  },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
-
-    -- piece image
-    self.image = Resources.pieceCandidate
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+    local args = args or PieceCandidate.pick()
+    args.image = Resources.pieceCandidate
+    PuzzlePiece.init(self, tile, args)
 
     -- tooltip
-    if args.tooltip and Resources[args.tooltip .. "_f"] then
+    if args and args.tooltip and Resources[args.tooltip .. "_f"] then
       self.imageTooltip = Resources[args.tooltip .. (math.random() > 0.5 and "_f" or "_h")]
+    elseif self.tooltipName and Resources[self.tooltipName .. "_f"] then
+      self.imageTooltip = Resources[self.tooltipName .. (math.random() > 0.5 and "_f" or "_h")]
     end
   end
 })
@@ -47,6 +52,16 @@ end
 
 function PieceCandidate:update(dt)
   PuzzlePiece.update(self, dt)
+end
+
+function PieceCandidate:pick()
+  if #ingame.timeline.candidateList > 0 then
+    local picked = ingame.timeline.candidateList[1]
+    table.remove(ingame.timeline.candidateList, 1)
+    return picked
+  else
+    return {}
+  end
 end
 
 --[[------------------------------------------------------------

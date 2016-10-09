@@ -19,12 +19,15 @@ Initialisation
 
 local PieceSource = Class({
   type = GameObject.newType("PieceSource"),
+  partColour = {
+    r = 50,
+    g = 160,
+    b = 105,
+  },
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args or PieceSource.pick())
-
-    -- piece image
-    self.image = Resources.pieceSource
-    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
+    local args = args or PieceSource.pick()
+    args.image = Resources.pieceSource
+    PuzzlePiece.init(self, tile, args)
   end
 })
 PieceSource:include(PuzzlePiece)
