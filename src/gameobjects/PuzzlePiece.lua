@@ -96,6 +96,11 @@ local PuzzlePiece = Class({
           self.combinationParts[dir] = part
         end
       end
+
+      -- tooltip
+      if args.tooltip and Resources[args.tooltip] then
+        self.imageTooltip = Resources[args.tooltip]
+      end
     else
       _randomiseCombinationParts()
     end

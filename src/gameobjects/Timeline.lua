@@ -50,19 +50,20 @@ function Timeline:draw()
   local barTop = barBottom - self.height
 
   -- bar
-  love.graphics.setColor(255, 255, 255)
+  love.graphics.setColor(100, 100, 100)
   love.graphics.rectangle("fill", self.margin, barBottom - self.height / 2, WORLD_W - self.margin * 2, self.height / 2)
 
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.setLineWidth(2)
+  
   -- lines
-  -- for x = 0, self.step do
-  --   love.graphics.line(self.margin + x * self.step * self.roundStep, barBottom, self.margin + x * self.step * self.roundStep, barTop)
-  -- end
+  for x = 0, self.step do
+    love.graphics.line(self.margin + x * self.step * self.roundStep, barBottom, self.margin + x * self.step * self.roundStep, barTop)
+  end
 
   -- current cursor
   local currentX = (WORLD_W - self.margin * 2) * self.ratioCurrentCursor
-  love.graphics.setColor(255, 0, 0)
   love.graphics.polygon("fill", currentX - self.cursorWidth, barTop - self.cursorHeight, currentX, barTop, currentX + self.cursorWidth, barTop - self.cursorHeight)
-  love.graphics.setLineWidth(2)
   love.graphics.line(currentX, barBottom, currentX, barTop - self.cursorHeight)
 
   love.graphics.setColor(255, 255, 255)

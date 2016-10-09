@@ -24,9 +24,6 @@ local PieceNewspaper = Class({
     -- piece image
     self.image = Resources.pieceNewspaper
     self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
-
-    -- tooltip
-    self.imageTooltip = Resources.tooltipFacho
   end
 })
 PieceNewspaper:include(PuzzlePiece)

@@ -25,7 +25,10 @@ local PieceCandidate = Class({
     self.image = Resources.pieceCandidate
     self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
 
-    self.imageTooltip = Resources.tooltipFacho
+    -- tooltip
+    if args.tooltip and Resources[args.tooltip .. "_f"] then
+      self.imageTooltip = Resources[args.tooltip .. (math.random() > 0.5 and "_f" or "_h")]
+    end
   end
 })
 PieceCandidate:include(PuzzlePiece)
