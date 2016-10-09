@@ -6,7 +6,7 @@ return {
   circle = love.graphics.newImage("assets/image/combination/circle.png"),
   trapeze = love.graphics.newImage("assets/image/combination/trapeze.png"),
   
-  facho = love.graphics.newImage("assets/image/tooltip/facho.png"),
+  facho_f = love.graphics.newImage("assets/image/tooltip/facho_f.png"),
 
   pieceNewspaper = love.graphics.newImage("assets/pieces/journal.png"),
   pieceSource = love.graphics.newImage("assets/pieces/source.png"),
