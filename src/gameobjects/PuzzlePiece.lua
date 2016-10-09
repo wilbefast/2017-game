@@ -157,6 +157,27 @@ local PuzzlePiece = Class({
 PuzzlePiece:include(GameObject)
 
 --[[------------------------------------------------------------
+Database
+--]]--
+
+function PuzzlePiece.findAbleToAttack(partTypeName, pieceTypeName)
+  local found = nil
+  local database = PuzzlePiece.databaseByType[pieceTypeName]
+  useful.shuffled_ipairs(database, function(template)
+    for dir, partTemplate in pairs(template.connections) do
+      if partTemplate.convex and (partTemplate.type == partTypeName) then
+        found = template
+        return true -- interrupt
+      end
+    end
+  end)
+  if not found then
+    log:write("Unable to find any pieces of type", pieceTypeName, "able to attack", partTypeName)
+  end
+  return found
+end
+
+--[[------------------------------------------------------------
 Events
 --]]--
 

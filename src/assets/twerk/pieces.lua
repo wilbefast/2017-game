@@ -399,7 +399,7 @@ return {
     -- Adversary: Random Event
     Adversary_RandomEvent1 = {
         name = "Adversary_RandomEvent1",
-        team = "Player",
+        team = "Enemy",
         tooltip = "adversary_randomevent1",
         lifetime = 5,
         pieceType = "PieceAdversary",
@@ -409,7 +409,7 @@ return {
     },
     Adversary_RandomEvent2 = {
         name = "Adversary_RandomEvent2",
-        team = "Player",
+        team = "Enemy",
         tooltip = "adversary_randomevent2",
         lifetime = 5,
         pieceType = "PieceAdversary",
@@ -419,7 +419,7 @@ return {
     },
     Adversary_RandomEvent3 = {
         name = "Adversary_RandomEvent3",
-        team = "Player",
+        team = "Enemy",
         tooltip = "adversary_randomevent3",
         lifetime = 5,
         pieceType = "PieceAdversary",
@@ -429,7 +429,7 @@ return {
     },
     Adversary_RandomEvent4 = {
         name = "Adversary_RandomEvent4",
-        team = "Player",
+        team = "Enemy",
         lifetime = 5,
         pieceType = "PieceAdversary",
         tooltip = "adversary_randomevent4",

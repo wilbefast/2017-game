@@ -47,10 +47,10 @@ function PieceEvidence:onSuccessfulDrop(targetTile)
   if targetTile.grid.isSociety then
     ingame:tick()
 
-    local probAdversary = (self.credibility + 1)/(self.maxCredibility + 1)
+    local probAdversary = 1 - self.credibility/self.maxCredibility
     probAdversary = 0.75*probAdversary*probAdversary
 
-    local probAlly = 1 - (self.credibility + 1)/(self.maxCredibility + 1)
+    local probAlly = self.credibility/self.maxCredibility
     probAlly = 0.75*probAlly*probAlly
 
     local probNothing = 1 - probAdversary - probAlly
@@ -61,10 +61,10 @@ function PieceEvidence:onSuccessfulDrop(targetTile)
 
     if draw <= probAdversary then
       -- attack on our evidence
-      ingame:spawnAdversaryPieceFromEvidence(self)
+      ingame:spawnAdversaryPieceFromEvidence(self, targetTile)
     elseif draw <= probAdversary + probAlly then
       -- defense of our evidence
-      ingame:spawnAllyPieceFromEvidence(self)
+      ingame:spawnAllyPieceFromEvidence(self, targetTile)
     else
       -- nothing
     end
