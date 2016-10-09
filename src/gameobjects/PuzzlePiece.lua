@@ -131,7 +131,6 @@ function PuzzlePiece:rotateDirection(map)
   local newCombinationParts = {}
   for direction, part in pairs(self.combinationParts) do
     local newDirection = map[direction]
-    --part.setDirection(newDirection)
     newCombinationParts[newDirection] = part
   end
   self.combinationParts = newCombinationParts
@@ -314,6 +313,15 @@ function PuzzlePiece:rotate(direction)
   end
 
   self.wiggleStartedAt = love.timer.getTime()
+end
+
+function PuzzlePiece:setStretch(ratio)
+  if math.abs(self.rotation) < 0.01 or math.abs(self.rotation - math.pi) < 0.01 then
+    self.wiggle.x = -ratio * 0.5
+  else 
+    self.wiggle.y = -ratio * 0.5
+  end
+  self:followCombinationParts()
 end
 
 function PuzzlePiece:canBeMovedToTile(newTile)
