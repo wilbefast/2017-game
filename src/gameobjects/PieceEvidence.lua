@@ -19,7 +19,7 @@ Initialisation
 local PieceEvidence = Class({
   type = GameObject.newType("PieceEvidence"),
   init = function(self, tile, args)
-    PuzzlePiece.init(self, tile, args and args)
+    PuzzlePiece.init(self, tile, args)
 
     -- piece image
     self.image = Resources.pieceEvidence
@@ -27,6 +27,14 @@ local PieceEvidence = Class({
   end
 })
 PieceEvidence:include(PuzzlePiece)
+
+--[[------------------------------------------------------------
+Generation
+--]]--
+
+function PieceEvidence.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceEvidence)
+end
 
 --[[------------------------------------------------------------
 Events

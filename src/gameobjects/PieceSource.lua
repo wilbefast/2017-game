@@ -68,6 +68,11 @@ end
 Events
 --]]--
 
+function PieceSource:applyEffect()
+  PuzzlePiece.applyEffect(self)
+  ingame:spawnEvidencePieceFromSource(self)
+end
+
 --[[------------------------------------------------------------
 Game loop
 --]]--

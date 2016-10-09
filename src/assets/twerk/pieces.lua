@@ -620,5 +620,125 @@ return {
         W = { type = "financial", convex = true },
         E = { type = "sexual", convex = false }
       }
+    },
+    Evidence_Tape1 = {
+      name = "Evidence_Tape1",
+      team = "Player",
+      tooltip = "evidence_tape1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Tape2 = {
+      name = "Evidence_Tape2",
+      team = "Player",
+      tooltip = "evidence_tape2",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Tape3 = {
+      name = "Evidence_Tape3",
+      team = "Player",
+      tooltip = "evidence_tape3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Tape4 = {
+      name = "Evidence_Tape4",
+      team = "Player",
+      tooltip = "evidence_tape1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "state", convex = true },
+        E = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_Video1 = {
+      name = "Evidence_Video1",
+      team = "Player",
+      tooltip = "evidence_video1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Video2 = {
+      name = "Evidence_Video2",
+      team = "Player",
+      tooltip = "evidence_video2",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Video3 = {
+      name = "Evidence_Video3",
+      team = "Player",
+      tooltip = "evidence_video3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Video4 = {
+      name = "Evidence_Video4",
+      team = "Player",
+      tooltip = "evidence_video1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "world", convex = true },
+        E = { type = "sexual", convex = false }
+      }
+    },
+    Evidence_Photo1 = {
+        name = "Evidence_Photo1",
+        team = "Player",
+        tooltip = "evidence_photo1",
+        pieceType = "PieceEvidence",
+        connections = {
+          W = { type = "sexual", convex = true },
+          E = { type = "financial", convex = false }
+      }
+    },
+    Evidence_Photo2 = {
+      name = "Evidence_Photo2",
+      team = "Player",
+      tooltip = "evidence_photo2",
+      pieceType = "PieceEvidence",
+      connections = {
+          W = { type = "sexual", convex = true },
+          E = { type = "world", convex = false }
+      }
+    },
+    Evidence_Photo3 = {
+      name = "Evidence_Photo3",
+      team = "Player",
+      tooltip = "evidence_photo3",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "sexual", convex = true },
+        E = { type = "state", convex = false }
+      }
+    },
+    Evidence_Photo4 = {
+      name = "Evidence_Photo4",
+      team = "Player",
+      tooltip = "evidence_photo1",
+      pieceType = "PieceEvidence",
+      connections = {
+        W = { type = "sexual", convex = true },
+        E = { type = "sexual", convex = false }
+      }
     }
 }

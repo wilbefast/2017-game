@@ -96,6 +96,11 @@ local PuzzlePiece = Class({
           self.combinationParts[dir] = part
         end
       end
+
+      -- tooltip
+      if args.tooltip and Resources[args.tooltip] then
+        self.imageTooltip = Resources[args.tooltip]
+      end
     else
       _randomiseCombinationParts()
     end
@@ -130,6 +135,7 @@ function PuzzlePiece:rotateDirection(map)
     newCombinationParts[newDirection] = part
   end
   self.combinationParts = newCombinationParts
+  self:checkForDeaths()
 end
 
 function PuzzlePiece:rotateClockwise()
@@ -141,6 +147,7 @@ function PuzzlePiece:rotateCounterClockwise()
 end
 
 function PuzzlePiece:grab()
+  self.grabbed = true
   self.wiggleStartedAt = love.timer.getTime()
   self.previousTile = self.tile
   self.tile.piece = nil
@@ -154,6 +161,7 @@ end
 
 
 function PuzzlePiece:drop(tile)
+  self.grabbed = false
   self.layer = nil
   for dir, part in pairs(self.combinationParts) do
     part.layer = nil
@@ -170,14 +178,7 @@ function PuzzlePiece:drop(tile)
   tile.piece = self
 
   -- the piece or other pieces may be destroyed
-  self.tile.grid:map(function(t)
-		if t.piece and t.piece:shouldDie() then
-      t.piece.purge = true
-    end
-	end)
-  if self.purge then
-    return
-  end
+  self:checkForDeaths()
 
   -- wiggle into position
   self.snapStartedAt = love.timer.getTime()
@@ -226,19 +227,22 @@ function PuzzlePiece:draw()
     love.graphics.setColor(255,255,255)
   end
 
-  -- print the name
-  -- useful.bindBlack()
-  --   love.graphics.print(self.name, self.x + self.size.x*0.2, self.y + self.size.y*0.1)
-  -- useful.bindWhite()
-
   -- debug stuff
   if DEBUG then
+    love.graphics.setFont(fontMedium)
+    useful.bindBlack()
+
+    -- print the name
+    love.graphics.print(self.name, self.x + self.size.x*0.35, self.y + self.size.y*0.3)
+    love.graphics.print(self:typename(), self.x + self.size.x*0.35, self.y + self.size.y*0.5)
+
     -- show grid coordinates
     if self.tile then
       local c, r = self.tile.col, self.tile.row
-      love.graphics.setFont(fontMedium)
       love.graphics.print(c .. ', ' .. r, self.x + self.size.x*0.35, self.y + self.size.y*0.1)
     end
+
+    useful.bindWhite()
   end
 end
 
@@ -275,13 +279,20 @@ function PuzzlePiece:update(dt)
   -- rotation animation
   self.rotation = useful.lerp(self.rotation, self.rotationTarget, 0.5)
 
+  -- drag combination parts behind us
   self:followCombinationParts()
+
+  -- for great justice!
+  if (self.tile and self.tile.piece ~= self) or (not self.tile and not self.grabbed) then
+    self.purge = true
+  end
 end
 
 function PuzzlePiece:drag(x, y)
   self.x = useful.lerp(self.x, x - PuzzlePiece.cellSize*0.5, 0.5)
   self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
 
+  -- drag combination parts behind us
   self:followCombinationParts()
 end
 
@@ -308,7 +319,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
   end
-  local permissive = newTile.grid == ingame.newspaperGrid
+  local permissive = false--newTile.grid == ingame.newspaperGrid
   if permissive then
     return true
   end
@@ -333,6 +344,18 @@ end
 Query
 --]]--
 
+function PuzzlePiece:checkForDeaths()
+  self.tile.grid:map(function(t)
+    if t.piece and t.piece:shouldDie() then
+      t.piece.purge = true
+      self:applyEffect()
+    end
+  end)
+  if self.purge then
+    return
+  end
+end
+
 function PuzzlePiece:shouldDie()
   local allEntriesFilled = true
   local anyEntries = false
@@ -342,7 +365,7 @@ function PuzzlePiece:shouldDie()
       local otherTile = self.tile[dir]
       if otherTile and otherTile.piece then
         local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
-        if not otherPart then
+        if not otherPart or not part:checkMatching(otherPart) then
           allEntriesFilled = false
         end
       else
