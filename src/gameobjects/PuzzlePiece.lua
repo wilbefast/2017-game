@@ -371,9 +371,8 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
       if part and otherPart and not part:checkMatching(otherPart) then
         return false
-      elseif part and not otherPart then
-        return false
-      elseif otherPart and not part then
+      elseif part and part.convex and not otherPart then
+      elseif otherPart and otherPart.convex and not part then
         return false
       end
       if part and otherPart then

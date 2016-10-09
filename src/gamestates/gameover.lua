@@ -20,16 +20,20 @@ local state = GameState.new()
 
 local endings = {
   win = {
-    background = Resources.gameover.win
+    background = Resources.gameover.win,
+    name = "win"
   },
   killed = {
-    background = Resources.gameover.killed
+    background = Resources.gameover.killed,
+    name = "killed"
   },
   extremist = {
-    background = Resources.gameover.extremist
+    background = Resources.gameover.extremist,
+    name = "extremist"
   },
   standard = {
-    background = Resources.gameover.standard
+    background = Resources.gameover.standard,
+    name = "standard"
   },
 }
 
@@ -41,26 +45,27 @@ function state:init()
 end
 
 function state:enter()
-
-  if ingame:countPiecesOfType("PieceNewspaper") <= 0 then
-    self.ending = endings.kill
-  elseif ingame:countPiecesOfType("PieceCandidate") <= 0 then
-    self.ending = endings.win
-  elseif ingame:countPiecesOfType("PieceCandidate") >= 4
-  or ingame:isPieceOfTypeSuchThat("PieceCandidate", function(p) return p.name == "Reac" or p.name == "Socialo" end) then
-    self.ending = endings.standard
-  else
-    self.ending = endings.extremist
-  end
 end
 
 function state:leave()
 end
 
 --[[------------------------------------------------------------
-Callbacks
+Modification
 --]]--
 
+function state:setEnding(endingName)
+  self.ending = endings[endingName]
+  if not self.ending then
+    log:write("Invalid ending", endingName)
+  else
+    log:write("Ending is", self.ending.name)
+  end
+end
+
+--[[------------------------------------------------------------
+Callbacks
+--]]--
 
 function state:keypressed(key, uni)
   GameState.switch(title)

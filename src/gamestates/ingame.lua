@@ -219,6 +219,19 @@ function state:spawnEvidencePieceFromEvidence(source)
 	self:trySpawn(PieceEvidence, emptyTiles)
 end
 
+function state:getEnding()
+	if self:countPiecesOfType("PieceNewspaper") <= 0 then
+		return "killed"
+	elseif self:countPiecesOfType("PieceCandidate") <= 0 then
+		return "win"
+	elseif self:countPiecesOfType("PieceCandidate") >= 4
+	or self:isPieceOfTypeSuchThat("PieceCandidate", function(p) return p.name == "Reac" or p.name == "Socialo" end) then
+		return "standard"
+	else
+		return "extremist"
+	end
+end
+
 --[[------------------------------------------------------------
 Events
 --]]--
@@ -228,6 +241,7 @@ function state:combinationHasBeenMade(piece)
 
 	-- win if there are no candidates
 	if self:countPiecesOfType("PieceCandidate") <= 0 then
+		gameover:setEnding(self:getEnding())
 		GameState.switch(gameover)
 	end
 end
@@ -288,6 +302,9 @@ function state:keypressed(key, uni)
   if key == "escape" then
     shake = shake + 2
 		GameState.switch(title)
+	elseif DEBUG then
+		gameover:setEnding(self:getEnding())
+		GameState.switch(gameover)
   end
 end
 
