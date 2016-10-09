@@ -379,14 +379,14 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       elseif otherPart and otherPart.convex and not part then
         return false
       end
-      if part and otherPart then
+      if part and otherPart and (part:isType("PieceEvidence") or otherPart:isType("PieceEvidence")) then
         shouldTakeRound = shouldTakeRound + (part:checkMatching(otherPart) and 1 or 0)
       end
     end
   end
-  -- if shouldTakeRound then
-  --   ingame:combinationHasBeenMade(self)
-  -- end
+  if shouldTakeRound > 0 then
+    ingame:combinationHasBeenMade(self)
+  end
   return true
 end
 
