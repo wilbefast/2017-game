@@ -164,7 +164,7 @@ function PuzzlePiece:drop(tile)
   self.grabbed = false
   self.layer = nil
   for dir, part in pairs(self.combinationParts) do
-    part.layer = nil
+    part:resetLayer()
   end
 
   if not tile or tile.piece or not self:canBeMovedToTile(tile) then

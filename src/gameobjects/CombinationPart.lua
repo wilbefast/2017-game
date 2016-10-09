@@ -155,6 +155,10 @@ function CombinationPart:setType(combinationType)
   end
 end
 
+function CombinationPart:resetLayer()
+  self.layer = self.convex and 2 or 1
+end
+
 --[[------------------------------------------------------------
 Game loop
 --]]--

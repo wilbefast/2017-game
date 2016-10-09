@@ -22,16 +22,30 @@ local Timeline = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
 
-    self.ratioCurrentCursor = 0
-
-    self.roundCount = 100
+    self.roundTotal = 100
     self.roundStep = 5
-    self.step = self.roundCount / self.roundStep
+    self.currentRound = 0
 
+    -- normalized position
+    self.ratioCurrentRound = 0
+
+    -- image
+    self.image = Resources.timeline
+    self.image:setWrap("repeat")
+
+    -- layout
     self.margin = 8
     self.height = 32
     self.cursorWidth = 16
     self.cursorHeight = 16
+    self.timelineLeft = 712
+    self.timelineRight = 1860
+    self.timelineWidth = self.timelineRight - self.timelineLeft
+    self.timelineTop = WORLD_H - 100
+    self.timelineBottom = self.timelineTop + self.image:getHeight()
+
+    -- tmp
+    self.background = love.graphics.newQuad(0, 0, self.timelineWidth, self.height, self.image:getWidth(), self.image:getHeight())
   end
 })
 Timeline:include(GameObject)
@@ -46,35 +60,30 @@ Game loop
 
 function Timeline:combinationHasBeenMade(piece)
   log:write(piece:typename())
+  local pieceType = piece:typename()
+  if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
+    self.currentRound = self.currentRound + 1
+    self.ratioCurrentRound = self.currentRound / self.roundTotal
+  end
 end
 
 function Timeline:draw()
 
-  local barBottom = WORLD_H - self.margin
-  local barTop = barBottom - self.height
-
   -- bar
-  love.graphics.setColor(100, 100, 100)
-  love.graphics.rectangle("fill", self.margin, barBottom - self.height / 2, WORLD_W - self.margin * 2, self.height / 2)
-
-  love.graphics.setColor(255, 0, 0)
-  love.graphics.setLineWidth(2)
-  
-  -- lines
-  for x = 0, self.step do
-    love.graphics.line(self.margin + x * self.step * self.roundStep, barBottom, self.margin + x * self.step * self.roundStep, barTop)
-  end
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(self.image, self.background, self.timelineLeft, self.timelineTop)
 
   -- current cursor
-  local currentX = (WORLD_W - self.margin * 2) * self.ratioCurrentCursor
-  love.graphics.polygon("fill", currentX - self.cursorWidth, barTop - self.cursorHeight, currentX, barTop, currentX + self.cursorWidth, barTop - self.cursorHeight)
-  love.graphics.line(currentX, barBottom, currentX, barTop - self.cursorHeight)
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.setLineWidth(2)
+  local currentX = self.timelineLeft + self.timelineWidth*self.ratioCurrentRound
+  love.graphics.polygon("fill", currentX - self.cursorWidth, self.timelineTop - self.cursorHeight, currentX, self.timelineTop, currentX + self.cursorWidth, self.timelineTop - self.cursorHeight)
+  love.graphics.line(currentX, self.timelineBottom, currentX, self.timelineTop)
 
   love.graphics.setColor(255, 255, 255)
 end
 
 function Timeline:update(dt)
-  self.ratioCurrentCursor = useful.round((math.sin(love.timer.getTime() * 0.2) * 0.5 + 0.5) * self.roundCount) / self.roundCount
 end
 
 --[[------------------------------------------------------------
