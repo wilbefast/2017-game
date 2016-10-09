@@ -93,5 +93,7 @@ return {
 	  	IN = love.graphics.newImage("assets/pieces/combination4IN.png"),
 	  	OUT = love.graphics.newImage("assets/pieces/combination4OUT.png")
 	  }
-	}
+	},
+
+  erase = love.graphics.newShader("assets/shaders/erase.glsl")
 }

@@ -38,6 +38,8 @@ local PuzzlePiece = Class({
   clockwiseDirections = { N = "E", E = "S", S = "W", W = "N" },
   counterClockwiseDirections = { N = "W", E = "N", S = "E", W = "S" },
 
+  wipCanvas = love.graphics.newCanvas(128, 128),
+
   init = function(self, tile, args)
     GameObject.init(self, tile.x, tile.y)
 
@@ -121,7 +123,27 @@ local PuzzlePiece = Class({
     }
 
     -- image
-    self.image = args.image
+    local originalImage = args.image
+
+    local w, h = self.wipCanvas:getWidth(), self.wipCanvas:getHeight()
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      for dir, part in pairs(self.combinationParts) do
+        part:erase_concave()
+      end
+    useful.popCanvas()
+
+    local mask = love.graphics.newImage(self.wipCanvas:newImageData())
+    useful.pushCanvas(self.wipCanvas)
+      love.graphics.clear(255, 255, 255, 0)
+      love.graphics.setShader(Resources.erase)
+      Resources.erase:send("mask", mask)
+      love.graphics.draw(originalImage)
+      love.graphics.setShader(nil)
+    useful.popCanvas()
+
+    self.image = love.graphics.newImage(self.wipCanvas:newImageData())
+
     self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
@@ -197,6 +219,7 @@ function PuzzlePiece:drop(tile)
 end
 
 function PuzzlePiece:onPurge()
+  self.image = nil
   ingame.pouf:emit(self.tile)
   self.tile.piece = nil
   for direction, part in pairs(self.combinationParts) do
