@@ -44,6 +44,10 @@ Events
 Game loop
 --]]--
 
+function Timeline:combinationHasBeenMade(piece)
+  log:write(piece:typename())
+end
+
 function Timeline:draw()
 
   local barBottom = WORLD_H - self.margin

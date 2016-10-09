@@ -201,7 +201,7 @@ function PuzzlePiece:onPurge()
 end
 
 function PuzzlePiece:applyEffect()
-  -- override me
+  ingame.timeline:combinationHasBeenMade(self)
 end
 
 --[[------------------------------------------------------------
