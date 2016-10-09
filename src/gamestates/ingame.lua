@@ -49,11 +49,13 @@ function state:enter()
 	self.newspaperGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
 		newspapergrid_tiles_across, grid_tiles_down, spacing, offset_y)
+	self.newspaperGrid.isNewspaper = true
 
 	-- society grid
 	self.societyGrid = CollisionGrid(
 		NewspaperGridTile, tile_size, tile_size,
 		society_tiles_across, grid_tiles_down, newspapergrid_width + spacing + spacingSocietyGrid, offset_y)
+	self.societyGrid.isSociety = true
 
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size

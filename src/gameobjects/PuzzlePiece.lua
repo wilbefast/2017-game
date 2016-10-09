@@ -121,7 +121,7 @@ local PuzzlePiece = Class({
       g = math.ceil(math.random() * 255),
       b = math.ceil(math.random() * 255)
     }
-    
+
     -- image
     local originalImage = args.image
 
@@ -397,6 +397,23 @@ function PuzzlePiece:checkForDeaths()
   if self.purge then
     return
   end
+end
+
+function PuzzlePiece:isAttack(newTile, targetTypeName)
+  for _, dir in ipairs(self.directions) do
+    local part = self.combinationParts[dir]
+    local otherTile = newTile[dir]
+    if otherTile and otherTile.piece then
+      local otherPiece = otherTile.piece
+      if otherPiece:isType(targetTypeName) then
+        local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
+        if part and part.convex and otherPart and part:checkMatching(otherPart) then
+          return true
+        end
+      end
+    end
+  end
+  return false
 end
 
 function PuzzlePiece:shouldDie()

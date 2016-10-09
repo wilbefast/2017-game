@@ -43,6 +43,21 @@ function PieceEvidence:applyEffect()
 end
 
 --[[------------------------------------------------------------
+Query
+--]]--
+
+function PieceEvidence:canBeMovedToTile(tile)
+  if not PuzzlePiece.canBeMovedToTile(self, tile) then
+    return false
+  end
+  if tile.grid.isSociety then
+    return self:isAttack(tile, "PieceCandidate")
+  else
+    return true
+  end
+end
+
+--[[------------------------------------------------------------
 Generation
 --]]--
 
