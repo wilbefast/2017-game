@@ -18,6 +18,11 @@ Initialisation
 
 local PieceAlly = Class({
   type = GameObject.newType("PieceAlly"),
+  partColour = {
+    r = 0,
+    g = 171,
+    b = 157,
+  },
   init = function(self, tile, args)
     PuzzlePiece.init(self, tile, args and args)
 
