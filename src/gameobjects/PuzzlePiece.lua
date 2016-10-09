@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2014 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -318,7 +318,7 @@ end
 function PuzzlePiece:setStretch(ratio)
   if math.abs(self.rotation) < 0.01 or math.abs(self.rotation - math.pi) < 0.01 then
     self.wiggle.x = -ratio * 0.5
-  else 
+  else
     self.wiggle.y = -ratio * 0.5
   end
   self:followCombinationParts()
@@ -350,7 +350,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       end
     end
   end
-  log:write("shouldTakeRound : " .. shouldTakeRound)
+  --log:write("shouldTakeRound : " .. shouldTakeRound)
   for i = 1, shouldTakeRound do
     ingame.timeline:combinationHasBeenMade(self)
   end

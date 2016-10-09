@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2014 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -22,8 +22,8 @@ local Timeline = Class({
   init = function(self)
     GameObject.init(self, 0, 0)
 
-    self.roundTotal = 100
-    self.roundStep = 5
+    self.roundTotal = 5
+    self.roundStep = 1
     self.currentRound = 0
 
     -- normalized position
@@ -61,12 +61,17 @@ Game loop
 --]]--
 
 function Timeline:combinationHasBeenMade(piece)
-  log:write(piece:typename())
   local pieceType = piece:typename()
   if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
     self.currentRound = self.currentRound + 1
-    self.ratioCurrentTarget = self.currentRound / self.roundTotal
-    self.animStart = love.timer.getTime()
+
+    if self.currentRound > self.roundTotal then
+      GameState.switch(gameover)
+    else
+      self.ratioCurrentTarget = self.currentRound / self.roundTotal
+      self.animStart = love.timer.getTime()
+    end
+
   end
 end
 

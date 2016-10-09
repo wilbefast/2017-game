@@ -1,5 +1,5 @@
 --[[
-(C) Copyright 2016 William Dyce
+(C) Copyright 2016 William Dyce, Leon Denise, Maxence Voleau
 
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the GNU Lesser General Public License
@@ -96,8 +96,6 @@ end
 
 function state:leave()
 	GameObject.purgeAll()
-	self.newspaperGrid = nil
-	self.societyGrid = nil
 end
 
 --[[------------------------------------------------------------
@@ -258,10 +256,11 @@ function state:update(dt)
 				self.grabbedPiece:drop(self.grabbedPiece.previousTile) -- self.hoveredTile can be nil
 				self.grabbedPiece = nil
 			else
-				local stretchRatio = useful.smoothstep(
-					self.newspaperLimit - PuzzlePiece.cellSize/2,
-					self.newspaperLimit + PuzzlePiece.cellSize,
-					mx)
+				local stretchRatio = 0
+				-- local stretchRatio = useful.smoothstep(
+				-- 	self.newspaperLimit - PuzzlePiece.cellSize/2,
+				-- 	self.newspaperLimit + PuzzlePiece.cellSize,
+				-- 	mx)
 				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize + PuzzlePiece.cellSize * stretchRatio / 4)
 				self.grabbedPiece:setStretch(stretchRatio)
 			end
