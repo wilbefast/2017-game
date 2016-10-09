@@ -341,10 +341,10 @@ function state:update(dt)
 				self.grabbedPiece = nil
 			else
 				local stretchRatio = 0
-				-- local stretchRatio = useful.smoothstep(
-				-- 	self.newspaperLimit - PuzzlePiece.cellSize/2,
-				-- 	self.newspaperLimit + PuzzlePiece.cellSize,
-				-- 	mx)
+				local stretchRatio = state.smoothstep(
+					self.newspaperLimit - PuzzlePiece.cellSize/2,
+					self.newspaperLimit + PuzzlePiece.cellSize,
+					mx)
 				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize + PuzzlePiece.cellSize * stretchRatio / 4)
 				self.grabbedPiece:setStretch(stretchRatio)
 			end
@@ -374,6 +374,12 @@ function state:draw()
 
 	-- draw logic
 	GameObject.drawAll()
+end
+
+-- https://www.khronos.org/opengles/sdk/docs/man31/html/smoothstep.xhtml
+function state.smoothstep (edge0, edge1, x)
+  local t = useful.clamp((x - edge0) / (edge1 - edge0), 0, 1)
+  return t * t * (3 - 2 * t)
 end
 
 --[[------------------------------------------------------------
