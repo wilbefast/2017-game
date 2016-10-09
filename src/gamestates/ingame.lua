@@ -303,24 +303,31 @@ function state:update(dt)
 	if self.hoveredTile then
 		self.hoveredTile.hovered = false
 		self.hoveredTile = nil
-	else
-		if self.tooltip.image then
-			self.tooltip:hide()
-		end
 	end
 	local newHoveredTile = self.newspaperGrid:pixelToTile(mx, my) or self.societyGrid:pixelToTile(mx, my)
 	if newHoveredTile then
  		self.hoveredTile = newHoveredTile
 		newHoveredTile.hovered = true
+	end
 
+	-- tooltip
+	if self.hoveredTile then
 		local hoveredPiece = self.hoveredTile.piece
 		if hoveredPiece then
 			if hoveredPiece.imageTooltip then
 				if self.tooltip.disappeared then
-					self.tooltip:show(
-						hoveredPiece.x + PuzzlePiece.cellSize,
-						hoveredPiece.y + PuzzlePiece.cellSize,
-						hoveredPiece.imageTooltip)
+					if self.tooltip.hovered then
+						if self.tooltip:hoverDelayComplete() then
+							self.tooltip:show(
+								hoveredPiece.x + PuzzlePiece.cellSize,
+								hoveredPiece.y + PuzzlePiece.cellSize,
+								hoveredPiece.imageTooltip)
+						end
+					else
+						self.tooltip:hover()
+					end
+				elseif self.tooltip.image ~= hoveredPiece.imageTooltip then
+					self.tooltip:hide()
 				end
 			else
 				self.tooltip:hide()
@@ -328,6 +335,8 @@ function state:update(dt)
 		else
 			self.tooltip:hide()
 		end
+	else
+		self.tooltip:hide()
 	end
 
  	-- drag
@@ -341,10 +350,10 @@ function state:update(dt)
 				self.grabbedPiece = nil
 			else
 				local stretchRatio = 0
-				-- local stretchRatio = useful.smoothstep(
-				-- 	self.newspaperLimit - PuzzlePiece.cellSize/2,
-				-- 	self.newspaperLimit + PuzzlePiece.cellSize,
-				-- 	mx)
+				local stretchRatio = state.smoothstep(
+					self.newspaperLimit - PuzzlePiece.cellSize/2,
+					self.newspaperLimit + PuzzlePiece.cellSize,
+					mx)
 				self.grabbedPiece.x = math.min(self.grabbedPiece.x, self.newspaperLimit - PuzzlePiece.cellSize + PuzzlePiece.cellSize * stretchRatio / 4)
 				self.grabbedPiece:setStretch(stretchRatio)
 			end
@@ -360,13 +369,13 @@ function state:draw()
 
 	if self.grabbedPiece then
 		-- newspaper grid
-		love.graphics.setColor(255, 255, 0)
+		love.graphics.setColor(82, 129, 114)
 			self.newspaperGrid:draw()
 		useful.bindWhite()
 
 		-- society grid
 		if self.grabbedPiece:isType("PieceEvidence") then
-			love.graphics.setColor(0, 255, 0)
+			love.graphics.setColor(163, 156, 137)
 				self.societyGrid:draw()
 			useful.bindWhite()
 		end
@@ -374,6 +383,12 @@ function state:draw()
 
 	-- draw logic
 	GameObject.drawAll()
+end
+
+-- https://www.khronos.org/opengles/sdk/docs/man31/html/smoothstep.xhtml
+function state.smoothstep (edge0, edge1, x)
+  local t = useful.clamp((x - edge0) / (edge1 - edge0), 0, 1)
+  return t * t * (3 - 2 * t)
 end
 
 --[[------------------------------------------------------------

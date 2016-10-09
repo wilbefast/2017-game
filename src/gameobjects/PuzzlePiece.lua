@@ -359,7 +359,7 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
   end
-  local permissive = false--newTile.grid == ingame.newspaperGrid
+  local permissive = newTile.grid == ingame.newspaperGrid
   if permissive then
     return true
   end
@@ -417,7 +417,20 @@ function PuzzlePiece:shouldDie()
       end
     end
   end
-  return anyEntries and allEntriesFilled
+
+  local die = anyEntries and allEntriesFilled
+
+  if self:isType("PieceCandidate") and die then
+    for dir, part in pairs(self.combinationParts) do
+      local otherTile = self.tile[dir]
+      if otherTile and otherTile.piece then
+        otherTile.piece.purge = true
+        otherTile.piece = nil
+      end
+    end
+  end
+
+  return die
 end
 
 --[[------------------------------------------------------------

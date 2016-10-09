@@ -48,6 +48,10 @@ local Timeline = Class({
     self.animStart = -1000
     self.animDelay = 1
     self.animScale = 0.5
+
+    -- sorry
+    self.actionStart = -1000
+    self.actionDelay = 0.5
   end
 })
 Timeline:include(GameObject)
@@ -61,17 +65,19 @@ Game loop
 --]]--
 
 function Timeline:combinationHasBeenMade(piece)
-  local pieceType = piece:typename()
-  if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
-    self.currentRound = self.currentRound + 1
+  if self.actionStart + self.actionDelay < love.timer.getTime() then
+    local pieceType = piece:typename()
+    if pieceType == "PieceEvidence" or pieceType == "PieceJournalist" or pieceType == "PieceSource" then
+      self.currentRound = self.currentRound + 1
 
-    if self.currentRound > self.roundTotal then
-      GameState.switch(gameover)
-    else
-      self.ratioCurrentTarget = self.currentRound / self.roundTotal
-      self.animStart = love.timer.getTime()
+      if self.currentRound > self.roundTotal then
+        GameState.switch(gameover)
+      else
+        self.ratioCurrentTarget = self.currentRound / self.roundTotal
+        self.animStart = love.timer.getTime()
+        self.actionStart = love.timer.getTime()
+      end
     end
-
   end
 end
 
