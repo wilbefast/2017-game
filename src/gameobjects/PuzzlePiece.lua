@@ -98,8 +98,12 @@ local PuzzlePiece = Class({
       end
 
       -- tooltip
-      if args.tooltip and Resources[args.tooltip] then
-        self.imageTooltip = Resources[args.tooltip]
+      if args.tooltip then
+        if Resources[args.tooltip] then
+          self.imageTooltip = Resources[args.tooltip]
+        else
+          self.tooltipName = args.tooltip
+        end
       end
     else
       _randomiseCombinationParts()
@@ -354,6 +358,9 @@ function PuzzlePiece:canBeMovedToTile(newTile)
       end
     end
   end
+  -- if shouldTakeRound then
+  --   ingame:combinationHasBeenMade(self)
+  -- end
   return true
 end
 
