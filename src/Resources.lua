@@ -101,6 +101,9 @@ return {
   timelineCursor = love.graphics.newImage("assets/image/curseur.png"),
   poof = love.graphics.newImage("assets/image/poof.png"),
 
+  intro = love.graphics.newImage("assets/image/intro.jpg"),
+  tuto = love.graphics.newImage("assets/image/tuto.jpg"),
+
   gameover = {
     win = love.graphics.newImage("assets/image/end_01.jpg"),
     standard = love.graphics.newImage("assets/image/end_02.jpg"),

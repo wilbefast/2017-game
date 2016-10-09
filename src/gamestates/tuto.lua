@@ -43,7 +43,7 @@ function state:keypressed(key, uni)
 end
 
 function state:mousepressed()
-  GameState.switch(intro)
+  GameState.switch(ingame)
 end
 
 function state:update(dt)
@@ -51,7 +51,7 @@ end
 
 function state:draw()
   -- background
-  love.graphics.draw(Resources.title, 0, 0)
+  love.graphics.draw(Resources.tuto, 0, 0)
 end
 
 
