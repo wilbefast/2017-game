@@ -121,7 +121,7 @@ local PuzzlePiece = Class({
       g = math.ceil(math.random() * 255),
       b = math.ceil(math.random() * 255)
     }
-
+    
     -- image
     local originalImage = args.image
 

@@ -173,6 +173,10 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 			spawnedPieces = spawnedPieces + 1
 
 			self.pouf:emit(tile)
+
+			if numberToSpawn == 1 then
+				return piece
+			end
 		end
 		i = i + 1
 	end
@@ -205,7 +209,7 @@ function state:spawnEvidencePieceFromSource(source)
 		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
 		return
 	end
-	self:trySpawn(PieceEvidence, emptyTiles)
+	self:trySpawn(PieceEvidence, emptyTiles, 1)
 end
 
 function state:spawnEvidencePieceFromEvidence(source)
@@ -216,7 +220,8 @@ function state:spawnEvidencePieceFromEvidence(source)
 		log:write("Not enough room to spawn evidence, there are only", #emptyTiles, "free tiles")
 		return
 	end
-	self:trySpawn(PieceEvidence, emptyTiles)
+	local evidence = self:trySpawn(PieceEvidence, emptyTiles, 1)
+	evidence.credibility = source.credibility + 1
 end
 
 function state:getEnding()
@@ -303,8 +308,8 @@ function state:keypressed(key, uni)
     shake = shake + 2
 		GameState.switch(title)
 	elseif DEBUG then
-		gameover:setEnding(self:getEnding())
-		GameState.switch(gameover)
+		-- gameover:setEnding(self:getEnding())
+		-- GameState.switch(gameover)
   end
 end
 

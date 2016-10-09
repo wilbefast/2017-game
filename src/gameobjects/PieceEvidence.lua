@@ -27,6 +27,8 @@ local PieceEvidence = Class({
     local args = args or PieceEvidence.pick()
     args.image = Resources.pieceEvidence
     PuzzlePiece.init(self, tile, args)
+
+    self.credibility = 1
   end
 })
 PieceEvidence:include(PuzzlePiece)
@@ -58,6 +60,11 @@ Game loop
 
 function PieceEvidence:draw()
   PuzzlePiece.draw(self)
+  if DEBUG then
+    useful.bindBlack()
+    love.graphics.print("CRED = " .. tostring(self.credibility), self.x + 8, self.y + 80)
+    useful.bindWhite()
+  end
 end
 
 function PieceEvidence:update(dt)
