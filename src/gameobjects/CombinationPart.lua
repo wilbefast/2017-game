@@ -163,11 +163,9 @@ end
 Game loop
 --]]--
 
-function CombinationPart:draw()
-  if self.image then
-    if self.convex then
-      love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b)
-    end
+function CombinationPart:draw_from_piece()
+  if self.image and self.convex then
+    love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b)
     love.graphics.draw(
       self.image,
       self.x + PuzzlePiece.cellSize*0.5,

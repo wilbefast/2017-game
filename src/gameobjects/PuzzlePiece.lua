@@ -119,6 +119,10 @@ local PuzzlePiece = Class({
       g = math.ceil(math.random() * 255),
       b = math.ceil(math.random() * 255)
     }
+
+    -- image
+    self.image = args.image
+    self.imageScale = PuzzlePiece.cellSize / self.image:getWidth()
   end
 })
 PuzzlePiece:include(GameObject)
@@ -211,7 +215,7 @@ Game loop
 function PuzzlePiece:draw()
   -- draw the parts
   for dir, part in pairs(self.combinationParts) do
-    --part:draw_from_piece()
+    part:draw_from_piece()
   end
 
   -- draw the piece
