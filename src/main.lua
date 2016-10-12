@@ -113,7 +113,16 @@ function love.load(arg)
   -- line width
   love.graphics.setLineWidth(3)
 
+  -- music
+  audio:load_music("marseillaise")
+  audio:play_music("marseillaise")
+
   -- sound
+  -- load_sound takes a filename, a volume (between 0 and 1) and a max number of simultaneous instances.
+  audio:load_sound("combo", 0.4, 10)
+  -- load_sounds takes a base filename, a number of variants, a volume and max a number of instances.
+  audio:load_sounds("lick", 3, 1, 4)
+  -- play_sound can be used to play either: it takes a name and a pitch randomisation (between 0 and 1)
 
   -- initial gamestate
   GameState.switch(title)

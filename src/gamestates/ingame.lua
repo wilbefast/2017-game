@@ -175,6 +175,7 @@ function state:trySpawn(class, candidateTiles, numberToSpawn)
 			spawnedPieces = spawnedPieces + 1
 
 			self.pouf:emit(tile)
+			audio:play_sound("combo", 0.1)
 
 			if numberToSpawn == 1 then
 				return piece
@@ -311,9 +312,11 @@ function state:mousepressed(x, y, button)
   -- drag puzzle piece
   if button == 1 then
 		piece:grab(piece)
+		audio:play_sound("combo", 0.1)
 		self.grabbedPiece = piece
 	-- rotate puzzle piece
 	elseif button == 2 then
+		audio:play_sound("lick")
 		piece:rotate(1)
 	end
 end
@@ -322,8 +325,10 @@ function state:mousereleased(x, y, button)
 	if button == 1 and self.grabbedPiece then
 		if self.hoveredTile and not self.grabbedPiece:isType("PieceEvidence") and self.hoveredTile.grid == self.societyGrid then
 			self.grabbedPiece:drop(self.grabbedPiece.previousTile)
+			audio:play_sound("combo", 0.1)
 		else
-			self.grabbedPiece:drop(self.hoveredTile) -- self.hoveredTile can be nil
+			self.grabbedPiece:drop(self.hoveredTile)
+			audio:play_sound("combo", 0.1)
 		end
 		self.grabbedPiece = nil
 	end
@@ -341,6 +346,7 @@ function state:keypressed(key, uni)
   if key == "escape" then
     shake = shake + 2
 		GameState.switch(title)
+		audio:play_sound("combo", 0.1)
 	elseif DEBUG then
 		-- gameover:setEnding(self:getEnding())
 		-- GameState.switch(gameover)
