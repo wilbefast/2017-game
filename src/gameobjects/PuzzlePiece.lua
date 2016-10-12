@@ -162,11 +162,13 @@ Database
 
 function PuzzlePiece.findAbleToAttack(partTypeName, pieceTypeName)
   local found = nil
+  local attackDirection = nil
   local database = PuzzlePiece.databaseByType[pieceTypeName]
   useful.shuffled_ipairs(database, function(template)
     for dir, partTemplate in pairs(template.connections) do
       if partTemplate.convex and (partTemplate.type == partTypeName) then
         found = template
+        attackDirection = dir
         return true -- interrupt
       end
     end
@@ -174,7 +176,7 @@ function PuzzlePiece.findAbleToAttack(partTypeName, pieceTypeName)
   if not found then
     log:write("Unable to find any pieces of type", pieceTypeName, "able to attack", partTypeName)
   end
-  return found
+  return found, attackDirection
 end
 
 --[[------------------------------------------------------------
@@ -186,6 +188,7 @@ function PuzzlePiece:rotateDirection(map)
   for direction, part in pairs(self.combinationParts) do
     local newDirection = map[direction]
     newCombinationParts[newDirection] = part
+    part.dir = newDirection
   end
   self.combinationParts = newCombinationParts
   self:checkForDeaths()
@@ -227,18 +230,21 @@ function PuzzlePiece:drop(tile)
     part:resetLayer()
   end
 
+  -- check success
+  local successful = false
   if not tile or tile.piece or not self:canBeMovedToTile(tile) then
     -- this tile already has a piece in it, or the piece would not fit here - revert back to previous tile!
-    self:onFailedDrop(tile)
+    successful = false
     tile = self.previousTile
   else
-    self:onSuccessfulDrop(tile)
+    successful = true
   end
 
   -- update position
   self.tile = tile
   self.previousTile = nil
   tile.piece = self
+  log:write("Placed piece", self.tile.piece.name, "into tile", self.tile.col, self.tile.row)
 
   -- the piece or other pieces may be destroyed
   self:checkForDeaths()
@@ -254,6 +260,13 @@ function PuzzlePiece:drop(tile)
     self.x = useful.lerp(self.x, x, t)
     self.y = useful.lerp(self.y, y, t)
   end)
+
+  -- notify
+  if successful then
+    self:onSuccessfulDrop(tile)
+  else
+    self:onFailedDrop(tile)
+  end
 end
 
 function PuzzlePiece:onPurge()
@@ -315,14 +328,6 @@ function PuzzlePiece:draw()
   end
 end
 
-function PuzzlePiece:followCombinationParts()
-  -- combination parts
-  for dir, part in pairs(self.combinationParts) do
-    part:follow(self.x, self.y)
-    part:doTheWiggle(self.wiggle.x, self.wiggle.y)
-  end
-end
-
 function PuzzlePiece:update(dt)
   -- timing
   self.t = self.t + dt
@@ -357,6 +362,18 @@ function PuzzlePiece:update(dt)
   end
 end
 
+--[[------------------------------------------------------------
+Modify
+--]]--
+
+function PuzzlePiece:followCombinationParts()
+  -- combination parts
+  for dir, part in pairs(self.combinationParts) do
+    part:follow(self.x, self.y)
+    part:doTheWiggle(self.wiggle.x, self.wiggle.y)
+  end
+end
+
 function PuzzlePiece:drag(x, y)
   self.x = useful.lerp(self.x, x - PuzzlePiece.cellSize*0.5, 0.5)
   self.y = useful.lerp(self.y, y - PuzzlePiece.cellSize*0.5, 0.5)
@@ -364,6 +381,7 @@ function PuzzlePiece:drag(x, y)
   -- drag combination parts behind us
   self:followCombinationParts()
 end
+
 
 function PuzzlePiece:rotate(direction)
   local radian = 0
@@ -393,6 +411,28 @@ function PuzzlePiece:setStretch(ratio)
   self:followCombinationParts()
 end
 
+function PuzzlePiece:rotateTillAttacking()
+  log:write("Trying to rotate piece at", self.tile.col, self.tile.row)
+  for i = 1, 4 do
+    if self:isAnyPartAttacking() then
+      log:write("Rotation success!")
+      return true
+    else
+      log:write("Rotation attempt", i, "of 4")
+      self:rotate(1)
+      for dir, part in pairs(self.combinationParts) do
+        log:write("\t", dir, part.name)
+      end
+    end
+  end
+  log:write("Rotation failed!")
+  return false
+end
+
+--[[------------------------------------------------------------
+Query
+--]]--
+
 function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
@@ -417,9 +457,6 @@ function PuzzlePiece:canBeMovedToTile(newTile)
   return true
 end
 
---[[------------------------------------------------------------
-Query
---]]--
 
 function PuzzlePiece:checkForDeaths()
   self.tile.grid:map(function(t)
@@ -431,6 +468,16 @@ function PuzzlePiece:checkForDeaths()
   if self.purge then
     return
   end
+end
+
+function PuzzlePiece:isAnyPartAttacking()
+  for dir, part in pairs(self.combinationParts) do
+    log:write("\tChecking whether", dir, "is an attack")
+    if part:isAttack() then
+      return true
+    end
+  end
+  return false
 end
 
 function PuzzlePiece:isAttack(newTile, targetTypeName)

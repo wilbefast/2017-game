@@ -61,13 +61,14 @@ local CombinationPart = Class({
       combinationType = self.types[combinationType]
     end
 
-    -- convex or concase?
+    -- convex or concave?
     if convex == nil then
       convex = math.random() > 0.5 and true or false
     end
     self.convex = convex
     self.concave = not convex
     self.layer = self.convex and 2 or 1
+    self.name = (self.convex and " convex " or " concave ") .. combinationType.name
 
     -- save it all
     self.pivot = { x = 0.5, y = 0.5 }
@@ -210,6 +211,7 @@ function CombinationPart:setDirection(dir)
   else
     self.wiggleDirection = 1
   end
+  self.dir = dir
 end
 
 function CombinationPart:follow(x, y)
@@ -243,6 +245,37 @@ end
 --[[------------------------------------------------------------
 Query
 --]]--
+
+function CombinationPart:isAttack()
+  if not self.convex then
+    log:write("\t\tNot attack because not convex")
+    return false
+  end
+  local affectedTile = self.piece.tile[self.dir]
+  if not affectedTile then
+    log:write("\t\tNot attack because no tile in direction", self.dir)
+    return false
+  end
+  local affectedPiece = affectedTile.piece
+  if not affectedPiece then
+    log:write("\t\tNot attack because nobody is in", affectedTile.col, affectedTile.row)
+    for i, v in pairs(affectedTile) do
+      log:write("\t\t\t", i, v)
+    end
+    return false
+  end
+  local oppositeDir = PuzzlePiece.oppositeDirections[self.dir]
+  local affectedPart = affectedPiece.combinationParts[oppositeDir]
+  if not affectedPart then
+    log:write("\t\tNot attack because no", oppositeDir,"facing part is in", affectedTile.col, affectedTile.row)
+    return false
+  end
+  if not self:checkMatching(affectedPart) then
+    log:write("\t\tNot attack because parts do not match")
+    return false
+  end
+  return true
+end
 
 function CombinationPart:checkMatching(combinationPart)
   return combinationPart.combinationType == self.combinationType and combinationPart.convex ~= self.convex

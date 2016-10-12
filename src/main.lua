@@ -29,6 +29,7 @@ LOCAL VARIABLES
 
 local WORLD_CANVAS = nil
 local CAPTURE_SCREENSHOT = false
+local MUTE = true -- for debugging
 
 --[[------------------------------------------------------------
 LOVE CALLBACKS
@@ -112,6 +113,9 @@ function love.load(arg)
 
   -- line width
   love.graphics.setLineWidth(3)
+
+  -- audio
+  audio.mute = MUTE
 
   -- music
   audio:load_music("marseillaise")

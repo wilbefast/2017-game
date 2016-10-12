@@ -60,6 +60,10 @@ Modification
 --]]--
 
 function state:setEnding(endingName)
+  if self.ending then
+    log:write("An ending has already been selected")
+    return
+  end
   self.ending = endings[endingName]
   if not self.ending then
     log:write("Invalid ending", endingName)

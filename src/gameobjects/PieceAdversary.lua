@@ -27,9 +27,28 @@ local PieceAdversary = Class({
     local args = args or PieceAdversary.pick()
     args.image = Resources.pieceEnemy
     PuzzlePiece.init(self, tile, args)
+    if not self:rotateTillAttacking() then
+      self.purge = true
+    end
   end
 })
 PieceAdversary:include(PuzzlePiece)
+
+function PieceAdversary.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceAdversary)
+end
+
+--[[------------------------------------------------------------
+Query
+--]]--
+
+function PieceAdversary:shouldDie()
+  if PuzzlePiece.shouldDie(self) then
+    return true
+  end
+  -- also die if not attacking
+  --return not self:isAnyPartAttacking()
+end
 
 --[[------------------------------------------------------------
 Events
@@ -38,11 +57,6 @@ Events
 --[[------------------------------------------------------------
 Game loop
 --]]--
-
-function PieceAdversary.pick()
-  return useful.randIn(PuzzlePiece.databaseByType.PieceAdversary)
-end
-
 
 function PieceAdversary:draw()
   PuzzlePiece.draw(self)

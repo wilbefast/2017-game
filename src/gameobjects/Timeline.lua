@@ -79,9 +79,15 @@ Timeline:include(GameObject)
 Events
 --]]--
 
---[[------------------------------------------------------------
-Game loop
---]]--
+function Timeline:spawnNextCandidate()
+  local emptyTiles = {}
+  for key, tile in ipairs(self.candidateTiles) do
+    if not tile.piece then
+      table.insert(emptyTiles, tile)
+    end
+  end
+  ingame:trySpawn(PieceCandidate, emptyTiles, 1)
+end
 
 function Timeline:tick()
   if self.actionStart + self.actionDelay < love.timer.getTime() then
@@ -98,14 +104,7 @@ function Timeline:tick()
     self.roundCandidate = self.roundCandidate + 1
     if self.roundCandidate >= self.roundStepCandidate then
       self.roundCandidate = 0
-
-      local emptyTiles = {}
-      for key, tile in ipairs(self.candidateTiles) do
-        if not tile.piece then
-          table.insert(emptyTiles, tile)
-        end
-      end
-      ingame:trySpawn(PieceCandidate, emptyTiles, 1)
+      self:spawnNextCandidate()
     end
   end
 end
@@ -116,6 +115,10 @@ function Timeline:combinationHasBeenMade(piece)
     self:tick()
   end
 end
+
+--[[------------------------------------------------------------
+Game loop
+--]]--
 
 function Timeline:draw()
   -- current cursor

@@ -60,9 +60,10 @@ function state:enter()
 	-- set up the wiggle
 	PuzzlePiece.cellSize = tile_size
 
-	-- initialise state
+	-- reinitialise state
 	self.grabbedPiece = nil
 	self.hoveredTile = nil
+	self.candidatesLeftToSpawn = #PuzzlePiece.databaseByType.PieceCandidate
 
 	-- spawn all the starting pieces
 	local spawn = require("assets/twerk/spawn")
@@ -238,7 +239,7 @@ function state:spawnAdversaryPieceFromEvidence(evidence, tile)
 			-- TODO check if this position is actually valid (not attack)
 			local part = evidence.combinationParts[dir]
 			if part and part.concave then
-				local template, direction = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceAdversary")
+				local template, attackDirection = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceAdversary")
 				if template then
 					PieceAdversary(candidateTile, template)
 					return
@@ -253,7 +254,6 @@ function state:spawnAllyPieceFromEvidence(evidence)
 	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
 	self:trySpawn(PieceAlly, emptyTiles, 1)
 end
-
 
 function state:getEnding()
 	if self:countPiecesOfType("PieceNewspaper") <= 0 then
@@ -276,13 +276,21 @@ function state:tick()
 	self.timeline:tick()
 end
 
+function state:onCandidateDestroyed()
+	self.candidatesLeftToSpawn = self.candidatesLeftToSpawn - 1
+end
+
 function state:combinationHasBeenMade(piece)
 	self.timeline:combinationHasBeenMade(piece)
 
 	-- win if there are no candidates
 	if self:countPiecesOfType("PieceCandidate") <= 0 then
-		gameover:setEnding(self:getEnding())
-		GameState.switch(gameover)
+		if self.candidatesLeftToSpawn > 0 then
+			self.timeline:spawnNextCandidate()
+		else
+			gameover:setEnding(self:getEnding())
+			GameState.switch(gameover)
+		end
 	end
 end
 

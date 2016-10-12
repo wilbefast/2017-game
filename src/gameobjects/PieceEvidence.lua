@@ -48,10 +48,10 @@ function PieceEvidence:onSuccessfulDrop(targetTile)
     ingame:tick()
 
     local probAdversary = 1 - self.credibility/self.maxCredibility
-    probAdversary = 0.75*probAdversary*probAdversary
+    probAdversary = 0.9*probAdversary*probAdversary
 
     local probAlly = self.credibility/self.maxCredibility
-    probAlly = 0.75*probAlly*probAlly
+    probAlly = 0.9*probAlly*probAlly
 
     local probNothing = 1 - probAdversary - probAlly
 

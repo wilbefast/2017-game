@@ -38,9 +38,24 @@ local PieceCandidate = Class({
 })
 PieceCandidate:include(PuzzlePiece)
 
+function PieceCandidate.pick()
+  if #ingame.timeline.candidateList > 0 then
+    local picked = ingame.timeline.candidateList[1]
+    table.remove(ingame.timeline.candidateList, 1)
+    return picked
+  else
+    return {}
+  end
+end
+
 --[[------------------------------------------------------------
 Events
 --]]--
+
+function PieceCandidate:onPurge()
+  ingame:onCandidateDestroyed()
+  PuzzlePiece.onPurge(self)
+end
 
 --[[------------------------------------------------------------
 Game loop
@@ -52,16 +67,6 @@ end
 
 function PieceCandidate:update(dt)
   PuzzlePiece.update(self, dt)
-end
-
-function PieceCandidate.pick()
-  if #ingame.timeline.candidateList > 0 then
-    local picked = ingame.timeline.candidateList[1]
-    table.remove(ingame.timeline.candidateList, 1)
-    return picked
-  else
-    return {}
-  end
 end
 
 --[[------------------------------------------------------------
