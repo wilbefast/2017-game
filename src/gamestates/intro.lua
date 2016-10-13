@@ -38,13 +38,13 @@ Callbacks
 
 function state:keypressed(key, uni)
   if key == "escape" then
-    audio:play_sound("combo", 0.1)
+    audio:play_sound("back", 0.1)
     love.event.push("quit")
   end
 end
 
 function state:mousepressed()
-  audio:play_sound("combo", 0.1)
+  audio:play_sound("confirm", 0.1)
   GameState.switch(tuto)
 end
 

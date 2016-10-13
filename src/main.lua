@@ -119,14 +119,19 @@ function love.load(arg)
   audio.mute = MUTE
 
   -- music
-  audio:load_music("marseillaise")
-  audio:play_music("marseillaise")
+  audio:load_music("prometheus")
+  audio:play_music("prometheus")
 
   -- sound
   -- load_sound takes a filename, a volume (between 0 and 1) and a max number of simultaneous instances.
-  audio:load_sound("combo", 0.4, 10)
+    audio:load_sound("confirm", 1, 10)
+    audio:load_sound("back", 1, 10)
+    audio:load_sound("cancel", 1, 10)
+    audio:load_sound("select", 1, 10)
+    audio:load_sound("rotate", 1, 10)
+    audio:load_sound("spawn", 1, 10)
   -- load_sounds takes a base filename, a number of variants, a volume and max a number of instances.
-  audio:load_sounds("lick", 3, 1, 4)
+  -- audio:load_sounds("lick", 3, 1, 4)
   -- play_sound can be used to play either: it takes a name and a pitch randomisation (between 0 and 1)
 
   -- initial gamestate
