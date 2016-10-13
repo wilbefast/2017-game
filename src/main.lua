@@ -97,13 +97,14 @@ function love.load(arg)
   math.randomseed(os.time())
 
   -- no mouse
-  --love.mouse.setVisible(false)
+  love.mouse.setVisible(false)
 
   -- save directory
   love.filesystem.setIdentity(TITLE)
 
   -- window title
   love.window.setTitle(TITLE)
+  love.window.setIcon(Resources.icon)
 
   -- canvases
   WORLD_CANVAS = love.graphics.newCanvas(WORLD_W, WORLD_H)
@@ -199,6 +200,8 @@ function love.draw()
     --   (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
     -- draw the canvas
     love.graphics.draw(WORLD_CANVAS, 0, 0)
+    -- draw cursor
+    love.graphics.draw(Resources.mouseCursor, mx, my)
   love.graphics.pop() -- pop offset
 
   -- capture GIF footage

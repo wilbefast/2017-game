@@ -96,6 +96,9 @@ return {
   intro = love.graphics.newImage("assets/image/intro.jpg"),
   tuto = love.graphics.newImage("assets/image/tuto.jpg"),
 
+  icon = love.image.newImageData("assets/image/icone.png"),
+  mouseCursor = love.graphics.newImage("assets/image/MousePointer.png"),
+
   gameover = {
     win = love.graphics.newImage("assets/image/end_01.jpg"),
     standard = love.graphics.newImage("assets/image/end_02.jpg"),
