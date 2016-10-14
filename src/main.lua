@@ -191,9 +191,10 @@ function love.draw()
     love.graphics.setColor(91, 132, 192)
     love.graphics.rectangle("fill", 0, 0, WORLD_W, WORLD_H)
     useful.bindWhite()
-
     -- draw any other state specific stuff
     GameState.draw()
+    -- draw cursor
+    love.graphics.draw(Resources.mouseCursor, mx, my)
   useful.popCanvas()
 
   love.graphics.push()
@@ -205,8 +206,6 @@ function love.draw()
     --   (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
     -- draw the canvas
     love.graphics.draw(WORLD_CANVAS, 0, 0)
-    -- draw cursor
-    love.graphics.draw(Resources.mouseCursor, mx, my)
   love.graphics.pop() -- pop offset
 
   -- capture GIF footage
