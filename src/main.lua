@@ -29,7 +29,7 @@ LOCAL VARIABLES
 
 local WORLD_CANVAS = nil
 local CAPTURE_SCREENSHOT = false
-local MUTE = true -- for debugging
+--local MUTE = true -- for debugging
 
 --[[------------------------------------------------------------
 LOVE CALLBACKS
