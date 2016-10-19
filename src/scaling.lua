@@ -1,6 +1,6 @@
 
 local scaling = {
-  pixel_perfect = true
+  pixel_perfect = false
 }
 
 VIEW_W = 0
@@ -27,18 +27,12 @@ scaling.reset = function(w, h)
 
   local step = (scaling.pixel_perfect and 1) or 0.01
   WINDOW_SCALE = step
-	if WORLD_W <= WINDOW_W or WORLD_H <= WINDOW_H then
-	  while (WORLD_W*(WINDOW_SCALE + step) < WINDOW_W) 
-	  and (WORLD_H*(WINDOW_SCALE + step) < WINDOW_H)
-	  do
-	    WINDOW_SCALE = WINDOW_SCALE + step
-	  end
-	else
-	  repeat
-	  	WINDOW_SCALE = WINDOW_SCALE - 0.1*step
-	  until ((WORLD_W*WINDOW_SCALE <= WINDOW_W)
-	  and (WORLD_H*WINDOW_SCALE <= WINDOW_H))
-	end
+  while (WORLD_W*(WINDOW_SCALE + step) < WINDOW_W)
+  and (WORLD_H*(WINDOW_SCALE + step) < WINDOW_H)
+  do
+    WINDOW_SCALE = WINDOW_SCALE + step
+  end
+
   VIEW_W = WORLD_W*WINDOW_SCALE
   VIEW_H = WORLD_H*WINDOW_SCALE
 
