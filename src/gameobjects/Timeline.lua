@@ -26,7 +26,9 @@ local Timeline = Class({
     self.currentRound = 0
 
     self.roundCandidate = 0
+    self.roundEvent = 0
     self.roundStepCandidate = 15
+    self.roundStepEvent = 10
     self.candidateTiles = {
       ingame.societyGrid:gridToTile(2, 2),
       ingame.societyGrid:gridToTile(8, 2),
@@ -78,6 +80,22 @@ Timeline:include(GameObject)
 --[[------------------------------------------------------------
 Events
 --]]--
+function Timeline:spawnNewEvent()
+  local randomNumber = math.random() * 100;
+  local emptyTiles = {}
+
+  if randomNumber < 0.33 then
+    -- set empty tiles for allies
+    ingame:trySpawn(PieceAlly,emptyTiles,1)
+  else if randomNumber < 0.66 then
+    -- set empty tiles for attack on newspaper
+    ingame:trySpawn(PieceAdversary,emptyTiles,1)
+    else
+    -- set empty tile for protection of opponents == tile for allies too
+    ingame:trySpawn(PieceAdversary,emptyTiles,1)
+    end
+
+end
 
 function Timeline:spawnNextCandidate()
   local emptyTiles = {}
@@ -106,6 +124,15 @@ function Timeline:tick()
       self.roundCandidate = 0
       self:spawnNextCandidate()
     end
+
+    -- generate events
+    self.roundEvent = self.roundEvent + 1
+    if self.roundEvent >= self.roundStepEvent then
+      self.roundEvent = 0
+      self:spawnNewEvent()
+    end
+
+
   end
 end
 
