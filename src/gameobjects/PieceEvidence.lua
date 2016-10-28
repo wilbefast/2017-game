@@ -107,7 +107,7 @@ function PieceEvidence:canBeMovedToTile(tile)
     return false
   end
   if tile.grid.isSociety then
-    return (self:isAttack(tile, "PieceCandidate") or self:isAttack(tile, "PieceSecretService") or self:isAttack(tile, "PieceAdversary"))
+    return (self:isAttack(tile, "PieceCandidate", "PieceSecretService", "PieceAdversary"))
   else
     return true
   end
