@@ -480,13 +480,13 @@ function PuzzlePiece:isAnyPartAttacking()
   return false
 end
 
-function PuzzlePiece:isAttack(newTile, targetTypeName)
+function PuzzlePiece:isAttack(newTile, ...)
   for _, dir in ipairs(self.directions) do
     local part = self.combinationParts[dir]
     local otherTile = newTile[dir]
     if otherTile and otherTile.piece then
       local otherPiece = otherTile.piece
-      if otherPiece:isType(targetTypeName) then
+      if otherPiece:isType(...) then
         local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
         if part and part.convex and otherPart and part:checkMatching(otherPart) then
           return true
