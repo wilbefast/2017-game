@@ -68,8 +68,8 @@ function love.load(arg)
   PieceJournalist = require("gameobjects/PieceJournalist")
   NewspaperGridTile = require("grid/NewspaperGridTile")
   -- filter items for event
-  -- PieceSecretService  = specific Adversary
-  -- PieceEvent  = specific Adversary
+  PieceSecretService  = require("gameobjects/PieceSecretService")
+  PieceEvent  = require("gameobjects/PieceEvent")
 
   Tooltip = require("gameobjects/Tooltip")
   Timeline = require("gameobjects/Timeline")

@@ -81,21 +81,36 @@ Timeline:include(GameObject)
 Events
 --]]--
 function Timeline:spawnNewEvent()
-  local randomNumber = math.random() * 100;
+  local randomNumber = math.random()
   local emptyTiles = {}
+  local candidateOccupiedTiles = {}
+  local newspaperOccupiedTiles = {}
+  ingame.societyGrid:map(function(tile) if not tile.piece  then table.insert(emptyTiles, tile) end end)
+  ingame.societyGrid:map(function(tile) if tile.piece and tile.piece:isType("PieceCandidate") then table.insert(candidateOccupiedTiles, tile) end end)
+	ingame.societyGrid:map(function(tile) if tile.piece and tile.piece:isType("PieceNewspaper") then table.insert(newspaperOccupiedTiles, tile) end end)
+  useful.shuffle(candidateOccupiedTiles)
 
-  if randomNumber < 0.33 then
-    -- set empty tiles for allies
-    ingame:trySpawn(PieceAlly,emptyTiles,1)
-  else if randomNumber < 0.66 then
-    -- set empty tiles for attack on newspaper
-    ingame:trySpawn(PieceAdversary,emptyTiles,1)
+    if randomNumber < 0.33 then
+      -- set empty tiles for allies
+      if candidateOccupiedTiles[1] then
+        ingame:spawnAllyPieceFromCandidate(candidateOccupiedTiles[1].piece,candidateOccupiedTiles[1])
+      end
+      --ingame:trySpawn(PieceAlly,emptyTiles,1)
+    elseif randomNumber < 0.66 then
+      -- set empty tiles for attack on newspaper
+      if candidateOccupiedTiles[1] then
+        ingame:spawnEventPieceFromCandidate(candidateOccupiedTiles[1].piece,candidateOccupiedTiles[1])
+      end
+      --ingame:trySpawn(PieceEvent,emptyTiles,1)
     else
-    -- set empty tile for protection of opponents == tile for allies too
-    ingame:trySpawn(PieceAdversary,emptyTiles,1)
+      log:write("\t\t newspaper tile: ", newspaperOccupiedTiles[0], " or ", newspaperOccupiedTiles[1])
+      if newspaperOccupiedTiles[1] then
+        ingame:spawnEventPieceFromNewspaper(newspaperOccupiedTiles[1].piece,newspaperOccupiedTiles[1])
+        newspaperOccupiedTiles[1].piece:checkForDeaths()
+      end
+      -- set empty tile for protection of opponents == tile for allies too
     end
-
-end
+  end
 
 function Timeline:spawnNextCandidate()
   local emptyTiles = {}
@@ -132,9 +147,34 @@ function Timeline:tick()
       self:spawnNewEvent()
     end
 
+    local destroyablePieces = {}
+  --  local destroyablePiecesCount = ingame:countPiecesOfType("PieceAlly", ingame.societyGrid) + ingame:countPiecesOfType("PieceEvent", ingame.societyGrid)
+
+    --if (destroyablePiecesCount > 0) then
+      -- not working
+      ingame.societyGrid:map(function(tile) if  tile.piece then table.insert(destroyablePieces, tile) end end)
+      for p, tile in pairs(destroyablePieces) do
+        if tile.piece:isType("PieceAlly") or tile.piece == tile.piece:isType("PieceEvent") then
+          tile.piece:updateLifetime()
+        elseif tile.piece:isType("PieceEvidence") then
+          tile.piece:attackFromSystem(tile)
+          if not tile.piece:isAnyPartAttacking() then
+            tile.piece.purge = true
+          end
+        elseif tile.piece:isType("PieceAdversary") then
+          if not tile.piece:isAnyPartAttacking() then
+            tile.piece.purge = true
+          end
+        end
+      end
+      end
+  --  end
+
+    --ingame.societyGrid:map(function(tile) if tile.piece then tile.piece:checkForDeaths() end end)
+
 
   end
-end
+
 
 function Timeline:combinationHasBeenMade(piece)
   local pieceType = piece:typename()

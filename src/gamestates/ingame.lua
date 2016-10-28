@@ -249,6 +249,70 @@ function state:spawnAdversaryPieceFromEvidence(evidence, tile)
 	end
 end
 
+function state:spawnEventPieceFromCandidate(candidatePiece, tile)
+	local emptyTiles = {}
+	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+
+	local shuffledDirections = useful.shuffle({"N", "S", "E", "W"})
+	for i, dir in ipairs(shuffledDirections) do
+		local candidateTile = tile[dir]
+		if candidateTile and not candidateTile.piece then
+			-- TODO check if this position is actually valid (not attack)
+			local part = candidatePiece.combinationParts[dir]
+			if part and part.concave then
+				local template, attackDirection = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceEvent")
+				if template then
+					PieceEvent(candidateTile, template)
+					return
+				end
+			end
+		end
+	end
+end
+
+function state:spawnEventPieceFromNewspaper(candidatePiece, tile)
+	local emptyTiles = {}
+	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+
+	local shuffledDirections = useful.shuffle({"N", "S", "E", "W"})
+	for i, dir in ipairs(shuffledDirections) do
+		local candidateTile = tile[dir]
+		if candidateTile and not candidateTile.piece then
+			-- TODO check if this position is actually valid (not attack)
+			local part = candidatePiece.combinationParts[dir]
+			if part and part.concave then
+				local template, attackDirection = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceSecretService")
+				if template then
+					PieceSecretService(candidateTile, template)
+					return
+				end
+			end
+		end
+	end
+end
+
+
+function state:spawnAllyPieceFromCandidate(candidatePiece, tile)
+	local emptyTiles = {}
+	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
+
+	local shuffledDirections = useful.shuffle({"N", "S", "E", "W"})
+	for i, dir in ipairs(shuffledDirections) do
+		local candidateTile = tile[dir]
+		if candidateTile and not candidateTile.piece then
+			-- TODO check if this position is actually valid (not attack)
+			local part = candidatePiece.combinationParts[dir]
+			if part and part.concave then
+				local template, attackDirection = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceAlly")
+				if template then
+					PieceAlly(candidateTile, template)
+					return
+				end
+			end
+		end
+	end
+end
+
 function state:spawnAllyPieceFromEvidence(evidence)
 	local emptyTiles = {}
 	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
@@ -284,7 +348,10 @@ function state:combinationHasBeenMade(piece)
 	self.timeline:combinationHasBeenMade(piece)
 
 	-- win if there are no candidates
-	if self:countPiecesOfType("PieceCandidate") <= 0 then
+	if self:countPiecesOfType("PieceNewspaper") <= 0 then
+		gameover:setEnding(self:getEnding())
+		GameState.switch(gameover)
+	elseif self:countPiecesOfType("PieceCandidate") <= 0 then
 		if self.candidatesLeftToSpawn > 0 then
 			self.timeline:spawnNextCandidate()
 		else

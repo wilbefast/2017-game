@@ -71,6 +71,30 @@ function PieceEvidence:onSuccessfulDrop(targetTile)
   end
 end
 
+function PieceEvidence:attackFromSystem(position)
+  local probAdversary = 1 - self.credibility/self.maxCredibility
+  probAdversary = 0.9*probAdversary*probAdversary
+
+  local probAlly = self.credibility/self.maxCredibility
+  probAlly = 0.9*probAlly*probAlly
+
+  local probNothing = 1 - probAdversary - probAlly
+
+  log:write("Random draw must be above", probAdversary, "for ally or", probAdversary + probAlly, "for nothing")
+  local draw = math.random()
+  log:write("Random draw was", draw)
+
+  if draw <= probAdversary then
+    -- attack on our evidence
+    ingame:spawnAdversaryPieceFromEvidence(self, position)
+  elseif draw <= probAdversary + probAlly then
+    -- defense of our evidence
+    ingame:spawnAllyPieceFromEvidence(self, position)
+  else
+    -- nothing
+  end
+end
+
 function PieceEvidence:onFailedDrop(targetTile)
 end
 
@@ -83,7 +107,7 @@ function PieceEvidence:canBeMovedToTile(tile)
     return false
   end
   if tile.grid.isSociety then
-    return self:isAttack(tile, "PieceCandidate")
+    return (self:isAttack(tile, "PieceCandidate") or self:isAttack(tile, "PieceSecretService") or self:isAttack(tile, "PieceAdversary"))
   else
     return true
   end

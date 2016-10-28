@@ -16,44 +16,44 @@ Lesser General Public License for more details.
 Initialisation
 --]]--
 
-local PieceAlly = Class({
-  type = GameObject.newType("PieceAlly"),
+local PieceEvent = Class({
+  type = GameObject.newType("PieceEvent"),
   partColour = {
     r = 0,
     g = 171,
     b = 157,
   },
   init = function(self, tile, args)
-    local args = args or PieceAlly.pick()
-    args.image = Resources.pieceAlly
+    local args = args or PieceEvent.pick()
+    args.image = Resources.pieceEnemy
     PuzzlePiece.init(self, tile, args)
     if not self:rotateTillAttacking() then
       self.purge = true
     end
   end
 })
-PieceAlly:include(PuzzlePiece)
+PieceEvent:include(PuzzlePiece)
 
 --[[------------------------------------------------------------
 Game loop
 --]]--
 
-function PieceAlly.pick()
-  return useful.randIn(PuzzlePiece.databaseByType.PieceAlly)
+function PieceEvent.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceEvent)
 end
 
 
-function PieceAlly:draw()
+function PieceEvent:draw()
   PuzzlePiece.draw(self)
 end
 
-  function PieceAlly:shouldDie()
+  function PieceEvent:shouldDie()
   if self.lifetime <= 0 then
     return true
   end
 end
 
-function PieceAlly:updateLifetime()
+function PieceEvent:updateLifetime()
   self.lifetime= self.lifetime - 1
   log:write("\t lifetime decreased:", self.lifetime)
   if (self:shouldDie()) then
@@ -62,7 +62,7 @@ function PieceAlly:updateLifetime()
   end
 end
 
-function PieceAlly:update(dt)
+function PieceEvent:update(dt)
   PuzzlePiece.update(self, dt)
 end
 
@@ -70,4 +70,4 @@ end
 Export
 --]]--
 
-return PieceAlly
+return PieceEvent

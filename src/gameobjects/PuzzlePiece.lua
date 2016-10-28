@@ -72,6 +72,8 @@ local PuzzlePiece = Class({
 
     -- set name
     self.name = args and args.name or "???"
+    -- set lifeTime
+    self.lifetime = (args and args.lifetime or 5) or 100
 
     -- initialise connections
     local _randomiseCombinationParts = function()
@@ -499,6 +501,8 @@ end
 
 function PuzzlePiece:shouldDie()
   local allEntriesFilled = true
+
+
   local anyEntries = false
   for dir, part in pairs(self.combinationParts) do
     if not part.convex then
@@ -515,12 +519,17 @@ function PuzzlePiece:shouldDie()
     end
   end
 
+  if (self.type == "PieceEvent" or self.type == "PieceAlly") then
+    allEntriesFilled = false
+  end
+
+
   local die = anyEntries and allEntriesFilled
 
-  if self:isType("PieceCandidate") and die then
+  if (self:isType("PieceCandidate")) and die then -- or self:isType("PieceEvidence"))
     for dir, part in pairs(self.combinationParts) do
       local otherTile = self.tile[dir]
-      if otherTile and otherTile.piece then
+      if otherTile and otherTile.piece  then --and not otherTile.piece:isType("PieceCandidate") and not otherTile.piece:isType("PieceJournalist")
         otherTile.piece.purge = true
         otherTile.piece = nil
       end

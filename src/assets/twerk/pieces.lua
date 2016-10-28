@@ -402,7 +402,7 @@ return {
         team = "Enemy",
         tooltip = "adversary_randomevent1",
         lifetime = 5,
-        pieceType = "PieceAdversary",
+        pieceType = "PieceEvent",
         connections = {
           N = { type = "financial", convex = true }
         }
@@ -412,7 +412,7 @@ return {
         team = "Enemy",
         tooltip = "adversary_randomevent2",
         lifetime = 5,
-        pieceType = "PieceAdversary",
+        pieceType = "PieceEvent",
         connections = {
           N = { type = "sexual", convex = true }
         }
@@ -422,7 +422,7 @@ return {
         team = "Enemy",
         tooltip = "adversary_randomevent3",
         lifetime = 5,
-        pieceType = "PieceAdversary",
+        pieceType = "PieceEvent",
         connections = {
           N = { type = "world", convex = true }
         }
@@ -431,7 +431,7 @@ return {
         name = "Adversary_RandomEvent4",
         team = "Enemy",
         lifetime = 5,
-        pieceType = "PieceAdversary",
+        pieceType = "PieceEvent",
         tooltip = "adversary_randomevent4",
         connections = {
           N = { type = "state", convex = true }
@@ -442,7 +442,7 @@ return {
       name = "Adversary_SecretServices1",
       team = "Enemy",
       tooltip = "adversary_secretservice1",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         E = { type = "world", convex = true },
         W = { type = "world", convex = false }
@@ -452,7 +452,7 @@ return {
       name = "Adversary_SecretServices2",
       team = "Enemy",
       tooltip = "adversary_secretservice2",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         E = { type = "world", convex = true },
         W = { type = "financial", convex = false }
@@ -462,7 +462,7 @@ return {
       name = "Adversary_SecretServices3",
       team = "Enemy",
       tooltip = "adversary_secretservice3",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         E = { type = "world", convex = true },
         W = { type = "state", convex = false }
@@ -472,7 +472,7 @@ return {
       name = "Adversary_SecretServices4",
       team = "Enemy",
       tooltip = "adversary_secretservice1",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         E = { type = "world", convex = true },
         W = { type = "sexual", convex = false }
@@ -483,7 +483,7 @@ return {
       name = "Adversary_Trials1",
       team = "Enemy",
       tooltip = "adversary_trial1",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         W = { type = "financial", convex = true },
         E = { type = "financial", convex = false }
@@ -493,7 +493,7 @@ return {
       name = "Adversary_Trials2",
       team = "Enemy",
       tooltip = "adversary_trial2",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         W = { type = "financial", convex = true },
         E = { type = "world", convex = false }
@@ -503,7 +503,7 @@ return {
       name = "Adversary_Trials3",
       team = "Enemy",
       tooltip = "adversary_trial3",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         W = { type = "financial", convex = true },
         E = { type = "state", convex = false }
@@ -513,7 +513,7 @@ return {
       name = "Adversary_Trials4",
       team = "Enemy",
       tooltip = "adversary_trial1",
-      pieceType = "PieceAdversary",
+      pieceType = "PieceSecretService",
       connections = {
         W = { type = "financial", convex = true },
         E = { type = "sexual", convex = false }

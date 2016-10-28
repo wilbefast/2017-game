@@ -16,53 +16,53 @@ Lesser General Public License for more details.
 Initialisation
 --]]--
 
-local PieceAlly = Class({
-  type = GameObject.newType("PieceAlly"),
+local PieceSecretService = Class({
+  type = GameObject.newType("PieceSecretService"),
   partColour = {
-    r = 0,
-    g = 171,
-    b = 157,
+    r = 218,
+    g = 0,
+    b = 35,
   },
   init = function(self, tile, args)
-    local args = args or PieceAlly.pick()
-    args.image = Resources.pieceAlly
+    local args = args or PieceAdversary.pick()
+    args.image = Resources.pieceEnemy
     PuzzlePiece.init(self, tile, args)
     if not self:rotateTillAttacking() then
       self.purge = true
     end
   end
 })
-PieceAlly:include(PuzzlePiece)
+PieceSecretService:include(PuzzlePiece)
+
+function PieceSecretService.pick()
+  return useful.randIn(PuzzlePiece.databaseByType.PieceSecretService)
+end
+
+--[[------------------------------------------------------------
+Query
+--]]--
+
+function PieceSecretService:shouldDie()
+  if PuzzlePiece.shouldDie(self) then
+    return true
+  end
+  -- also die if not attacking
+  --return not self:isAnyPartAttacking()
+end
+
+--[[------------------------------------------------------------
+Events
+--]]--
 
 --[[------------------------------------------------------------
 Game loop
 --]]--
 
-function PieceAlly.pick()
-  return useful.randIn(PuzzlePiece.databaseByType.PieceAlly)
-end
-
-
-function PieceAlly:draw()
+function PieceSecretService:draw()
   PuzzlePiece.draw(self)
 end
 
-  function PieceAlly:shouldDie()
-  if self.lifetime <= 0 then
-    return true
-  end
-end
-
-function PieceAlly:updateLifetime()
-  self.lifetime= self.lifetime - 1
-  log:write("\t lifetime decreased:", self.lifetime)
-  if (self:shouldDie()) then
-    self.purge = true
-    self = nil
-  end
-end
-
-function PieceAlly:update(dt)
+function PieceSecretService:update(dt)
   PuzzlePiece.update(self, dt)
 end
 
@@ -70,4 +70,4 @@ end
 Export
 --]]--
 
-return PieceAlly
+return PieceSecretService
