@@ -448,7 +448,11 @@ Query
 --]]--
 
 function PuzzlePiece:isEnemy(otherPiece)
-  return PuzzlePiece.enemies[self.team][otherPiece.team]
+  if self:isType("PieceJournalist") and not otherPiece:isType("PieceJournalist") then
+    return true
+  else
+    return PuzzlePiece.enemies[self.team][otherPiece.team]
+  end
 end
 
 function PuzzlePiece:isAlly(otherPiece)
