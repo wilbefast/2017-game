@@ -38,6 +38,18 @@ local PuzzlePiece = Class({
   clockwiseDirections = { N = "E", E = "S", S = "W", W = "N" },
   counterClockwiseDirections = { N = "W", E = "N", S = "E", W = "S" },
 
+  enemies = {
+    Neutral = { Player = false, Enemy = false, Neutral = false },
+    Enemy = { Player = true, Enemy = false, Neutral = false },
+    Player = { Player = false, Enemy = true, Neutral = true }
+  },
+
+  allies = {
+    Neutral = { Player = false, Enemy = false, Neutral = false },
+    Enemy = { Player = false, Enemy = true, Neutral = false },
+    Player = { Player = true, Enemy = false, Neutral = false }
+  },
+
   wipCanvas = love.graphics.newCanvas(128, 128),
 
   init = function(self, tile, args)
@@ -435,6 +447,14 @@ end
 Query
 --]]--
 
+function PuzzlePiece:isEnemy(otherPiece)
+  return PuzzlePiece.enemies[self.team][otherPiece.team]
+end
+
+function PuzzlePiece:isAlly(otherPiece)
+  return PuzzlePiece.allies[self.team][otherPiece.team]
+end
+
 function PuzzlePiece:canBeMovedToTile(newTile)
   if not newTile then
     return false
@@ -508,7 +528,7 @@ function PuzzlePiece:shouldDie()
     if not part.convex then
       anyEntries = true
       local otherTile = self.tile[dir]
-      if otherTile and otherTile.piece then
+      if otherTile and otherTile.piece and otherTile.piece:isEnemy(self) then
         local otherPart = otherTile.piece.combinationParts[self.oppositeDirections[dir]]
         if not otherPart or not part:checkMatching(otherPart) then
           allEntriesFilled = false
