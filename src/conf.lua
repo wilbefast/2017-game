@@ -1,6 +1,6 @@
 function love.conf(t)
   t.version = "0.10.1"                -- The LÖVE version this game was made for (string)
-  t.console = true                  -- Attach a console (boolean, Windows only)
+  t.console = false                  -- Attach a console (boolean, Windows only)
   t.release = true
   t.author = "William 'wilbefast' Dyce"
 
@@ -25,7 +25,7 @@ function love.conf(t)
   t.modules.keyboard = true          -- Enable the keyboard module (boolean)
   t.modules.math = true              -- Enable the math module (boolean)
   t.modules.mouse = true             -- Enable the mouse module (boolean)
-  t.modules.physics = true           -- Enable the physics module (boolean)
+  t.modules.physics = false           -- Enable the physics module (boolean)
   t.modules.sound = true             -- Enable the sound module (boolean)
   t.modules.system = true            -- Enable the system module (boolean)
   t.modules.timer = true             -- Enable the timer module (boolean)
