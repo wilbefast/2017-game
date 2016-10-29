@@ -44,7 +44,7 @@ function state:keypressed(key, uni)
 end
 
 function state:mousepressed()
-  audio:play_sound("confirm", 0.1)
+  audio:play_sound("confirm", 0.05)
   GameState.switch(ingame)
 end
 

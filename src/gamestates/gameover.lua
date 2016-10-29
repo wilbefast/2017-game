@@ -77,7 +77,7 @@ Callbacks
 --]]--
 
 function state:mousepressed()
-  audio:play_sound("confirm", 0.1)
+  audio:play_sound("confirm", 0.05)
   GameState.switch(title)
 end
 

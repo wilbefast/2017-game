@@ -148,12 +148,9 @@ function Timeline:tick()
     end
 
     local destroyablePieces = {}
-  --  local destroyablePiecesCount = ingame:countPiecesOfType("PieceAlly", ingame.societyGrid) + ingame:countPiecesOfType("PieceEvent", ingame.societyGrid)
-
-    --if (destroyablePiecesCount > 0) then
-      -- not working
-      ingame.societyGrid:map(function(tile) if  tile.piece then table.insert(destroyablePieces, tile) end end)
-      for p, tile in pairs(destroyablePieces) do
+    ingame.societyGrid:map(function(tile) if tile.piece and not tile.piece.purge then table.insert(destroyablePieces, tile) end end)
+    for p, tile in pairs(destroyablePieces) do
+      if tile.piece and not tile.piece.purge then
         if tile.piece:isType("PieceAlly") or tile.piece:isType("PieceEvent") then
           tile.piece:updateLifetime()
           if not tile.piece:isAnyPartAttacking() then
@@ -170,13 +167,9 @@ function Timeline:tick()
           end
         end
       end
-      end
-  --  end
-
-    --ingame.societyGrid:map(function(tile) if tile.piece then tile.piece:checkForDeaths() end end)
-
-
+    end
   end
+end
 
 
 function Timeline:combinationHasBeenMade(piece)

@@ -47,7 +47,7 @@ function PieceAdversary:shouldDie()
     return true
   end
   -- also die if not attacking
-  --return not self:isAnyPartAttacking()
+  return not self:isAnyPartAttacking()
 end
 
 --[[------------------------------------------------------------

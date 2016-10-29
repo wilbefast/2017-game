@@ -19,9 +19,9 @@ Initialisation
 local PieceEvent = Class({
   type = GameObject.newType("PieceEvent"),
   partColour = {
-    r = 0,
-    g = 171,
-    b = 157,
+    r = 218,
+    g = 0,
+    b = 35,
   },
   init = function(self, tile, args)
     local args = args or PieceEvent.pick()

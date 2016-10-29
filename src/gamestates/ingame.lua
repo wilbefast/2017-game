@@ -365,13 +365,15 @@ function state:combinationHasBeenMade(piece)
 	-- win if there are no candidates
 	if self:countPiecesOfType("PieceNewspaper") <= 0 then
 		gameover:setEnding(self:getEnding())
-		GameState.switch(gameover)
+		self.allowInput = false
+		babysitter.waitThen(1.5, function() GameState.switch(gameover) end)
 	elseif self:countPiecesOfType("PieceCandidate") <= 0 then
 		if self.candidatesLeftToSpawn > 0 then
 			self.timeline:spawnNextCandidate()
 		else
 			gameover:setEnding(self:getEnding())
-			GameState.switch(gameover)
+			self.allowInput = false
+			babysitter.waitThen(1.5, function() GameState.switch(gameover) end)
 		end
 	end
 end
@@ -418,7 +420,7 @@ function state:mousereleased(x, y, button)
 			audio:play_sound("cancel", 0.1)
 		else
 			self.grabbedPiece:drop(self.hoveredTile)
-			audio:play_sound("confirm", 0.1)
+			audio:play_sound("confirm", 0.05)
 		end
 		self.grabbedPiece = nil
 	end
@@ -514,6 +516,10 @@ function state:update(dt)
 		-- spawn source tiles
 		self:spawnSourcePieces()
 	end
+
+	-- clean up (just in case)
+	self.societyGrid:map(function(tile) tile:update(dt) end)
+	self.newspaperGrid:map(function(tile) tile:update(dt) end)
 end
 
 function state:draw()

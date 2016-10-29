@@ -31,4 +31,12 @@ function SocietyGridTile:draw()
   end
 end
 
+function SocietyGridTile:update(dt)
+  -- clean
+  if self.piece and (self.piece.purge or not self.piece.tile) then
+    self.piece.purge = true
+    self.piece = nil
+  end
+end
+
 return SocietyGridTile

@@ -247,6 +247,11 @@ function PuzzlePiece:drop(tile)
   -- check success
   local successful = false
   if not tile or tile.piece or not self:canBeMovedToTile(tile) then
+    if not tile then
+      log:write("Cannot place piece", self.name, "into null tile")
+    else
+      log:write("Cannot place piece", self.name, "into tile", tile.col, tile.row, "which contains", tile.piece and tile.piece.name or "nothing")
+    end
     -- this tile already has a piece in it, or the piece would not fit here - revert back to previous tile!
     successful = false
     tile = self.previousTile
@@ -485,14 +490,16 @@ end
 
 
 function PuzzlePiece:checkForDeaths()
-  self.tile.grid:map(function(t)
-    if t.piece and t.piece:shouldDie() then
-      t.piece.purge = true
-      t.piece:applyEffect()
-    end
-  end)
-  if self.purge then
-    return
+  local check = 2
+  while check > 1 do
+    check = check - 1
+    self.tile.grid:map(function(t)
+      if t.piece and not t.piece.purge and t.piece:shouldDie() then
+        check = check + 1
+        t.piece.purge = true
+        t.piece:applyEffect()
+      end
+    end)
   end
 end
 
@@ -525,8 +532,6 @@ end
 
 function PuzzlePiece:shouldDie()
   local allEntriesFilled = true
-
-
   local anyEntries = false
   for dir, part in pairs(self.combinationParts) do
     if not part.convex then

@@ -109,7 +109,9 @@ function PieceEvidence:canBeMovedToTile(tile)
     return false
   end
   if tile.grid.isSociety then
-    return (self:isAttack(tile, "PieceCandidate", "PieceSecretService", "PieceAdversary"))
+    local isAttack = self:isAttack(tile, "PieceCandidate", "PieceSecretService", "PieceAdversary")
+    log:write("Trying to move evidence to", tile.col, tile.row, isAttack and "it is an attack" or "it is NOT an attack")
+    return isAttack
   else
     return true
   end

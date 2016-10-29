@@ -37,4 +37,12 @@ function NewspaperGridTile:draw()
   end
 end
 
+function NewspaperGridTile:update(dt)
+  -- clean
+  if self.piece and (self.piece.purge or not self.piece.tile) then
+    self.piece.purge = true
+    self.piece = nil
+  end
+end
+
 return NewspaperGridTile
