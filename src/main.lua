@@ -19,6 +19,7 @@ GLOBAL VARIABLES
 TITLE = "2017-game"
 WORLD_W, WORLD_H = 1920, 1080
 shake = 0
+--DEV_TOOLS = true
 DEBUG = false
 WORLD_OX, WORLD_OY = WORLD_W/2, WORLD_H
 mx, my = WORLD_OX, WORLD_OY
@@ -148,9 +149,9 @@ end
 
 function love.keypressed(key, uni)
   GameState.keypressed(key, uni)
-  if key == "d" then
+  if key == "d" and DEV_TOOLS then
     DEBUG = not DEBUG
-  elseif key == "x" then
+  elseif key == "x" and DEV_TOOLS then
     CAPTURE_SCREENSHOT = not CAPTURE_SCREENSHOT
   else
     --babysitter.activeWaitThen(10, function(t) log:write(t*t) end, function() log:write("DONE") end)
@@ -171,7 +172,7 @@ function love.mousereleased(mx, my, button)
   GameState.mousereleased(mx, my, button)
 end
 
-function love.update(dt)
+local _unsafeUpdate = function(dt)
   GameState.update(dt)
 
   shake = shake*math.pow(0.9, 100*dt)
@@ -184,8 +185,18 @@ function love.update(dt)
 
   babysitter.update(dt)
 end
+function love.update(dt)
+  if SAFE_MODE then
+    local status, err = xpcall(__unsafeUpdate, debug.traceback)
+    if not status then
+      print(err)
+    end
+  else
+    _unsafeUpdate(dt)
+  end
+end
 
-function love.draw()
+function _unsafeDraw()
   useful.pushCanvas(WORLD_CANVAS)
     -- clear
     love.graphics.setColor(91, 132, 192)
@@ -201,9 +212,9 @@ function love.draw()
     -- scaling
     love.graphics.scale(WINDOW_SCALE, WINDOW_SCALE)
     -- playable area is the centre sub-rect of the screen
-    -- love.graphics.translate(
-    --   (WINDOW_W - VIEW_W)*0.5/WINDOW_SCALE + useful.signedRand(shake),
-    --   (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
+    love.graphics.translate(
+      (WINDOW_W - VIEW_W)*0.5/WINDOW_SCALE + useful.signedRand(shake),
+      (WINDOW_H - VIEW_H)*0.5/WINDOW_SCALE + useful.signedRand(shake))
     -- draw the canvas
     love.graphics.draw(WORLD_CANVAS, 0, 0)
   love.graphics.pop() -- pop offset
@@ -216,5 +227,16 @@ function love.draw()
   -- draw logs
   if DEBUG then
     log:draw(16, 48)
+  end
+end
+function love.draw()
+  if SAFE_MODE then
+    local status, err = xpcall(__unsafeDraw, debug.traceback)
+    if not status then
+      print(err)
+      love.graphics.setCanvas(nil)
+    end
+  else
+    _unsafeDraw()
   end
 end
