@@ -93,6 +93,8 @@ function PieceEvidence:attackFromSystem(position)
   else
     -- nothing
   end
+
+
 end
 
 function PieceEvidence:onFailedDrop(targetTile)

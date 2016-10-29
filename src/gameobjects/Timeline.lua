@@ -154,8 +154,11 @@ function Timeline:tick()
       -- not working
       ingame.societyGrid:map(function(tile) if  tile.piece then table.insert(destroyablePieces, tile) end end)
       for p, tile in pairs(destroyablePieces) do
-        if tile.piece:isType("PieceAlly") or tile.piece == tile.piece:isType("PieceEvent") then
+        if tile.piece:isType("PieceAlly") or tile.piece:isType("PieceEvent") then
           tile.piece:updateLifetime()
+          if not tile.piece:isAnyPartAttacking() then
+            tile.piece.purge = true
+          end
         elseif tile.piece:isType("PieceEvidence") then
           tile.piece:attackFromSystem(tile)
           if not tile.piece:isAnyPartAttacking() then

@@ -123,8 +123,8 @@ function love.load(arg)
   audio.mute = MUTE
 
   -- music
-  audio:load_music("prometheus")
-  audio:play_music("prometheus")
+  audio:load_music("charlie")
+  audio:play_music("charlie")
 
   -- sound
   -- load_sound takes a filename, a volume (between 0 and 1) and a max number of simultaneous instances.

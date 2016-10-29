@@ -55,10 +55,8 @@ end
 
 function PieceEvent:updateLifetime()
   self.lifetime= self.lifetime - 1
-  log:write("\t lifetime decreased:", self.lifetime)
-  if (self:shouldDie()) then
+  if self:shouldDie() then
     self.purge = true
-    self = nil
   end
 end
 

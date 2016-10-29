@@ -58,7 +58,6 @@ function PieceAlly:updateLifetime()
   log:write("\t lifetime decreased:", self.lifetime)
   if (self:shouldDie()) then
     self.purge = true
-    self = nil
   end
 end
 

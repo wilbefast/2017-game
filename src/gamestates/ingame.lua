@@ -313,10 +313,25 @@ function state:spawnAllyPieceFromCandidate(candidatePiece, tile)
 	end
 end
 
-function state:spawnAllyPieceFromEvidence(evidence)
+function state:spawnAllyPieceFromEvidence(evidence,tile)
 	local emptyTiles = {}
 	self.societyGrid:map(function(tile) if not tile.piece then table.insert(emptyTiles, tile) end end)
-	self:trySpawn(PieceAlly, emptyTiles, 1)
+
+	local shuffledDirections = useful.shuffle({"N", "S", "E", "W"})
+	for i, dir in ipairs(shuffledDirections) do
+		local candidateTile = tile[dir]
+		if candidateTile and not candidateTile.piece then
+			-- TODO check if this position is actually valid (not attack)
+			local part = evidence.combinationParts[dir]
+			if part and part.concave then
+				local template, attackDirection = PuzzlePiece.findAbleToAttack(part.combinationType.name, "PieceAlly")
+				if template then
+					PieceAlly(candidateTile, template)
+					return
+				end
+			end
+		end
+	end
 end
 
 function state:getEnding()
