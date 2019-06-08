@@ -151,17 +151,17 @@ function Timeline:tick()
     ingame.societyGrid:map(function(tile) if tile.piece and not tile.piece.purge then table.insert(destroyablePieces, tile) end end)
     for p, tile in pairs(destroyablePieces) do
       if tile.piece and not tile.piece.purge then
-        if tile.piece:isType("PieceAlly") or tile.piece:isType("PieceEvent") then
+        if tile.piece and (tile.piece:isType("PieceAlly") or tile.piece:isType("PieceEvent")) then
           tile.piece:updateLifetime()
           if not tile.piece:isAnyPartAttacking() then
             tile.piece.purge = true
           end
-        elseif tile.piece:isType("PieceEvidence") then
+        elseif tile.piece and tile.piece:isType("PieceEvidence") then
           tile.piece:attackFromSystem(tile)
           if not tile.piece:isAnyPartAttacking() then
             tile.piece.purge = true
           end
-        elseif tile.piece:isType("PieceAdversary") then
+        elseif tile.piece and tile.piece:isType("PieceAdversary") then
           if not tile.piece:isAnyPartAttacking() then
             tile.piece.purge = true
           end
